@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32126.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vessel-Info.Web", "Vessel-Info.Web\Vessel-Info.Web.csproj", "{EB4015EC-567B-4B50-8EEA-9A74978AAF3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vessel-Info.Web", "Vessel-Info.Web\Vessel-Info.Web.csproj", "{EB4015EC-567B-4B50-8EEA-9A74978AAF3A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{11F98EE3-2B9A-4010-BBF8-F26F8E3310EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{0BCB12AB-54D2-4E64-8B3B-C52F4D898A36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vessel-Info.Data", "..\..\Data\Vessel-Info.Data\Vessel-Info.Data.csproj", "{C9648BB2-5137-4F85-8452-735E4A8CDB51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +21,17 @@ Global
 		{EB4015EC-567B-4B50-8EEA-9A74978AAF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB4015EC-567B-4B50-8EEA-9A74978AAF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB4015EC-567B-4B50-8EEA-9A74978AAF3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9648BB2-5137-4F85-8452-735E4A8CDB51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9648BB2-5137-4F85-8452-735E4A8CDB51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9648BB2-5137-4F85-8452-735E4A8CDB51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9648BB2-5137-4F85-8452-735E4A8CDB51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EB4015EC-567B-4B50-8EEA-9A74978AAF3A} = {11F98EE3-2B9A-4010-BBF8-F26F8E3310EE}
+		{C9648BB2-5137-4F85-8452-735E4A8CDB51} = {0BCB12AB-54D2-4E64-8B3B-C52F4D898A36}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C1E6FBDE-9658-425C-B4F0-91D42241CBB0}
