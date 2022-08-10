@@ -2,12 +2,13 @@ namespace Vessel_Info.Web
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Vessel_Info.Data;
+    using Vessel_Info.Data.Models;
 
     public class Startup
     {
@@ -27,10 +28,19 @@ namespace Vessel_Info.Web
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services
-                .AddDefaultIdentity<IdentityUser>(options => 
-                    options.SignIn.RequireConfirmedAccount = true)
+                .AddDefaultIdentity<User>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                })
                 .AddEntityFrameworkStores<VesselInfoDbContext>();
-            services.AddControllersWithViews();
+
+            services.AddControllersWithViews(options => 
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
