@@ -7,6 +7,7 @@ namespace Vessel_Info.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Vessel_Info.Data;
 
     public class Startup
     {
@@ -19,13 +20,16 @@ namespace Vessel_Info.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<VesselInfoDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+            services
+                .AddDbContext<VesselInfoDbContext>(options => options
+                .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services
+                .AddDefaultIdentity<IdentityUser>(options => 
+                    options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<VesselInfoDbContext>();
             services.AddControllersWithViews();
         }
 
