@@ -12,6 +12,10 @@
 
         public string CallSign { get; set; }
 
-        public DateTime Built { get; set; }       
+        public DateTime Built { get; set; }
+
+        public int TypeId { get; set; }
+
+        public Type Type { get; set; }
     }
 }

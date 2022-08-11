@@ -9,6 +9,10 @@
         public VesselInfoDbContext(DbContextOptions<VesselInfoDbContext> options) 
             : base(options) {}
 
+        public DbSet<Vessel> Vessels { get; set; }
+
+        public DbSet<Type> Types { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
