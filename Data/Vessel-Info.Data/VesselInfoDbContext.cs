@@ -13,6 +13,12 @@
 
         public DbSet<Type> Types { get; set; }
 
+        public DbSet<Type> Owners { get; set; }
+
+        public DbSet<Type> Registrations { get; set; }
+
+        public DbSet<Type> ClassificationSocieties { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
