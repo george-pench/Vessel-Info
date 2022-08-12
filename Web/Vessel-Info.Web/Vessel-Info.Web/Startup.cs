@@ -2,6 +2,7 @@ namespace Vessel_Info.Web
 {
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@ namespace Vessel_Info.Web
     using Microsoft.Extensions.Hosting;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
+    using Vessel_Info.Web.Infrastructure.Extensions;
 
     public class Startup
     {
@@ -28,13 +30,7 @@ namespace Vessel_Info.Web
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services
-                .AddDefaultIdentity<User>(options =>
-                {
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireUppercase = false;
-                })
+                .AddDefaultIdentity<User>()
                 .AddEntityFrameworkStores<VesselInfoDbContext>();
 
             services.AddControllersWithViews(options => 
@@ -45,6 +41,8 @@ namespace Vessel_Info.Web
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //app.DatabaseInit();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -55,6 +53,7 @@ namespace Vessel_Info.Web
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
