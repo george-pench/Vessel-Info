@@ -21,6 +21,34 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder
+                .Entity<Vessel>()
+                .HasOne(v => v.Type)
+                .WithMany(t => t.Vessels)
+                .HasForeignKey(v => v.TypeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Vessel>()
+                .HasOne(v => v.Owner)
+                .WithMany(o => o.Vessels)
+                .HasForeignKey(v => v.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Vessel>()
+                .HasOne(v => v.Registration)
+                .WithMany(r => r.Vessels)
+                .HasForeignKey(v => v.RegistrationId)
+                .OnDelete(DeleteBehavior.Restrict);            
+
+            builder
+                .Entity<Vessel>()
+                .HasOne(v => v.ClassificationSociety)
+                .WithMany(cs => cs.Vessels)
+                .HasForeignKey(v => v.ClassificationSocietyId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
         }
     }
