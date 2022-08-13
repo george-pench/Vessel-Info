@@ -13,16 +13,38 @@
 
         public DbSet<Type> Types { get; set; }
 
-        public DbSet<Type> Owners { get; set; }
+        public DbSet<Owner> Owners { get; set; }
 
-        public DbSet<Type> Registrations { get; set; }
+        public DbSet<Registration> Registrations { get; set; }
 
-        public DbSet<Type> ClassificationSocieties { get; set; }
+        public DbSet<ClassificationSociety> ClassificationSocieties { get; set; }
 
         public DbSet<Shipbroker> Shipbrokers { get; set; }
+        
+        public DbSet<Operator> Operators { get; set; }
+
+        public DbSet<ShipbrokerOperator> ShipbrokersOperators { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder
+                .Entity<ShipbrokerOperator>()
+                .HasKey(so => new { so.OperatorId, so.ShipbrokerId });
+
+            builder
+                .Entity<ShipbrokerOperator>()
+                .HasOne(so => so.Shipbroker)
+                .WithMany(sb => sb.Operators)
+                .HasForeignKey(so => so.ShipbrokerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<ShipbrokerOperator>()
+                .HasOne(so => so.Operator)
+                .WithMany(o => o.Shipbrokers)
+                .HasForeignKey(so => so.OperatorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder
                 .Entity<Vessel>()
                 .HasOne(v => v.Type)
