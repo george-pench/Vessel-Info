@@ -19,6 +19,8 @@
 
         public DbSet<Type> ClassificationSocieties { get; set; }
 
+        public DbSet<Shipbroker> Shipbrokers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -47,6 +49,13 @@
                 .HasOne(v => v.ClassificationSociety)
                 .WithMany(cs => cs.Vessels)
                 .HasForeignKey(v => v.ClassificationSocietyId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Shipbroker>()
+                .HasOne<User>()
+                .WithOne()
+                .HasForeignKey<Shipbroker>(sb => sb.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

@@ -41,7 +41,7 @@ namespace Vessel_Info.Web
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //app.DatabaseInit();
+            app.DatabaseInit();
 
             if (env.IsDevelopment())
             {

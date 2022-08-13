@@ -6,15 +6,16 @@
 
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder DatabaseInit(this IApplicationBuilder app)
+        public static IApplicationBuilder DatabaseInit(
+            this IApplicationBuilder app)
         {
             using var serviceScope = app.ApplicationServices.CreateScope();
-            var service = serviceScope.ServiceProvider;
+            var services = serviceScope.ServiceProvider;
 
-            var db = service.GetRequiredService<VesselInfoDbContext>();
+            var db = services.GetRequiredService<VesselInfoDbContext>();
             db.Database.EnsureCreated();
 
             return app;
-        }
+        } 
     }
 }
