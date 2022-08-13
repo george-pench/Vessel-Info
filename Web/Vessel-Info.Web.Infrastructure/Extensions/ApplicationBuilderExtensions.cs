@@ -1,6 +1,7 @@
 ﻿namespace Vessel_Info.Web.Infrastructure.Extensions
 {
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using Vessel_Info.Data;
 
@@ -13,7 +14,7 @@
             var services = serviceScope.ServiceProvider;
 
             var db = services.GetRequiredService<VesselInfoDbContext>();
-            db.Database.EnsureCreated();
+            db.Database.Migrate();
 
             return app;
         } 
