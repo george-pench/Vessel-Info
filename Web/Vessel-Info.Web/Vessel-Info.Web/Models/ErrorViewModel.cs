@@ -1,5 +1,3 @@
-using System;
-
 namespace Vessel_Info.Web.Models
 {
     public class ErrorViewModel
