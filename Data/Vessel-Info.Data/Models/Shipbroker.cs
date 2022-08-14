@@ -4,6 +4,7 @@
     using System.ComponentModel.DataAnnotations;
 
     using static Constants.DataConstants.User;
+    using static Constants.DataConstants.Shipbroker;
 
     public class Shipbroker
     {
@@ -13,8 +14,10 @@
         [MaxLength(NameMaxLength)]
         public string Name { get; set; }
 
+        [MaxLength(TelephoneNumberMaxLength)]
         public string TelephoneNumber { get; set; }
 
+        [MaxLength(AgencyMaxLength)]
         public string Agency { get; set; }
 
         [Required]
