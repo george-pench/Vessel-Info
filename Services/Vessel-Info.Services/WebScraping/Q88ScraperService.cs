@@ -18,9 +18,24 @@
             this.context = BrowsingContext.New(this.config);
         }
 
-        public async Task GetVesselData()
+        public void PopulateDatabase()
         {
-            var document = await context.OpenAsync("https://www.q88.com/ships.aspx?letter=A&v=list");
+            for (char i = 'A'; i < 'Z'; i++)
+            {
+                try
+                {
+                    this.GetVesselData(i);
+                } 
+                catch { }
+            }
+        }
+
+        public void GetVesselData(char id)
+        {
+            var document = this.context
+                .OpenAsync($"https://www.q88.com/ships.aspx?letter={id}&v=list")
+                .GetAwaiter()
+                .GetResult();
 
             if (document.DocumentElement.OuterHtml.Contains(ERROR_MESSAGE))
             {
