@@ -1,46 +1,88 @@
 ﻿namespace Vessel_Info.Services.WebScraping
 {
     using AngleSharp;
+    using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using Vessel_Info.Data;
+    using Vessel_Info.Services.Models;
 
     public class Q88ScraperService : IQ88ScraperService
     {
         private static string ERROR_MESSAGE = "No vessels starting with 'Adsadas' were found.";
 
         private readonly IConfiguration config;
-        private readonly IBrowsingContext context;
+        private readonly IBrowsingContext browsingContext;
 
-        public Q88ScraperService()
+        private readonly VesselInfoDbContext context;
+
+        public Q88ScraperService(VesselInfoDbContext context)
         {
             this.config = Configuration.Default.WithDefaultLoader();
-            this.context = BrowsingContext.New(this.config);
+            this.browsingContext = BrowsingContext.New(this.config);
+
+            this.context = context;
         }
 
-        public void PopulateDatabase()
+        public async Task PopulateDatabase()
         {
+            var concurrenetBag = new ConcurrentBag<Q88ServiceModel>();
+
             for (char i = 'A'; i < 'Z'; i++)
             {
                 try
                 {
-                    this.GetVesselData(i);
+                    var vesselData = this.GetVesselData(i);
+                    concurrenetBag.Add(vesselData);
                 } 
                 catch { }
             }
+
+            foreach (var vessel in concurrenetBag)
+            {
+                // var vesseTypeId = await this.GetOrCreateVesselTypeAsync(vessel.HullType);
+
+
+            }
+
+            // this.context.SaveChanges();
         }
 
-        public void GetVesselData(char id)
+        //private async Task<int> GetOrCreateVesselTypeAsync(string typeName)
+        //{
+        //    var type = this.context
+        //        .Types
+        //        // Get All Types
+        //        .FirstOrDefault(t => t.Name == typeName);
+
+        //    if (type == null)
+        //    {
+        //        type = new Data.Models.Type()
+        //        {
+        //            Name = typeName,
+        //        };
+
+        //        await this.context.Types.AddAsync(type);
+        //    }
+
+        //    return type.Id;
+        //}
+
+        public Q88ServiceModel GetVesselData(char id)
         {
-            var document = this.context
+            var document = this.browsingContext
                 .OpenAsync($"https://www.q88.com/ships.aspx?letter={id}&v=list")
                 .GetAwaiter()
                 .GetResult();
 
             if (document.DocumentElement.OuterHtml.Contains(ERROR_MESSAGE))
             {
-                return;
+                throw new InvalidOperationException();
             }
+
+            var vesselData = new Q88ServiceModel();
 
             // Get Vessel Name
             var names = document
@@ -83,6 +125,8 @@
             //Get Call Sing
             var callSings = document
                 .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(10)");
+
+            return vesselData;
         }
     }
 }

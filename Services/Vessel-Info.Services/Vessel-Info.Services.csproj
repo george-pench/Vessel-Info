@@ -5,4 +5,12 @@
     <RootNamespace>Vessel_Info.Services</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="0.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Vessel-Info.Data\Vessel-Info.Data.csproj" />
+  </ItemGroup>
+
 </Project>
