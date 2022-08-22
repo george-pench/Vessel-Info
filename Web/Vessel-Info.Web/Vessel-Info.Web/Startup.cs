@@ -10,6 +10,7 @@ namespace Vessel_Info.Web
     using Microsoft.Extensions.Hosting;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
+    using Vessel_Info.Services.WebScraping;
     using Vessel_Info.Web.Infrastructure.Extensions;
 
     public class Startup
@@ -33,6 +34,8 @@ namespace Vessel_Info.Web
                 .AddDefaultIdentity<User>()
                 .AddEntityFrameworkStores<VesselInfoDbContext>();
 
+            services.AddTransient<IQ88ScraperService, Q88ScraperService>();
+            
             services.AddControllersWithViews(options => 
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();

@@ -14,7 +14,7 @@
             var services = serviceScope.ServiceProvider;
 
             var db = services.GetRequiredService<VesselInfoDbContext>();
-            db.Database.Migrate();
+            db.Database.EnsureCreated();
 
             return app;
         } 

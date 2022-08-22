@@ -1,12 +1,9 @@
 ﻿namespace Vessel_Info.Services.WebScraping
-{
+{ 
     using System.Threading.Tasks;
-    using Vessel_Info.Services.Models;
     
     public interface IQ88ScraperService
     {
-        Task PopulateDatabase();
-
-        Q88ServiceModel GetVesselData(char id);
+        Task ImportVesselDataAsync(char fromId = 'A', char toId = 'Z');
     }
 }
