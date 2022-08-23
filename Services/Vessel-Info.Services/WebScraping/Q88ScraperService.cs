@@ -2,7 +2,6 @@
 {
     using AngleSharp;
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -28,7 +27,7 @@
             this.context = context;
         }
 
-        public async Task ImportVesselDataAsync(char fromId = 'X', char toId = 'Y')
+        public async Task ImportVesselDataAsync(char fromId = 'Y', char toId = 'Z')
         {         
             var vessels = this.ScrapeRecipes(fromId, toId);
             Console.WriteLine();
@@ -39,31 +38,37 @@
             var imos = vessels[0].IMO;
             var hullTypes = vessels[0].HullType;
             var cubic = vessels[0].Cubic;
+            var beams = vessels[0].Beam;
+            var drafts = vessels[0].Draft;
             var callSigns = vessels[0].CallSign;
             var builts = vessels[0].Built;
 
-            // Size of each entity. They should always be equal. 
+            // Size of each entity. They should always be equal.
             var vesselSize = imos.Count;
 
             for (int i = 0; i < vesselSize; i++)
             {
+                var typeId = this.GetOrCreateType(vesselNames[i]);
+
                 var newVessel = new Vessel
                 {
                     Name = vesselNames[i],
-                    SummerDwt = summerDwts[i],
                     IMO = imos[i],
+                    Built = builts[i],
+                    SummerDwt = summerDwts[i],
+                    Loa = loas[i],
+                    Cubic = cubic[i],
+                    Beam = beams[i],
+                    Draft = drafts[i],
                     HullType = hullTypes[i],
                     CallSign = callSigns[i],
-                    Built = DateTime.Parse(builts[i])
+                    TypeId = typeId
                 };
 
                 await this.context.Vessels.AddAsync(newVessel);
-
-                Console.WriteLine($"{vesselNames[i]} {imos[i]} created");
             }
 
-
-            //await this.context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
 
         private List<Q88ListingServiceModel> ScrapeRecipes(char fromId, char toId)
@@ -81,6 +86,28 @@
             }
 
             return all;
+        }
+
+        private int GetOrCreateType(string typeName)
+        {
+            var type = this.context
+                .Types
+                .FirstOrDefault(x => x.Name == typeName);
+
+            if (type != null)
+            {
+                return type.Id;
+            }
+
+            type = new Data.Models.Type
+            {
+                Name = typeName
+            };
+
+            this.context.Types.Add(type);
+            this.context.SaveChanges();
+
+            return type.Id;
         }
 
         private int GetOrCreateVessel(string vesselImo)
@@ -151,9 +178,8 @@
             // Get DTWs
             var DWTs = document
                 .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(4)")
-                .Select(x => x.TextContent.Replace(",", string.Empty))
+                .Select(x => x.TextContent)
                 .Skip(1)
-                .Select(x => int.Parse(x))
                 .ToList();
 
             vesselsData.SummerDwt.AddRange(DWTs);
@@ -161,9 +187,8 @@
             // Get LOAs
             var LOAs = document
                 .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(5)")
-                .Select(x => x.TextContent.Replace(".", string.Empty))
+                .Select(x => x.TextContent)
                 .Skip(1)
-                .Select(x => int.Parse(x))
                 .ToList();
 
             vesselsData.LOA.AddRange(LOAs);
@@ -171,24 +196,29 @@
             // Get Cubic
             var cubic = document
                 .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(6)")
-                .Select(x => x.TextContent.Replace(",", string.Empty))
+                .Select(x => x.TextContent)                
                 .Skip(1)
-                .Select(x => int.Parse(x))
                 .ToList();
 
             vesselsData.Cubic.AddRange(cubic);
 
             // Get Beams
-            //var beams = document
-            //    .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(7)")
-            //    .Select(x => x.TextContent)
-            //    .ToList();
+            var beams = document
+                .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(7)")
+                .Select(x => x.TextContent)
+                .Skip(1)
+                .ToList();
+
+            vesselsData.Beam.AddRange(beams);
 
             // Get Drafts
-            //var drafts = document
-            //    .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(8)")
-            //    .Select(x => x.TextContent)
-            //    .ToList();
+            var drafts = document
+                .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(8)")
+                .Select(x => x.TextContent)
+                .Skip(1)
+                .ToList();
+
+            vesselsData.Draft.AddRange(drafts);
 
             // Get Hulls
             var hullTypes = document

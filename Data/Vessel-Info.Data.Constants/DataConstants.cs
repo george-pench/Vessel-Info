@@ -21,7 +21,7 @@
             public const int HullTypeMinLength = 5;
             public const int HyllTypeMaxLength = 20;
             public const int ImoLength = 9;
-            public const int CallSignLength = 5;
+            public const int CallSignLength = 10;
             public const int SummertDwtNameMinLength = 1000;
             public const int SummertDwtNameMaxLength = 600000;
             public const int BuiltMinValue = 1950;
@@ -31,7 +31,7 @@
         public class Type
         {
             public const int NameMinLength = 5;
-            public const int NameMaxLength = 20;
+            public const int NameMaxLength = 50;
         }
 
         public class Shipbroker
