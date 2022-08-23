@@ -240,5 +240,57 @@
 
             return vesselsData;
         }
+
+        // TODO: Try optimizing GetOwners and GetGuids if possible. Change variable names. Document the code for a better understanding later on
+        private async Task<List<string>> GetOwners(IBrowsingContext context, List<string> guids)
+        {
+            var owners = new List<string>();
+
+            for (int i = 0; i < guids.Count; i++)
+            {
+                string url = "https://www.q88.com/ViewShip.aspx?id={0}";
+                var formatted = String.Format(url, guids[i]);
+                var document = await context.OpenAsync(formatted);
+
+                var outerHtmlPerVessel = document
+                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(6) > td:nth-child(5)")
+                    .Select(x => x.TextContent)
+                    .ToList();
+
+                owners.Add(outerHtmlPerVessel[0].Trim());
+            }
+
+            return owners;
+        }
+
+        private async Task<List<string>> GetGuids(IBrowsingContext context, char id)
+        {
+            var document = await context.OpenAsync($"https://www.q88.com/ships.aspx?letter={id}&v=list");
+
+            if (document.DocumentElement.OuterHtml.Contains("No vessels starting with 'Adsadas' were found."))
+            {
+                System.Console.WriteLine($"{id} not found");
+            }
+
+            // "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(1)"
+            var outerHtmlPerVessel = document
+                .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(1)")
+                .Select(x => x.OuterHtml)
+                .Skip(2)
+                .ToList();
+
+            var vesselGuids = new List<string>();
+
+            foreach (var outerHtml in outerHtmlPerVessel)
+            {
+                var newOuterHtml = outerHtml
+                    .Split("?id=", StringSplitOptions.RemoveEmptyEntries);
+                var vesselGuid = newOuterHtml[1]
+                    .Split("&amp", StringSplitOptions.RemoveEmptyEntries)[0];
+                vesselGuids.Add(vesselGuid);
+            }
+
+            return vesselGuids;
+        }
     }
 }
