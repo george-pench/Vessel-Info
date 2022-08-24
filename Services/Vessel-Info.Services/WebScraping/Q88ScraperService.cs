@@ -27,9 +27,9 @@
             this.context = context;
         }
 
-        public async Task ImportVesselDataAsync(char fromId = 'Y', char toId = 'Z')
+        public async Task ImportVesselDataAsync(char fromId = 'X', char toId = 'Y')
         {         
-            var vessels = this.ScrapeRecipes(fromId, toId);
+            var vessels = this.GetVesselListing(fromId, toId);
             Console.WriteLine();
 
             var vesselNames = vessels[0].VesselName;
@@ -43,15 +43,21 @@
             var callSigns = vessels[0].CallSign;
             var builts = vessels[0].Built;
 
+            var guids = await this.ScrapeGuids(this.browsingContext, fromId);
+            var owners = await this.ScrapeOwners(this.browsingContext, guids);
+            var types = await this.ScrapeTypes(this.browsingContext, guids);
+
             // Size of each entity. They should always be equal.
             var vesselSize = imos.Count;
 
             for (int i = 0; i < vesselSize; i++)
             {
-                var typeId = this.GetOrCreateType(vesselNames[i]);
+                var typeId = this.GetOrCreateType(types[i]);
+                var ownerId = this.GetOrCreateOwner(owners[i]);
 
                 var newVessel = new Vessel
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Name = vesselNames[i],
                     IMO = imos[i],
                     Built = builts[i],
@@ -62,7 +68,8 @@
                     Draft = drafts[i],
                     HullType = hullTypes[i],
                     CallSign = callSigns[i],
-                    TypeId = typeId
+                    TypeId = typeId,
+                    OwnerId = ownerId
                 };
 
                 await this.context.Vessels.AddAsync(newVessel);
@@ -71,7 +78,7 @@
             await this.context.SaveChangesAsync();
         }
 
-        private List<Q88ListingServiceModel> ScrapeRecipes(char fromId, char toId)
+        private List<Q88ListingServiceModel> GetVesselListing(char fromId, char toId)
         {
             var all = new List<Q88ListingServiceModel>();
 
@@ -79,7 +86,7 @@
             {
                 try
                 {
-                    var vesselData = this.GetVesselsData(i);
+                    var vesselData = this.ScrapeVessel(i);
                     all.Add(vesselData);
                 }
                 catch { }
@@ -110,29 +117,29 @@
             return type.Id;
         }
 
-        private int GetOrCreateVessel(string vesselImo)
+        private int GetOrCreateOwner(string ownerName)
         {
-            var vessel = this.context
-                .Vessels
-                .FirstOrDefault(x => x.IMO == vesselImo);
+            var owner = this.context
+                .Owners
+                .FirstOrDefault(x => x.Name == ownerName);
 
-            if (vessel != null)
+            if (owner != null)
             {
-                return vessel.Id;
+                return owner.Id;
             }
 
-            vessel = new Data.Models.Vessel
+            owner = new Owner 
             {
-                IMO = vesselImo,
+                Name = ownerName
             };
 
-            this.context.Vessels.Add(vessel);
+            this.context.Owners.Add(owner);
             this.context.SaveChanges();
 
-            return vessel.Id;
+            return owner.Id;
         }
 
-        private Q88ListingServiceModel GetVesselsData(char id)
+        private Q88ListingServiceModel ScrapeVessel(char id)
         {
             var formattedUrl = string.Format(BASE_URL, id);
 
@@ -241,15 +248,14 @@
             return vesselsData;
         }
 
-        // TODO: Try optimizing GetOwners and GetGuids if possible. Change variable names. Document the code for a better understanding later on
-        private async Task<List<string>> GetOwners(IBrowsingContext context, List<string> guids)
+        // TODO: Try optimizing ScrapeOwners and ScrapeGuids if possible. Change variable names. Document the code for a better understanding later on
+        private async Task<List<string>> ScrapeOwners(IBrowsingContext context, List<string> guids)
         {
             var owners = new List<string>();
 
             for (int i = 0; i < guids.Count; i++)
             {
-                string url = "https://www.q88.com/ViewShip.aspx?id={0}";
-                var formatted = String.Format(url, guids[i]);
+                string formatted = this.UrlFormatting(guids, i);
                 var document = await context.OpenAsync(formatted);
 
                 var outerHtmlPerVessel = document
@@ -263,7 +269,27 @@
             return owners;
         }
 
-        private async Task<List<string>> GetGuids(IBrowsingContext context, char id)
+        private async Task<List<string>> ScrapeTypes(IBrowsingContext context, List<string> guids)
+        {
+            var types = new List<string>();
+
+            for (int i = 0; i < guids.Count; i++)
+            {
+                string formatted = this.UrlFormatting(guids, i);
+                var document = await context.OpenAsync(formatted);
+
+                var outerHtmlPerVessel = document
+                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(5) > td:nth-child(2)")
+                    .Select(x => x.TextContent)
+                    .ToList();
+
+                types.Add(outerHtmlPerVessel[0].Trim());
+            }
+
+            return types;
+        }      
+
+        private async Task<List<string>> ScrapeGuids(IBrowsingContext context, char id)
         {
             var document = await context.OpenAsync($"https://www.q88.com/ships.aspx?letter={id}&v=list");
 
@@ -291,6 +317,13 @@
             }
 
             return vesselGuids;
+        }
+        private string UrlFormatting(List<string> guids, int i)
+        {
+            string url = "https://www.q88.com/ViewShip.aspx?id={0}";
+            var formatted = String.Format(url, guids[i]);
+
+            return formatted;
         }
     }
 }
