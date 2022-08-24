@@ -46,6 +46,7 @@
             var guids = await this.ScrapeGuids(this.browsingContext, fromId);
             var owners = await this.ScrapeOwners(this.browsingContext, guids);
             var types = await this.ScrapeTypes(this.browsingContext, guids);
+            var registrations = await this.ScrapeRegistrations(this.browsingContext, guids);
 
             // Size of each entity. They should always be equal.
             var vesselSize = imos.Count;
@@ -54,6 +55,7 @@
             {
                 var typeId = this.GetOrCreateType(types[i]);
                 var ownerId = this.GetOrCreateOwner(owners[i]);
+                var registrationId = this.GetOrCreateRegistration(registrations[i]);
 
                 var newVessel = new Vessel
                 {
@@ -69,7 +71,8 @@
                     HullType = hullTypes[i],
                     CallSign = callSigns[i],
                     TypeId = typeId,
-                    OwnerId = ownerId
+                    OwnerId = ownerId,
+                    RegistrationId = registrationId,
                 };
 
                 await this.context.Vessels.AddAsync(newVessel);
@@ -137,6 +140,28 @@
             this.context.SaveChanges();
 
             return owner.Id;
+        }
+
+        private int GetOrCreateRegistration(string flagName)
+        {
+            var registration = this.context
+                .Registrations
+                .FirstOrDefault(x => x.Flag == flagName);
+
+            if (registration != null)
+            {
+                return registration.Id;
+            }
+
+            registration = new Registration 
+            {
+                Flag = flagName
+            };
+
+            this.context.Registrations.Add(registration);
+            this.context.SaveChanges();
+
+            return registration.Id;
         }
 
         private Q88ListingServiceModel ScrapeVessel(char id)
@@ -318,6 +343,27 @@
 
             return vesselGuids;
         }
+
+        private async Task<List<string>> ScrapeRegistrations(IBrowsingContext context, List<string> guids)
+        {
+            var registrations = new List<string>();
+
+            for (int i = 0; i < guids.Count; i++)
+            {
+                string formatted = this.UrlFormatting(guids, i);
+                var document = await context.OpenAsync(formatted);
+
+                var outerHtmlPerVessel = document
+                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(3) > td:nth-child(2)")
+                    .Select(x => x.TextContent)
+                    .ToList();
+
+                registrations.Add(outerHtmlPerVessel[0].Trim());
+            }
+
+            return registrations;
+        }
+
         private string UrlFormatting(List<string> guids, int i)
         {
             string url = "https://www.q88.com/ViewShip.aspx?id={0}";
