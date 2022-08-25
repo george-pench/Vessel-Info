@@ -27,7 +27,7 @@
             this.context = context;
         }
 
-        public async Task ImportVesselDataAsync(char fromId = 'X', char toId = 'Y')
+        public async Task ImportVesselDataAsync(char fromId = 'Y', char toId = 'Z')
         {         
             var vessels = this.GetVesselListing(fromId, toId);
             Console.WriteLine();
@@ -46,7 +46,11 @@
             var guids = await this.ScrapeGuids(this.browsingContext, fromId);
             var owners = await this.ScrapeOwners(this.browsingContext, guids);
             var types = await this.ScrapeTypes(this.browsingContext, guids);
-            var registrations = await this.ScrapeRegistrations(this.browsingContext, guids);
+            var classSocieties = await this.ScrapeClassSocieties(this.browsingContext, guids);
+
+            var registrations = await this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
+            var registrationsKeys = new List<string>(registrations.Keys);
+            var registrationsValues = new List<string>(registrations.Values);
 
             // Size of each entity. They should always be equal.
             var vesselSize = imos.Count;
@@ -55,7 +59,8 @@
             {
                 var typeId = this.GetOrCreateType(types[i]);
                 var ownerId = this.GetOrCreateOwner(owners[i]);
-                var registrationId = this.GetOrCreateRegistration(registrations[i]);
+                var classSocietyId = this.GetOrCreateClassSociety(classSocieties[i]);
+                var registrationId = this.GetOrCreateRegistration(registrationsKeys[i], registrationsValues[i]);
 
                 var newVessel = new Vessel
                 {
@@ -73,6 +78,7 @@
                     TypeId = typeId,
                     OwnerId = ownerId,
                     RegistrationId = registrationId,
+                    ClassificationSocietyId = classSocietyId
                 };
 
                 await this.context.Vessels.AddAsync(newVessel);
@@ -142,7 +148,29 @@
             return owner.Id;
         }
 
-        private int GetOrCreateRegistration(string flagName)
+        private int GetOrCreateClassSociety(string classSocietyFullName)
+        {
+            var classSociety = this.context
+                .ClassificationSocieties
+                .FirstOrDefault(x => x.FullName == classSocietyFullName);
+
+            if (classSociety != null)
+            {
+                return classSociety.Id;
+            }
+
+            classSociety = new ClassificationSociety 
+            {
+                FullName = classSocietyFullName
+            };
+
+            this.context.ClassificationSocieties.Add(classSociety);
+            this.context.SaveChanges();
+
+            return classSociety.Id;
+        }
+
+        private int GetOrCreateRegistration(string flagName, string registryName) // ToLower
         {
             var registration = this.context
                 .Registrations
@@ -155,7 +183,8 @@
 
             registration = new Registration 
             {
-                Flag = flagName
+                Flag = flagName,
+                RegistryPort = registryName
             };
 
             this.context.Registrations.Add(registration);
@@ -362,6 +391,59 @@
             }
 
             return registrations;
+        }
+
+        // throws an exception when having the same key, refactor
+        private async Task<Dictionary<string, string>> ScrapeRegistrationsWithPorts(IBrowsingContext context, List<string> guids)
+        {
+            var registrations = new Dictionary<string, string>();
+
+            for (int i = 0; i < guids.Count; i++)
+            {
+                string formatted = this.UrlFormatting(guids, i);
+                var document = await context.OpenAsync(formatted);
+
+                var outerHtmlPerVesselFlag = document
+                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(3) > td:nth-child(2)")
+                    .Select(x => x.TextContent)
+                    .ToList();
+
+                var outerHtmlPerVesselPort = document
+                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(4) > td:nth-child(2)")
+                    .Select(x => x.TextContent)
+                    .ToList();
+
+                if (!registrations.ContainsKey(outerHtmlPerVesselFlag[0].Trim()))
+                {
+                    registrations[outerHtmlPerVesselFlag[0]] = outerHtmlPerVesselPort[0];
+                }
+                else
+                {
+                    registrations.Add(outerHtmlPerVesselFlag[0], outerHtmlPerVesselPort[0]);
+                }
+            }
+
+            return registrations;
+        }
+
+        private async Task<List<string>> ScrapeClassSocieties(IBrowsingContext context, List<string> guids)
+        {
+            var classSocieties = new List<string>();
+
+            for (int i = 0; i < guids.Count; i++)
+            {
+                string formatted = this.UrlFormatting(guids, i);
+                var document = await context.OpenAsync(formatted);
+
+                var outerHtmlPerVessel = document
+                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(7) > td:nth-child(2)")
+                    .Select(x => x.TextContent)
+                    .ToList();
+
+                classSocieties.Add(outerHtmlPerVessel[0].Trim());
+            }
+
+            return classSocieties;
         }
 
         private string UrlFormatting(List<string> guids, int i)
