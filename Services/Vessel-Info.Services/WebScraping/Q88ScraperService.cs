@@ -10,95 +10,81 @@
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Models;
 
+    using static Constants.ServicesConstants;
+
     public class Q88ScraperService : IQ88ScraperService
-    {
-        // TODO: move constants into a separate class
-        private const string ERROR_MESSAGE = "No vessels starting with {0} were found.";
-        private const string BASE_URL = "https://www.q88.com/ships.aspx?letter={0}&v=list";
-
-        private const string VESSELNAME_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td > a";
-        private const string IMO_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(2)";
-        private const string BUILTDATA_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(3)";
-        private const string DWT_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(4)";
-        private const string LOA_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(5)";
-        private const string CUBIC_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(6)";
-        private const string BEAM_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(7)";
-        private const string DRAFT_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(8)";
-        private const string HULL_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(9)";
-        private const string CALLSIGN_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(10)";
-        private const int SKIPNUMBER_SELECTOR = 1;
-
+    {      
         private readonly IConfiguration config;
         private readonly IBrowsingContext browsingContext;
-
         private readonly VesselInfoDbContext context;
 
         public Q88ScraperService(VesselInfoDbContext context)
         {
             this.config = Configuration.Default.WithDefaultLoader();
             this.browsingContext = BrowsingContext.New(this.config);
-
             this.context = context;
         }
 
-        public async Task ImportVesselDataAsync(char fromId = 'X', char toId = 'Y')
+        public async Task ImportVesselDataAsync(char fromId = START_LETTER, char toId = END_LETTER)
         {         
             var vessels = this.GetVesselListing(fromId, toId);
-            Console.WriteLine();
 
-            var names = vessels[0].Name;
-            var summerDwts = vessels[0].SummerDwt;           
-            var loas = vessels[0].Loa;
-            var imos = vessels[0].Imo;
-            var hullTypes = vessels[0].HullType;
-            var cubic = vessels[0].Cubic;
-            var beams = vessels[0].Beam;
-            var drafts = vessels[0].Draft;
-            var callSigns = vessels[0].CallSign;
-            var builts = vessels[0].Built;
-
-            var guids = await this.ScrapeGuids(this.browsingContext, fromId);
-            var owners = await this.ScrapeOwners(this.browsingContext, guids);
-            var types = await this.ScrapeTypes(this.browsingContext, guids);
-            var classSocieties = await this.ScrapeClassSocieties(this.browsingContext, guids);
-            var registrations = await this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
-            
-            // Size of each entity. They should always be equal.
-            var vesselSize = imos.Count;
-
-            for (int i = 0; i < vesselSize; i++)
+            if (vessels.Any())
             {
-                var typeId = this.GetOrCreateType(types[i]);
-                var ownerId = this.GetOrCreateOwner(owners[i]);
-                var classSocietyId = this.GetOrCreateClassSociety(classSocieties[i]);
+                var names = vessels[0].Name;
+                var summerDwts = vessels[0].SummerDwt;
+                var loas = vessels[0].Loa;
+                var imos = vessels[0].Imo;
+                var hullTypes = vessels[0].HullType;
+                var cubic = vessels[0].Cubic;
+                var beams = vessels[0].Beam;
+                var drafts = vessels[0].Draft;
+                var callSigns = vessels[0].CallSign;
+                var builts = vessels[0].Built;
 
-                var registrationKeys = registrations[i].Keys.FirstOrDefault();
-                var registrationValues = registrations[i].Values.FirstOrDefault();
-                var registrationId = this.GetOrCreateRegistration(registrationKeys, registrationValues);
+                var guids = await this.ScrapeGuids(this.browsingContext, fromId);
+                var owners = await this.ScrapeOwners(this.browsingContext, guids);
+                var types = await this.ScrapeTypes(this.browsingContext, guids);
+                var classSocieties = await this.ScrapeClassSocieties(this.browsingContext, guids);
+                var registrations = await this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
 
-                var newVessel = new Vessel
+                // Size of each entity. They should always be equal.
+                var vesselSize = names.Count;
+
+                for (int i = 0; i < vesselSize; i++)
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = names[i],
-                    Imo = imos[i],
-                    Built = builts[i],
-                    SummerDwt = summerDwts[i],
-                    Loa = loas[i],
-                    Cubic = cubic[i],
-                    Beam = beams[i],
-                    Draft = drafts[i],
-                    HullType = hullTypes[i],
-                    CallSign = callSigns[i],
-                    TypeId = typeId,
-                    OwnerId = ownerId,
-                    RegistrationId = registrationId,
-                    ClassificationSocietyId = classSocietyId
-                };
+                    var typeId = this.GetOrCreateType(types[i]);
+                    var ownerId = this.GetOrCreateOwner(owners[i]);
+                    var classSocietyId = this.GetOrCreateClassSociety(classSocieties[i]);
 
-                await this.context.Vessels.AddAsync(newVessel);
-            }
+                    var registrationKeys = registrations[i].Keys.FirstOrDefault();
+                    var registrationValues = registrations[i].Values.FirstOrDefault();
+                    var registrationId = this.GetOrCreateRegistration(registrationKeys, registrationValues);
 
-            await this.context.SaveChangesAsync();
+                    var newVessel = new Vessel
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = names[i],
+                        Imo = imos[i],
+                        Built = builts[i],
+                        SummerDwt = summerDwts[i],
+                        Loa = loas[i],
+                        Cubic = cubic[i],
+                        Beam = beams[i],
+                        Draft = drafts[i],
+                        HullType = hullTypes[i],
+                        CallSign = callSigns[i],
+                        TypeId = typeId,
+                        OwnerId = ownerId,
+                        RegistrationId = registrationId,
+                        ClassificationSocietyId = classSocietyId
+                    };
+
+                    await this.context.Vessels.AddAsync(newVessel);
+                }
+
+                await this.context.SaveChangesAsync();
+            }            
         }
 
         private List<Q88ListingServiceModel> GetVesselListing(char fromId, char toId)
@@ -184,7 +170,7 @@
             return classSociety.Id;
         }
 
-        private int GetOrCreateRegistration(string flagName, string registryPortName) // ToLower
+        private int GetOrCreateRegistration(string flagName, string registryPortName)
         {
             var registration = this.context
                 .Registrations
@@ -209,12 +195,11 @@
 
         private Q88ListingServiceModel ScrapeVessel(char id)
         {
-            var formattedUrl = string.Format(BASE_URL, id);
-
+            var formattedUrl = string.Format(BASE_URL_BY_CHARACTER, id);
             var document = this.browsingContext
                 .OpenAsync(formattedUrl)
                 .GetAwaiter()
-                .GetResult();
+                .GetResult();            
 
             if (document.DocumentElement.OuterHtml.Contains(ERROR_MESSAGE))
             {
@@ -224,7 +209,7 @@
             var vesselsData = new Q88ListingServiceModel();
 
             // Get Vessel Name
-            var names = this.SelectorType(document, VESSELNAME_SELECTOR, 27);
+            var names = this.SelectorType(document, VESSEL_NAME_SELECTOR, 27);
             vesselsData.Name.AddRange(names);
 
             // Get IMOs 
@@ -232,7 +217,7 @@
             vesselsData.Imo.AddRange(imos);
 
             // Get Built Data
-            var builtData = this.SelectorType(document, BUILTDATA_SELECTOR, SKIPNUMBER_SELECTOR);
+            var builtData = this.SelectorType(document, BUILT_DATA_SELECTOR, SKIPNUMBER_SELECTOR);
             vesselsData.Built.AddRange(builtData);
 
             // Get DTWs
@@ -260,7 +245,7 @@
             vesselsData.HullType.AddRange(hullTypes);
 
             //Get Call Sings
-            var callSings = this.SelectorType(document, CALLSIGN_SELECTOR, SKIPNUMBER_SELECTOR);
+            var callSings = this.SelectorType(document, CALL_SIGN_SELECTOR, SKIPNUMBER_SELECTOR);
             vesselsData.CallSign.AddRange(callSings);
 
             return vesselsData;
@@ -284,7 +269,7 @@
                 var document = await context.OpenAsync(formatted);
 
                 var outerHtmlPerVessel = document
-                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(6) > td:nth-child(5)")
+                    .QuerySelectorAll(OWNER_SELECTOR)
                     .Select(x => x.TextContent)
                     .ToList();
 
@@ -304,7 +289,7 @@
                 var document = await context.OpenAsync(formatted);
 
                 var outerHtmlPerVessel = document
-                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(5) > td:nth-child(2)")
+                    .QuerySelectorAll(TYPE_SELECTOR)
                     .Select(x => x.TextContent)
                     .ToList();
 
@@ -316,16 +301,16 @@
 
         private async Task<List<string>> ScrapeGuids(IBrowsingContext context, char id)
         {
-            var document = await context.OpenAsync($"https://www.q88.com/ships.aspx?letter={id}&v=list");
+            var formattedUrl = string.Format(BASE_URL_BY_ID, id);
+            var document = await context.OpenAsync(formattedUrl);
 
-            if (document.DocumentElement.OuterHtml.Contains("No vessels starting with 'Adsadas' were found."))
+            if (document.DocumentElement.OuterHtml.Contains(ERROR_MESSAGE))
             {
                 System.Console.WriteLine($"{id} not found");
             }
 
-            // "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(1)"
             var outerHtmlPerVessel = document
-                .QuerySelectorAll("#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td:nth-child(1)")
+                .QuerySelectorAll(GUID_SELECTOR)
                 .Select(x => x.OuterHtml)
                 .Skip(2)
                 .ToList();
@@ -354,12 +339,12 @@
                 var document = await context.OpenAsync(formatted);
 
                 var outerHtmlPerVesselFlag = document
-                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(3) > td:nth-child(2)")
+                    .QuerySelectorAll(FLAG_SELECTOR)
                     .Select(x => x.TextContent)
                     .ToList();
 
                 var outerHtmlPerVesselPort = document
-                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(4) > td:nth-child(2)")
+                    .QuerySelectorAll(PORT_SELECTOR)
                     .Select(x => x.TextContent)
                     .ToList();
 
@@ -384,7 +369,7 @@
                 var document = await context.OpenAsync(formatted);
 
                 var outerHtmlPerVessel = document
-                    .QuerySelectorAll("#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(7) > td:nth-child(2)")
+                    .QuerySelectorAll(CLASS_SOCIETY_SELECTOR)
                     .Select(x => x.TextContent)
                     .ToList();
 
