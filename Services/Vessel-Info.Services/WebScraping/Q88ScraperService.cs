@@ -2,6 +2,7 @@
 {
     using AngleSharp;
     using AngleSharp.Dom;
+    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -16,13 +17,13 @@
     {      
         private readonly IConfiguration config;
         private readonly IBrowsingContext browsingContext;
-        private readonly VesselInfoDbContext context;
+        private readonly VesselInfoDbContext dbContext;
 
-        public Q88ScraperService(VesselInfoDbContext context)
+        public Q88ScraperService(VesselInfoDbContext dbContext)
         {
             this.config = Configuration.Default.WithDefaultLoader();
             this.browsingContext = BrowsingContext.New(this.config);
-            this.context = context;
+            this.dbContext = dbContext;
         }
 
         public async Task ImportVesselDataAsync(char fromId = START_LETTER, char toId = END_LETTER)
@@ -42,24 +43,24 @@
                 var callSigns = vessels[0].CallSign;
                 var builts = vessels[0].Built;
 
-                var guids = await this.ScrapeGuids(this.browsingContext, fromId);
-                var owners = await this.ScrapeOwners(this.browsingContext, guids);
-                var types = await this.ScrapeTypes(this.browsingContext, guids);
-                var classSocieties = await this.ScrapeClassSocieties(this.browsingContext, guids);
-                var registrations = await this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
+                var guids = this.ScrapeGuids(this.browsingContext, fromId);
+                var owners = this.ScrapeOwners(this.browsingContext, guids);
+                var types = this.ScrapeTypes(this.browsingContext, guids);
+                var classSocieties = this.ScrapeClassSocieties(this.browsingContext, guids);
+                var registrations = this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
 
                 // Size of each entity. They should always be equal.
                 var vesselSize = names.Count;
 
                 for (int i = 0; i < vesselSize; i++)
                 {
-                    var typeId = this.GetOrCreateType(types[i]);
-                    var ownerId = this.GetOrCreateOwner(owners[i]);
-                    var classSocietyId = this.GetOrCreateClassSociety(classSocieties[i]);
+                    var typeId = await this.GetOrCreateTypeAsync(types[i]);
+                    var ownerId = await this.GetOrCreateOwnerAsync(owners[i]);
+                    var classSocietyId = await this.GetOrCreateClassSocietyAsync(classSocieties[i]);
 
                     var registrationKeys = registrations[i].Keys.FirstOrDefault();
                     var registrationValues = registrations[i].Values.FirstOrDefault();
-                    var registrationId = this.GetOrCreateRegistration(registrationKeys, registrationValues);
+                    var registrationId = await this.GetOrCreateRegistrationAsync(registrationKeys, registrationValues);
 
                     var newVessel = new Vessel
                     {
@@ -80,10 +81,10 @@
                         ClassificationSocietyId = classSocietyId
                     };
 
-                    await this.context.Vessels.AddAsync(newVessel);
+                    await this.dbContext.Vessels.AddAsync(newVessel);
                 }
 
-                await this.context.SaveChangesAsync();
+                await this.dbContext.SaveChangesAsync();
             }            
         }
 
@@ -104,11 +105,11 @@
             return all;
         }
 
-        private int GetOrCreateType(string typeName)
+        private async Task<int> GetOrCreateTypeAsync(string typeName)
         {
-            var type = this.context
+            var type = await this.dbContext
                 .Types
-                .FirstOrDefault(x => x.Name == typeName);
+                .FirstOrDefaultAsync(x => x.Name == typeName);
 
             if (type != null)
             {
@@ -120,17 +121,17 @@
                 Name = typeName
             };
 
-            this.context.Types.Add(type);
-            this.context.SaveChanges();
+            await this.dbContext.Types.AddAsync(type);
+            await this.dbContext.SaveChangesAsync();
 
             return type.Id;
         }
 
-        private int GetOrCreateOwner(string ownerName)
+        private async Task<int> GetOrCreateOwnerAsync(string ownerName)
         {
-            var owner = this.context
+            var owner = await this.dbContext
                 .Owners
-                .FirstOrDefault(x => x.Name == ownerName);
+                .FirstOrDefaultAsync(x => x.Name == ownerName);
 
             if (owner != null)
             {
@@ -142,17 +143,17 @@
                 Name = ownerName
             };
 
-            this.context.Owners.Add(owner);
-            this.context.SaveChanges();
+            await this.dbContext.Owners.AddAsync(owner);
+            await this.dbContext.SaveChangesAsync();
 
             return owner.Id;
         }
 
-        private int GetOrCreateClassSociety(string classSocietyFullName)
+        private async Task<int> GetOrCreateClassSocietyAsync(string classSocietyFullName)
         {
-            var classSociety = this.context
+            var classSociety = await this.dbContext
                 .ClassificationSocieties
-                .FirstOrDefault(x => x.FullName == classSocietyFullName);
+                .FirstOrDefaultAsync(x => x.FullName == classSocietyFullName);
 
             if (classSociety != null)
             {
@@ -164,17 +165,17 @@
                 FullName = classSocietyFullName
             };
 
-            this.context.ClassificationSocieties.Add(classSociety);
-            this.context.SaveChanges();
+            await this.dbContext.ClassificationSocieties.AddAsync(classSociety);
+            await this.dbContext.SaveChangesAsync();
 
             return classSociety.Id;
         }
 
-        private int GetOrCreateRegistration(string flagName, string registryPortName)
+        private async Task<int> GetOrCreateRegistrationAsync(string flagName, string registryPortName)
         {
-            var registration = this.context
+            var registration = await this.dbContext
                 .Registrations
-                .FirstOrDefault(x => x.Flag == flagName);
+                .FirstOrDefaultAsync(x => x.Flag == flagName);
 
             if (registration != null)
             {
@@ -187,8 +188,8 @@
                 RegistryPort = registryPortName
             };
 
-            this.context.Registrations.Add(registration);
-            this.context.SaveChanges();
+            await this.dbContext.Registrations.AddAsync(registration);
+            await this.dbContext.SaveChangesAsync();
 
             return registration.Id;
         }
@@ -243,14 +244,13 @@
             return vesselsData;
         }
 
-        // TODO: Try optimizing ScrapeOwners and ScrapeGuids if possible. Change variable names. Document the code for a better understanding later on
-        private async Task<List<string>> ScrapeOwners(IBrowsingContext context, List<string> guids)
+        private List<string> ScrapeOwners(IBrowsingContext context, List<string> guids)
         {
             var owners = new List<string>();
 
             for (int i = 0; i < guids.Count; i++)
             {
-                string formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
                 var document = this.GetDocument(formattedUrl);
                 var outerHtmlPerVessel = this.SelectorType(document, OWNER_SELECTOR, 0);
 
@@ -260,13 +260,13 @@
             return owners;
         }
 
-        private async Task<List<string>> ScrapeTypes(IBrowsingContext context, List<string> guids)
+        private List<string> ScrapeTypes(IBrowsingContext context, List<string> guids)
         {
             var types = new List<string>();
 
             for (int i = 0; i < guids.Count; i++)
             {
-                string formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
                 var document = this.GetDocument(formattedUrl);
                 var outerHtmlPerVessel = this.SelectorType(document, TYPE_SELECTOR, 0);
 
@@ -276,7 +276,7 @@
             return types;
         }      
 
-        private async Task<List<string>> ScrapeGuids(IBrowsingContext context, char id)
+        private List<string> ScrapeGuids(IBrowsingContext context, char id)
         {
             var formattedUrl = string.Format(BASE_URL, id);
             var document = this.GetDocument(formattedUrl);
@@ -301,13 +301,13 @@
             return vesselGuids;
         }
 
-        private async Task<Dictionary<int, Dictionary<string, string>>> ScrapeRegistrationsWithPorts(IBrowsingContext context, List<string> guids)
+        private Dictionary<int, Dictionary<string, string>> ScrapeRegistrationsWithPorts(IBrowsingContext context, List<string> guids)
         {
             var registrations = new Dictionary<int, Dictionary<string, string>>();
 
             for (int i = 0; i < guids.Count; i++)
             {
-                string formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
                 var document = this.GetDocument(formattedUrl);
 
                 var outerHtmlPerVesselFlag = this.SelectorType(document, FLAG_SELECTOR, 0);
@@ -324,13 +324,13 @@
             return registrations;
         }
 
-        private async Task<List<string>> ScrapeClassSocieties(IBrowsingContext context, List<string> guids)
+        private List<string> ScrapeClassSocieties(IBrowsingContext context, List<string> guids)
         {
             var classSocieties = new List<string>();
 
             for (int i = 0; i < guids.Count; i++)
             {
-                string formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
                 var document = this.GetDocument(formattedUrl);
                 var outerHtmlPerVessel = this.SelectorType(document, CLASS_SOCIETY_SELECTOR, 0);
 
@@ -339,6 +339,7 @@
 
             return classSocieties;
         }
+
         private IDocument GetDocument(string formattedUrl)
         {
             var document = this.browsingContext
