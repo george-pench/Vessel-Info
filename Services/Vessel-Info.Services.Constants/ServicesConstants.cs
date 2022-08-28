@@ -25,6 +25,7 @@
         public const string FLAG_SELECTOR = "#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(3) > td:nth-child(2)";
         public const string PORT_SELECTOR = "#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(4) > td:nth-child(2)";
         public const string CLASS_SOCIETY_SELECTOR = "#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(7) > td:nth-child(2)";
+        public const string OPERATOR_SELECTOR = "#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(7) > td:nth-child(5)";
 
         public const int SKIPNUMBER_SELECTOR = 1;
     }

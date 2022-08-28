@@ -48,6 +48,7 @@
                 var types = this.ScrapeTypes(this.browsingContext, guids);
                 var classSocieties = this.ScrapeClassSocieties(this.browsingContext, guids);
                 var registrations = this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
+                var operators = this.ScrapeOperators(this.browsingContext, guids);
 
                 // Size of each entity. They should always be equal.
                 var vesselSize = names.Count;
@@ -57,6 +58,7 @@
                     var typeId = await this.GetOrCreateTypeAsync(types[i]);
                     var ownerId = await this.GetOrCreateOwnerAsync(owners[i]);
                     var classSocietyId = await this.GetOrCreateClassSocietyAsync(classSocieties[i]);
+                    // var operatorId = await this.GetOrCreateOperator(operators[i]);
 
                     var registrationKeys = registrations[i].Keys.FirstOrDefault();
                     var registrationValues = registrations[i].Values.FirstOrDefault();
@@ -192,6 +194,28 @@
             await this.dbContext.SaveChangesAsync();
 
             return registration.Id;
+        }
+
+        private async Task<int> GetOrCreateOperator(string operatorName)
+        {
+            var @operator = await this.dbContext
+                .Operators
+                .FirstOrDefaultAsync(x => x.Name == operatorName);
+
+            if (@operator != null)
+            {
+                return @operator.Id;
+            }
+
+            @operator = new Operator 
+            {
+                Name = operatorName
+            };
+
+            await this.dbContext.Operators.AddAsync(@operator);
+            await this.dbContext.SaveChangesAsync();
+
+            return @operator.Id;
         }
 
         private Q88ListingServiceModel ScrapeVessel(char id)
@@ -338,6 +362,22 @@
             }
 
             return classSocieties;
+        }
+
+        private List<string> ScrapeOperators(IBrowsingContext context, List<string> guids)
+        {
+            var operators = new List<string>();
+
+            for (int i = 0; i < guids.Count; i++)
+            {
+                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var document = this.GetDocument(formattedUrl);
+                var outerHtmlPerVessel = this.SelectorType(document, OPERATOR_SELECTOR, 0);
+
+                operators.Add(outerHtmlPerVessel[0].Trim());
+            }
+
+            return operators;
         }
 
         private IDocument GetDocument(string formattedUrl)
