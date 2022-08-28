@@ -5,8 +5,8 @@
         public const char START_LETTER = 'X';
         public const char END_LETTER = 'Y';
 
-        public const string BASE_URL_BY_CHARACTER = "https://www.q88.com/ships.aspx?letter={0}&v=list";
-        public const string BASE_URL_BY_ID = "https://www.q88.com/ships.aspx?letter={id}&v=list";
+        public const string BASE_URL = "https://www.q88.com/ships.aspx?letter={0}&v=list";
+        public const string VIEW_SHIP_URL = "https://www.q88.com/ViewShip.aspx?id={0}";
         public const string ERROR_MESSAGE = "No vessels starting with";
 
         public const string VESSEL_NAME_SELECTOR = "#ctl00_cphMiddle_ctl00_modView_dgVessel > tbody > tr > td > a";
