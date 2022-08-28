@@ -195,16 +195,8 @@
 
         private Q88ListingServiceModel ScrapeVessel(char id)
         {
-            var formattedUrl = string.Format(BASE_URL_BY_CHARACTER, id);
-            var document = this.browsingContext
-                .OpenAsync(formattedUrl)
-                .GetAwaiter()
-                .GetResult();            
-
-            if (document.DocumentElement.OuterHtml.Contains(ERROR_MESSAGE))
-            {
-                throw new InvalidOperationException();
-            }
+            var formattedUrl = string.Format(BASE_URL, id);
+            var document = this.GetDocument(formattedUrl);
 
             var vesselsData = new Q88ListingServiceModel();
 
@@ -251,13 +243,6 @@
             return vesselsData;
         }
 
-        private List<string> SelectorType(IDocument document, string selector, int skipNumber) 
-            => document
-                .QuerySelectorAll(selector)
-                .Select(x => x.TextContent)
-                .Skip(skipNumber)
-                .ToList();
-
         // TODO: Try optimizing ScrapeOwners and ScrapeGuids if possible. Change variable names. Document the code for a better understanding later on
         private async Task<List<string>> ScrapeOwners(IBrowsingContext context, List<string> guids)
         {
@@ -265,13 +250,9 @@
 
             for (int i = 0; i < guids.Count; i++)
             {
-                string formatted = this.UrlFormatting(guids, i);
-                var document = await context.OpenAsync(formatted);
-
-                var outerHtmlPerVessel = document
-                    .QuerySelectorAll(OWNER_SELECTOR)
-                    .Select(x => x.TextContent)
-                    .ToList();
+                string formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var document = this.GetDocument(formattedUrl);
+                var outerHtmlPerVessel = this.SelectorType(document, OWNER_SELECTOR, 0);
 
                 owners.Add(outerHtmlPerVessel[0].Trim());
             }
@@ -285,13 +266,9 @@
 
             for (int i = 0; i < guids.Count; i++)
             {
-                string formatted = this.UrlFormatting(guids, i);
-                var document = await context.OpenAsync(formatted);
-
-                var outerHtmlPerVessel = document
-                    .QuerySelectorAll(TYPE_SELECTOR)
-                    .Select(x => x.TextContent)
-                    .ToList();
+                string formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var document = this.GetDocument(formattedUrl);
+                var outerHtmlPerVessel = this.SelectorType(document, TYPE_SELECTOR, 0);
 
                 types.Add(outerHtmlPerVessel[0].Trim());
             }
@@ -301,13 +278,8 @@
 
         private async Task<List<string>> ScrapeGuids(IBrowsingContext context, char id)
         {
-            var formattedUrl = string.Format(BASE_URL_BY_ID, id);
-            var document = await context.OpenAsync(formattedUrl);
-
-            if (document.DocumentElement.OuterHtml.Contains(ERROR_MESSAGE))
-            {
-                System.Console.WriteLine($"{id} not found");
-            }
+            var formattedUrl = string.Format(BASE_URL, id);
+            var document = this.GetDocument(formattedUrl);
 
             var outerHtmlPerVessel = document
                 .QuerySelectorAll(GUID_SELECTOR)
@@ -335,18 +307,11 @@
 
             for (int i = 0; i < guids.Count; i++)
             {
-                string formatted = this.UrlFormatting(guids, i);
-                var document = await context.OpenAsync(formatted);
+                string formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var document = this.GetDocument(formattedUrl);
 
-                var outerHtmlPerVesselFlag = document
-                    .QuerySelectorAll(FLAG_SELECTOR)
-                    .Select(x => x.TextContent)
-                    .ToList();
-
-                var outerHtmlPerVesselPort = document
-                    .QuerySelectorAll(PORT_SELECTOR)
-                    .Select(x => x.TextContent)
-                    .ToList();
+                var outerHtmlPerVesselFlag = this.SelectorType(document, FLAG_SELECTOR, 0);
+                var outerHtmlPerVesselPort = this.SelectorType(document, PORT_SELECTOR, 0);
 
                 if (!registrations.ContainsKey(i))
                 {
@@ -365,23 +330,39 @@
 
             for (int i = 0; i < guids.Count; i++)
             {
-                string formatted = this.UrlFormatting(guids, i);
-                var document = await context.OpenAsync(formatted);
-
-                var outerHtmlPerVessel = document
-                    .QuerySelectorAll(CLASS_SOCIETY_SELECTOR)
-                    .Select(x => x.TextContent)
-                    .ToList();
+                string formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var document = this.GetDocument(formattedUrl);
+                var outerHtmlPerVessel = this.SelectorType(document, CLASS_SOCIETY_SELECTOR, 0);
 
                 classSocieties.Add(outerHtmlPerVessel[0].Trim());
             }
 
             return classSocieties;
         }
-
-        private string UrlFormatting(List<string> guids, int i)
+        private IDocument GetDocument(string formattedUrl)
         {
-            string url = "https://www.q88.com/ViewShip.aspx?id={0}";
+            var document = this.browsingContext
+                .OpenAsync(formattedUrl)
+                .GetAwaiter()
+                .GetResult();
+
+            if (document.DocumentElement.OuterHtml.Contains(ERROR_MESSAGE))
+            {
+                throw new InvalidOperationException();
+            }
+
+            return document;
+        }
+
+        private List<string> SelectorType(IDocument document, string selector, int skipNumber) 
+            => document
+                .QuerySelectorAll(selector)
+                .Select(x => x.TextContent)
+                .Skip(skipNumber)
+                .ToList();
+
+        private string UrlFormatting(string url, List<string> guids, int i)
+        {
             var formatted = String.Format(url, guids[i]);
 
             return formatted;
