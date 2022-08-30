@@ -48,7 +48,7 @@
                 var types = this.ScrapeTypes(this.browsingContext, guids);
                 var classSocieties = this.ScrapeClassSocieties(this.browsingContext, guids);
                 var registrations = this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
-                var operators = this.ScrapeOperators(this.browsingContext, guids);
+                // var operators = this.ScrapeOperators(this.browsingContext, guids);
 
                 // Size of each entity. They should always be equal.
                 var vesselSize = names.Count;
@@ -58,7 +58,7 @@
                     var typeId = await this.GetOrCreateTypeAsync(types[i]);
                     var ownerId = await this.GetOrCreateOwnerAsync(owners[i]);
                     var classSocietyId = await this.GetOrCreateClassSocietyAsync(classSocieties[i]);
-                    // var operatorId = await this.GetOrCreateOperator(operators[i]);
+                    // var shipbrokerId = await this.GetOrCreateShipbrokerAsync();
 
                     var registrationKeys = registrations[i].Keys.FirstOrDefault();
                     var registrationValues = registrations[i].Values.FirstOrDefault();
@@ -80,14 +80,15 @@
                         TypeId = typeId,
                         OwnerId = ownerId,
                         RegistrationId = registrationId,
-                        ClassificationSocietyId = classSocietyId
+                        ClassificationSocietyId = classSocietyId,
+                        // ShipbrokerId = shipbrokerId
                     };
 
                     await this.dbContext.Vessels.AddAsync(newVessel);
                 }
 
                 await this.dbContext.SaveChangesAsync();
-            }            
+            }
         }
 
         private List<Q88ListingServiceModel> GetVesselListing(char fromId, char toId)
@@ -149,6 +150,28 @@
             await this.dbContext.SaveChangesAsync();
 
             return owner.Id;
+        }
+
+        private async Task<int> GetOrCreateShipbrokerAsync(string agencyName)
+        {
+            var shipbroker = this.dbContext
+                .Shipbrokers
+                .FirstOrDefault(x => x.AgencyName == agencyName);
+
+            if (shipbroker != null)
+            {
+                return shipbroker.Id;
+            }
+
+            shipbroker = new Shipbroker
+            {
+                AgencyName = agencyName
+            };
+
+            await this.dbContext.Shipbrokers.AddAsync(shipbroker);
+            await this.dbContext.SaveChangesAsync();
+
+            return shipbroker.Id;
         }
 
         private async Task<int> GetOrCreateClassSocietyAsync(string classSocietyFullName)

@@ -36,11 +36,10 @@
 
         public class Shipbroker
         {
+            public const int AgencyNameMinLength = 4;
+            public const int AgencyNameMaxLength = 100;
             public const int TelephoneNumberMinLength = 8;
             public const int TelephoneNumberMaxLength = 20;
-            public const int AgencyMinLength = 6;
-            public const int AgencyMaxLength = 50;
-
         }
 
         public class Registration
