@@ -31,7 +31,14 @@ namespace Vessel_Info.Web
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services
-                .AddDefaultIdentity<User>()
+                .AddDefaultIdentity<User>(options => 
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<VesselInfoDbContext>();
 
             services.AddTransient<IQ88ScraperService, Q88ScraperService>();
