@@ -26,7 +26,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task ImportVesselDataAsync(char fromId = START_LETTER, char toId = END_LETTER)
+        public async Task ImportVesselDataAsync(char fromId = StartLetter, char toId = EndLetter)
         {         
             var vessels = this.GetVesselListing(fromId, toId);
 
@@ -48,7 +48,7 @@
                 var types = this.ScrapeTypes(this.browsingContext, guids);
                 var classSocieties = this.ScrapeClassSocieties(this.browsingContext, guids);
                 var registrations = this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
-                // var operators = this.ScrapeOperators(this.browsingContext, guids);
+                // var operators = this.ScrapeOperators(this.browsingContext, guids); 
 
                 // Size of each entity. They should always be equal.
                 var vesselSize = names.Count;
@@ -243,49 +243,49 @@
 
         private Q88ListingServiceModel ScrapeVessel(char id)
         {
-            var formattedUrl = string.Format(BASE_URL, id);
+            var formattedUrl = string.Format(BaseUrl, id);
             var document = this.GetDocument(formattedUrl);
 
             var vesselsData = new Q88ListingServiceModel();
 
             // Get Vessel Name
-            var names = this.SelectorType(document, VESSEL_NAME_SELECTOR, 27);
+            var names = this.SelectorType(document, VesselNameSelector, 27);
             vesselsData.Name.AddRange(names);
 
             // Get IMOs 
-            var imos = this.SelectorType(document, IMO_SELECTOR, SKIPNUMBER_SELECTOR);
+            var imos = this.SelectorType(document, ImoSelector, SkipNumber);
             vesselsData.Imo.AddRange(imos);
 
             // Get Built Data
-            var builtData = this.SelectorType(document, BUILT_DATA_SELECTOR, SKIPNUMBER_SELECTOR);
+            var builtData = this.SelectorType(document, BuiltDataSelector, SkipNumber);
             vesselsData.Built.AddRange(builtData);
 
             // Get DTWs
-            var dwts = this.SelectorType(document, DWT_SELECTOR, SKIPNUMBER_SELECTOR);
+            var dwts = this.SelectorType(document, DwtSelector, SkipNumber);
             vesselsData.SummerDwt.AddRange(dwts);
 
             // Get LOAs
-            var loas = this.SelectorType(document, LOA_SELECTOR, SKIPNUMBER_SELECTOR);
+            var loas = this.SelectorType(document, LoaSelector, SkipNumber);
             vesselsData.Loa.AddRange(loas);
 
             // Get Cubic
-            var cubic = this.SelectorType(document, CUBIC_SELECTOR, SKIPNUMBER_SELECTOR);
+            var cubic = this.SelectorType(document, CubicSelector, SkipNumber);
             vesselsData.Cubic.AddRange(cubic);
 
             // Get Beams
-            var beams = this.SelectorType(document, BEAM_SELECTOR, SKIPNUMBER_SELECTOR);
+            var beams = this.SelectorType(document, BeamSelector, SkipNumber);
             vesselsData.Beam.AddRange(beams);
 
             // Get Drafts
-            var drafts = this.SelectorType(document, DRAFT_SELECTOR, SKIPNUMBER_SELECTOR);
+            var drafts = this.SelectorType(document, DraftSelector, SkipNumber);
             vesselsData.Draft.AddRange(drafts);
 
             // Get Hulls
-            var hullTypes = this.SelectorType(document, HULL_SELECTOR, SKIPNUMBER_SELECTOR);
+            var hullTypes = this.SelectorType(document, HullSelector, SkipNumber);
             vesselsData.HullType.AddRange(hullTypes);
 
             //Get Call Sings
-            var callSings = this.SelectorType(document, CALL_SIGN_SELECTOR, SKIPNUMBER_SELECTOR);
+            var callSings = this.SelectorType(document, CallSignSelector, SkipNumber);
             vesselsData.CallSign.AddRange(callSings);
 
             return vesselsData;
@@ -297,9 +297,9 @@
 
             for (int i = 0; i < guids.Count; i++)
             {
-                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
-                var outerHtmlPerVessel = this.SelectorType(document, OWNER_SELECTOR, 0);
+                var outerHtmlPerVessel = this.SelectorType(document, OwnerSelector, 0);
 
                 owners.Add(outerHtmlPerVessel[0].Trim());
             }
@@ -313,9 +313,9 @@
 
             for (int i = 0; i < guids.Count; i++)
             {
-                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
-                var outerHtmlPerVessel = this.SelectorType(document, TYPE_SELECTOR, 0);
+                var outerHtmlPerVessel = this.SelectorType(document, TypeSelector, 0);
 
                 types.Add(outerHtmlPerVessel[0].Trim());
             }
@@ -325,11 +325,11 @@
 
         private List<string> ScrapeGuids(IBrowsingContext context, char id)
         {
-            var formattedUrl = string.Format(BASE_URL, id);
+            var formattedUrl = string.Format(BaseUrl, id);
             var document = this.GetDocument(formattedUrl);
 
             var outerHtmlPerVessel = document
-                .QuerySelectorAll(GUID_SELECTOR)
+                .QuerySelectorAll(GuidSelector)
                 .Select(x => x.OuterHtml)
                 .Skip(2)
                 .ToList();
@@ -354,11 +354,11 @@
 
             for (int i = 0; i < guids.Count; i++)
             {
-                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
 
-                var outerHtmlPerVesselFlag = this.SelectorType(document, FLAG_SELECTOR, 0);
-                var outerHtmlPerVesselPort = this.SelectorType(document, PORT_SELECTOR, 0);
+                var outerHtmlPerVesselFlag = this.SelectorType(document, FlagSelector, 0);
+                var outerHtmlPerVesselPort = this.SelectorType(document, PortSelector, 0);
 
                 if (!registrations.ContainsKey(i))
                 {
@@ -377,9 +377,9 @@
 
             for (int i = 0; i < guids.Count; i++)
             {
-                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
-                var outerHtmlPerVessel = this.SelectorType(document, CLASS_SOCIETY_SELECTOR, 0);
+                var outerHtmlPerVessel = this.SelectorType(document, ClassSocietySelector, 0);
 
                 classSocieties.Add(outerHtmlPerVessel[0].Trim());
             }
@@ -393,9 +393,9 @@
 
             for (int i = 0; i < guids.Count; i++)
             {
-                var formattedUrl = this.UrlFormatting(VIEW_SHIP_URL, guids, i);
+                var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
-                var outerHtmlPerVessel = this.SelectorType(document, OPERATOR_SELECTOR, 0);
+                var outerHtmlPerVessel = this.SelectorType(document, OperatorSelector, 0);
 
                 operators.Add(outerHtmlPerVessel[0].Trim());
             }
@@ -410,7 +410,7 @@
                 .GetAwaiter()
                 .GetResult();
 
-            if (document.DocumentElement.OuterHtml.Contains(ERROR_MESSAGE))
+            if (document.DocumentElement.OuterHtml.Contains(ErrorMessage))
             {
                 throw new InvalidOperationException();
             }
