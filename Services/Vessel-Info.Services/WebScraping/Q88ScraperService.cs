@@ -253,39 +253,39 @@
             vesselsData.Name.AddRange(names);
 
             // Get IMOs 
-            var imos = this.SelectorType(document, ImoSelector, SkipNumber);
+            var imos = this.SelectorType(document, ImoSelector, ScrapeVesselSkipNumber);
             vesselsData.Imo.AddRange(imos);
 
             // Get Built Data
-            var builtData = this.SelectorType(document, BuiltDataSelector, SkipNumber);
+            var builtData = this.SelectorType(document, BuiltDataSelector, ScrapeVesselSkipNumber);
             vesselsData.Built.AddRange(builtData);
 
             // Get DTWs
-            var dwts = this.SelectorType(document, DwtSelector, SkipNumber);
+            var dwts = this.SelectorType(document, DwtSelector, ScrapeVesselSkipNumber);
             vesselsData.SummerDwt.AddRange(dwts);
 
             // Get LOAs
-            var loas = this.SelectorType(document, LoaSelector, SkipNumber);
+            var loas = this.SelectorType(document, LoaSelector, ScrapeVesselSkipNumber);
             vesselsData.Loa.AddRange(loas);
 
             // Get Cubic
-            var cubic = this.SelectorType(document, CubicSelector, SkipNumber);
+            var cubic = this.SelectorType(document, CubicSelector, ScrapeVesselSkipNumber);
             vesselsData.Cubic.AddRange(cubic);
 
             // Get Beams
-            var beams = this.SelectorType(document, BeamSelector, SkipNumber);
+            var beams = this.SelectorType(document, BeamSelector, ScrapeVesselSkipNumber);
             vesselsData.Beam.AddRange(beams);
 
             // Get Drafts
-            var drafts = this.SelectorType(document, DraftSelector, SkipNumber);
+            var drafts = this.SelectorType(document, DraftSelector, ScrapeVesselSkipNumber);
             vesselsData.Draft.AddRange(drafts);
 
             // Get Hulls
-            var hullTypes = this.SelectorType(document, HullSelector, SkipNumber);
+            var hullTypes = this.SelectorType(document, HullSelector, ScrapeVesselSkipNumber);
             vesselsData.HullType.AddRange(hullTypes);
 
             //Get Call Sings
-            var callSings = this.SelectorType(document, CallSignSelector, SkipNumber);
+            var callSings = this.SelectorType(document, CallSignSelector, ScrapeVesselSkipNumber);
             vesselsData.CallSign.AddRange(callSings);
 
             return vesselsData;
@@ -299,7 +299,7 @@
             {
                 var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
-                var outerHtmlPerVessel = this.SelectorType(document, OwnerSelector, 0);
+                var outerHtmlPerVessel = this.SelectorType(document, OwnerSelector, ScrapeSkipNumber);
 
                 owners.Add(outerHtmlPerVessel[0].Trim());
             }
@@ -315,7 +315,7 @@
             {
                 var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
-                var outerHtmlPerVessel = this.SelectorType(document, TypeSelector, 0);
+                var outerHtmlPerVessel = this.SelectorType(document, TypeSelector, ScrapeSkipNumber);
 
                 types.Add(outerHtmlPerVessel[0].Trim());
             }
@@ -357,8 +357,8 @@
                 var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
 
-                var outerHtmlPerVesselFlag = this.SelectorType(document, FlagSelector, 0);
-                var outerHtmlPerVesselPort = this.SelectorType(document, PortSelector, 0);
+                var outerHtmlPerVesselFlag = this.SelectorType(document, FlagSelector, ScrapeSkipNumber);
+                var outerHtmlPerVesselPort = this.SelectorType(document, PortSelector, ScrapeSkipNumber);
 
                 if (!registrations.ContainsKey(i))
                 {
@@ -379,7 +379,7 @@
             {
                 var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
-                var outerHtmlPerVessel = this.SelectorType(document, ClassSocietySelector, 0);
+                var outerHtmlPerVessel = this.SelectorType(document, ClassSocietySelector, ScrapeSkipNumber);
 
                 classSocieties.Add(outerHtmlPerVessel[0].Trim());
             }
@@ -395,7 +395,7 @@
             {
                 var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
-                var outerHtmlPerVessel = this.SelectorType(document, OperatorSelector, 0);
+                var outerHtmlPerVessel = this.SelectorType(document, OperatorSelector, ScrapeSkipNumber);
 
                 operators.Add(outerHtmlPerVessel[0].Trim());
             }

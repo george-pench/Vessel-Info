@@ -27,6 +27,7 @@
         public const string ClassSocietySelector = "#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(7) > td:nth-child(2)";
         public const string OperatorSelector = "#pnlQuestionnaires > table.main > tbody > tr:nth-child(1) > td > table > tbody > tr:nth-child(7) > td:nth-child(5)";
 
-        public const int SkipNumber = 1;
+        public const int ScrapeVesselSkipNumber = 1;
+        public const int ScrapeSkipNumber = 0;
     }
 }
