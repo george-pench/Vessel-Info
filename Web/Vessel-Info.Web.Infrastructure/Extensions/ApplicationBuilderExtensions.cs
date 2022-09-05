@@ -48,8 +48,8 @@
                     var user = new User
                     {
                         Email = AdminEmail,
-                        UserName = AdminUserName,
-                        Name = AdminName
+                        UserName = AdminEmail,
+                        Name = AdminUserName
                     };
 
                     await userManager.CreateAsync(user, AdminPassword);

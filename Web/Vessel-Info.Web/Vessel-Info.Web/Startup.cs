@@ -10,6 +10,7 @@ namespace Vessel_Info.Web
     using Microsoft.Extensions.Hosting;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
+    using Vessel_Info.Services.Vessels;
     using Vessel_Info.Services.WebScraping;
     using Vessel_Info.Web.Infrastructure.Extensions;
 
@@ -42,6 +43,7 @@ namespace Vessel_Info.Web
                 .AddEntityFrameworkStores<VesselInfoDbContext>();
 
             services.AddTransient<IQ88ScraperService, Q88ScraperService>();
+            services.AddTransient<IVesselService, VesselService>();
             
             services.AddControllersWithViews(options => 
             {
@@ -75,8 +77,14 @@ namespace Vessel_Info.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "Areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                //endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
             });
         }
