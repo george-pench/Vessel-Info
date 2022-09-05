@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Vessel_Info.Services.Vessels.Models.VesselAllServiceModel>
+
+@{
+    ViewData["Title"] = "All Vessels";
+}
+
+<h2 class="text-center">
+    @ViewData["Title"]
+</h2>
+
+<table class="table table-hover table-bordered table-striped">
+    <thead class="table-success">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Imo</th>
+            <th scope="col">Built</th>
+            <th scope="col">Dwt</th>
+            <th scope="col">Loa</th>
+            <th scope="col">Cubic</th>
+            <th scope="col">Beam</th>
+            <th scope="col">Draft</th>
+            <th scope="col">Hull</th>
+            <th scope="col">Call Sign</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vessel in Model)
+        {
+            <tr>
+                <td scope="col">
+                    <a asp-controller="Vessels" asp-action="Details" asp-route-id="@vessel.Id">@vessel.Name</a>
+                </td>
+                <td scope="col">@vessel.Imo</td>
+                <td scope="col">@vessel.Built</td>
+                <td scope="col">@vessel.Dwt</td>
+                <td scope="col">@vessel.Loa</td>
+                <td scope="col">@vessel.Cubic</td>
+                <td scope="col">@vessel.Beam</td>
+                <td scope="col">@vessel.Draft</td>
+                <td scope="col">@vessel.Hull</td>
+                <td scope="col">@vessel.CallSign</td>
+            </tr>
+        }
+    </tbody>
+</table>
