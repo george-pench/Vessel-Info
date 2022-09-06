@@ -1,0 +1,57 @@
+﻿@model Vessel_Info.Services.Vessels.Models.VesselDetailsServiceModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h2 class="text-center">Vessel Details</h2>
+    <hr />
+
+    <table class="table table-borderless table-hover">
+        <tbody>
+            <tr>
+                <td style="width:150px">Vessel's name:</td>
+                <td class="answer">@Model.Name</td>
+                <td>&nbsp;</td>
+                <td>Ex-name(s):</td>
+                <td class="answer"></td>
+            </tr>
+            <tr>
+                <td>IMO number:</td>
+                <td class="answer">@Model.Imo</td>
+                <td>&nbsp;</td>
+                <td>Summer DWT:</td>
+                <td class="answer">@Model.Dwt</td>
+            </tr>
+            <tr>
+                <td>Flag:</td>
+                <td class="answer">@Model.Registration.Flag</td>
+                <td>&nbsp;</td>
+                <td>Call sign:</td>
+                <td class="answer">@Model.CallSign</td>
+            </tr>
+            <tr>
+                <td>Port of Registry:</td>
+                <td class="answer">@Model.Registration.RegistryPort</td>
+                <td>&nbsp;</td>
+                <td>Built:</td>
+                <td class="answer">@Model.Built</td>
+            </tr>
+            <tr>
+                <td>Type of vessel:</td>
+                <td class="answer">@Model.VesselType.Name</td>
+                <td>&nbsp;</td>
+                <td>Type of hull:</td>
+                <td class="answer">@Model.Hull</td>
+            </tr>
+            <tr>
+                <td>Class Society:</td>
+                <td class="answer">@Model.ClassSociety.FullName</td>
+                <td>&nbsp;</td>
+                <td>Owner:</td>
+                <td class="answer">@Model.Owner.Name</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -8,8 +8,6 @@
 
         public VesselTypeServiceModel VesselType { get; set; }
 
-        public string HullType { get; set; }
-
         public VesselClassificationSocietyServiceModel ClassSociety { get; set; }
 
         public VesselOwnerServiceModel Owner { get; set; }

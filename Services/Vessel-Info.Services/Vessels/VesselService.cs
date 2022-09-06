@@ -63,6 +63,7 @@
                     CallSign = v.CallSign,
                     Dwt = v.SummerDwt,
                     Built = v.Built,
+                    Hull = v.HullType,
                     Owner = new VesselOwnerServiceModel
                     {
                         Name = v.Owner.Name
