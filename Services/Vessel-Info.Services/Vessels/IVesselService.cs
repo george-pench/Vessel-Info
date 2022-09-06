@@ -1,7 +1,7 @@
 ﻿namespace Vessel_Info.Services.Vessels
 {
     using System.Collections.Generic;
-    using Vessel_Info.Services.Vessels.Models;
+    using Vessel_Info.Services.Models.Vessels;
 
     public interface IVesselService
     {

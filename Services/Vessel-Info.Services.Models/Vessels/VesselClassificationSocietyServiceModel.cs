@@ -1,4 +1,4 @@
-﻿namespace Vessel_Info.Services.Vessels.Models
+﻿namespace Vessel_Info.Services.Models.Vessels
 {
     public class VesselClassificationSocietyServiceModel
     {

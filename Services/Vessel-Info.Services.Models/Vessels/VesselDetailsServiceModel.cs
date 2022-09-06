@@ -1,5 +1,5 @@
-﻿namespace Vessel_Info.Services.Vessels.Models
-{
+﻿namespace Vessel_Info.Services.Models.Vessels
+{  
     public class VesselDetailsServiceModel : VesselAllServiceModel
     {
         public string ExName { get; set; }

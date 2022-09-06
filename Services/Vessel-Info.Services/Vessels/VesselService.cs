@@ -3,20 +3,20 @@
     using System.Collections.Generic;
     using System.Linq;
     using Vessel_Info.Data;
-    using Vessel_Info.Services.Vessels.Models;
+    using Vessel_Info.Services.Models.Vessels;
 
     public class VesselService : IVesselService
     {
+        // TODO: use AutoMapper 
         private readonly VesselInfoDbContext dbContext;
 
         public VesselService(VesselInfoDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
-        
-        public IEnumerable<VesselAllServiceModel> All()
-        {
-            return this.dbContext
+
+        public IEnumerable<VesselAllServiceModel> All() 
+            => this.dbContext
                 .Vessels
                 .OrderBy(v => v.Name)
                 .Select(v => new VesselAllServiceModel
@@ -34,11 +34,9 @@
                     CallSign = v.CallSign
                 })
                 .ToList();
-        }
 
-        public VesselDetailsServiceModel Details(string id)
-        {
-            var vessel = this.dbContext
+        public VesselDetailsServiceModel Details(string id) 
+            => this.dbContext
                 .Vessels
                 .Where(v => v.Id == id)
                 .Select(v => new VesselDetailsServiceModel
@@ -63,15 +61,24 @@
                     CallSign = v.CallSign,
                     Dwt = v.SummerDwt,
                     Built = v.Built,
-                    Hull = v.HullType,
+                    Hull = HullTypeFullName(v.HullType),
                     Owner = new VesselOwnerServiceModel
                     {
                         Name = v.Owner.Name
                     }
                 })
-                .FirstOrDefault();                
-            
-            return vessel;
-        }
+                .FirstOrDefault();
+
+        private static string HullTypeFullName(string hullType) 
+            => hullType switch
+            {
+                "DB" => "Double Bottom",
+                "DH" => "Double Hull",
+                "DS" => "Double Side",
+                "SB" => "Single Bottom",
+                "SH" => "Single Hull",
+                "SS" => "Single Side",
+                _ => "Other",
+            };        
     }
 }

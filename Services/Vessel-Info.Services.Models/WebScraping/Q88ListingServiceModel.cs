@@ -1,4 +1,4 @@
-﻿namespace Vessel_Info.Services.Models
+﻿namespace Vessel_Info.Services.Models.WebScraping
 {
     using System.Collections.Generic;
 

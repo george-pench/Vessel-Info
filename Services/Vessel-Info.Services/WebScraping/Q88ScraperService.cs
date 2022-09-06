@@ -9,7 +9,7 @@
     using System.Threading.Tasks;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
-    using Vessel_Info.Services.Models;
+    using Vessel_Info.Services.Models.WebScraping;
 
     using static Constants.ServicesConstants;
 
