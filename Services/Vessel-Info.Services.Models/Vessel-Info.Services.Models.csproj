@@ -5,4 +5,9 @@
     <RootNamespace>Vessel_Info.Services.Models</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Vessel-Info.Data\Vessel-Info.Data.csproj" />
+    <ProjectReference Include="..\Vessel-Info.Services.Mapping\Vessel-Info.Services.Mapping.csproj" />
+  </ItemGroup>
+
 </Project>

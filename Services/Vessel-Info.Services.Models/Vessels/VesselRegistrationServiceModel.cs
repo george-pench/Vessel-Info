@@ -1,6 +1,9 @@
 ﻿namespace Vessel_Info.Services.Models.Vessels
 {
-    public class VesselRegistrationServiceModel
+    using Vessel_Info.Data.Models;
+    using Vessel_Info.Services.Mapping;
+
+    public class VesselRegistrationServiceModel : IMapFrom<Registration>, IMapTo<Registration>
     {
         public string Flag { get; set; }
 

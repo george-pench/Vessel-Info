@@ -1,11 +1,13 @@
 ﻿namespace Vessel_Info.Services.Vessels
 {
-    using System.Collections.Generic;
+    using System.Linq;
     using Vessel_Info.Services.Models.Vessels;
 
     public interface IVesselService
     {
-        IEnumerable<VesselAllServiceModel> All();
+        bool Create(VesselCreateServiceModel model);
+
+        IQueryable<VesselAllServiceModel> All();
 
         VesselDetailsServiceModel Details(string id);
     }
