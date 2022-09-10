@@ -1,7 +1,7 @@
 ﻿namespace Vessel_Info.Web.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using System.Linq;
+    using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
     using Vessel_Info.Services.Vessels;
     using Vessel_Info.Web.ViewModels.Vessels;
@@ -20,21 +20,7 @@
         {
             var all = this.vessels
                 .All()
-                .Select(v => new VesselAllViewModel 
-                {
-                    Id = v.Id,
-                    Name = v.Name,
-                    Imo = v.Imo,
-                    Built = v.Built,
-                    Dwt = v.Dwt,
-                    Loa = v.Loa,
-                    Cubic = v.Cubic,
-                    Beam = v.Beam,
-                    Draft = v.Draft,
-                    Hull = v.Hull,
-                    CallSign = v.CallSign
-                })
-                .ToList();
+                .To<VesselAllViewModel>();
 
             return this.View(all);
         }
@@ -47,23 +33,23 @@
                 return this.NotFound();
             }
 
-            var details = this.vessels.Details(id);
+            VesselDetailsServiceModel details = this.vessels.Details(id);
 
-            var newDetails = new VesselDetailsViewModel 
+            var newDetails = new VesselDetailsViewModel
             {
                 Name = details.Name,
                 Imo = details.Imo,
                 Built = details.Built,
-                Dwt = details.Dwt,
+                SummerDwt = details.SummerDwt,
                 Hull = details.Hull,
                 CallSign = details.CallSign,
                 ExName = details.ExName,
                 Flag = details.Registration.Flag,
                 RegistryPort = details.Registration.RegistryPort,
-                VesselTypeName = details.VesselType.Name,
-                ClassificationSocietyFullName = details.ClassSociety.FullName,
+                TypeName = details.Type.Name,
+                ClassificationSocietyFullName = details.ClassificationSociety.FullName,
                 OwnerName = details.Owner.Name
-            };
+            };           
 
             if (!this.ModelState.IsValid)
             {
@@ -83,7 +69,7 @@
                 return this.View(model);
             }
 
-            var vessel = new VesselCreateServiceModel
+            var vessel = new VesselCreateServiceModel   
             {
                 TypeId = 1,
                 RegistrationId = 1,
@@ -95,7 +81,7 @@
                     Name = model.Vessel.Name,
                     Imo = model.Vessel.Imo,
                     Built = model.Vessel.Built,
-                    Dwt = model.Vessel.Dwt,
+                    SummerDwt = model.Vessel.SummerDwt,
                     Loa = model.Vessel.Loa,
                     Cubic = model.Vessel.Cubic,
                     Beam = model.Vessel.Beam,
@@ -104,8 +90,30 @@
                     CallSign = model.Vessel.CallSign,                
                 }
             };
-
+            
             this.vessels.Create(vessel);
+
+            var newVessel = new VesselCreateInputModel 
+            {
+                TypeId = vessel.TypeId,
+                RegistrationId = vessel.RegistrationId,
+                ClassificationSocietyId = vessel.ClassificationSocietyId,
+                OwnerId = vessel.OwnerId,
+                Vessel = new VesselAllViewModel 
+                {
+                    Id = vessel.Vessel.Id,
+                    Name = vessel.Vessel.Name,
+                    Imo = vessel.Vessel.Imo,
+                    Built = vessel.Vessel.Built,
+                    SummerDwt = vessel.Vessel.SummerDwt,
+                    Loa = vessel.Vessel.Loa,
+                    Cubic = vessel.Vessel.Cubic,
+                    Beam = vessel.Vessel.Beam,
+                    Draft = vessel.Vessel.Draft,
+                    Hull = vessel.Vessel.Hull,
+                    CallSign = vessel.Vessel.CallSign,
+                }
+            };
 
             return this.Redirect("/");
         }

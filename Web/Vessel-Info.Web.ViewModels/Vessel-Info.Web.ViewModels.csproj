@@ -5,4 +5,9 @@
     <RootNamespace>Vessel_Info.Web.ViewModels</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Services\Vessel-Info.Services.Mapping\Vessel-Info.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\Services\Vessel-Info.Services.Models\Vessel-Info.Services.Models.csproj" />
+  </ItemGroup>
+
 </Project>

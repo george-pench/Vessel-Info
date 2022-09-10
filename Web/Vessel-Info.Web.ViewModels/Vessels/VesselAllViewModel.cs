@@ -1,6 +1,9 @@
 ﻿namespace Vessel_Info.Web.ViewModels.Vessels
 {
-    public class VesselAllViewModel : VesselBaseViewModel
+    using Vessel_Info.Services.Mapping;
+    using Vessel_Info.Services.Models.Vessels;
+
+    public class VesselAllViewModel : VesselBaseViewModel, IMapFrom<VesselAllServiceModel>
     {
         public string Id { get; set; }       
 

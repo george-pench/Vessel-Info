@@ -8,7 +8,7 @@
 
         public string Built { get; set; }
 
-        public string Dwt { get; set; }
+        public string SummerDwt { get; set; }
 
         public string Hull { get; set; }
 
