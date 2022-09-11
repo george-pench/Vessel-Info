@@ -3,7 +3,9 @@
     using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
 
-    public class VesselAllViewModel : VesselBaseViewModel, IMapFrom<VesselAllServiceModel>
+    public class VesselAllViewModel : VesselBaseViewModel, 
+        IMapFrom<VesselAllServiceModel>, IMapTo<VesselAllServiceModel>,
+        IMapFrom<VesselCreateInputModel>, IMapTo<VesselCreateInputModel>
     {
         public string Id { get; set; }       
 

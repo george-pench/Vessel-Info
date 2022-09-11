@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Vessel-Info.Data\Vessel-Info.Data.csproj" />
+    <ProjectReference Include="..\..\Web\Vessel-Info.Web.Infrastructure\Vessel-Info.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\Vessel-Info.Services.Constants\Vessel-Info.Services.Constants.csproj" />
     <ProjectReference Include="..\Vessel-Info.Services.Models\Vessel-Info.Services.Models.csproj" />
   </ItemGroup>

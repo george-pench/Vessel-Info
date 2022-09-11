@@ -19,8 +19,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Data\Vessel-Info.Data\Vessel-Info.Data.csproj" />
+    <ProjectReference Include="..\..\..\Services\Vessel-Info.Services.Mapping\Vessel-Info.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\..\Services\Vessel-Info.Services\Vessel-Info.Services.csproj" />
-    <ProjectReference Include="..\..\Vessel-Info.Web.Infrastructure\Vessel-Info.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Vessel-Info.Web.ViewModels\Vessel-Info.Web.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

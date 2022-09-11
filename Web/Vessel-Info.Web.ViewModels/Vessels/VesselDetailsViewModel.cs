@@ -3,14 +3,13 @@
     using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
 
-    public class VesselDetailsViewModel : VesselBaseViewModel, 
-        IMapFrom<VesselDetailsServiceModel>, IMapTo<VesselDetailsServiceModel>
+    public class VesselDetailsViewModel : VesselBaseViewModel, IMapFrom<VesselDetailsServiceModel>
     {
         public string ExName { get; set; }
 
-        public string Flag { get; set; }
+        public string RegistrationFlag { get; set; }
 
-        public string RegistryPort { get; set; }
+        public string RegistrationRegistryPort { get; set; }
 
         public string TypeName { get; set; }
 

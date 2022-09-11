@@ -1,6 +1,9 @@
 ﻿namespace Vessel_Info.Services.Models.Vessels
 {
-    public class VesselCreateServiceModel
+    using Vessel_Info.Data.Models;
+    using Vessel_Info.Services.Mapping;
+
+    public class VesselCreateServiceModel : IMapFrom<Vessel>, IMapTo<Vessel>
     {
         public int TypeId { get; set; }
 
