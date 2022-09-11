@@ -8,11 +8,15 @@ namespace Vessel_Info.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using System.Reflection;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
+    using Vessel_Info.Services.Mapping;
+    using Vessel_Info.Services.Models.Vessels;
     using Vessel_Info.Services.Vessels;
     using Vessel_Info.Services.WebScraping;
     using Vessel_Info.Web.Infrastructure.Extensions;
+    using Vessel_Info.Web.ViewModels.Vessels;
 
     public class Startup
     {
@@ -53,6 +57,10 @@ namespace Vessel_Info.Web
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutoMapperConfig.RegisterMappings(
+                typeof(VesselAllViewModel).GetTypeInfo().Assembly,
+                typeof(VesselAllServiceModel).GetTypeInfo().Assembly);
+
             app.DatabaseInit();
 
             if (env.IsDevelopment())

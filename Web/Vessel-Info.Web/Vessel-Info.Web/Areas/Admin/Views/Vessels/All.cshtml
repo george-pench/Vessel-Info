@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Vessel_Info.Web.ViewModels.Vessels.VesselAllViewModel>
+﻿@model IQueryable<Vessel_Info.Web.ViewModels.Vessels.VesselAllViewModel>
 
 @{
     ViewData["Title"] = "All Vessels";
@@ -14,7 +14,7 @@
             <th scope="col">Name</th>
             <th scope="col">Imo</th>
             <th scope="col">Built</th>
-            <th scope="col">Dwt</th>
+            <th scope="col">SummerDwt</th>
             <th scope="col">Loa</th>
             <th scope="col">Cubic</th>
             <th scope="col">Beam</th>
@@ -32,7 +32,7 @@
                 </td>
                 <td scope="col">@vessel.Imo</td>
                 <td scope="col">@vessel.Built</td>
-                <td scope="col">@vessel.Dwt</td>
+                <td scope="col">@vessel.SummerDwt</td>
                 <td scope="col">@vessel.Loa</td>
                 <td scope="col">@vessel.Cubic</td>
                 <td scope="col">@vessel.Beam</td>
