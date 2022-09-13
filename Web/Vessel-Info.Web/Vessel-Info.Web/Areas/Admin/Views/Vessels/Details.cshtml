@@ -26,14 +26,14 @@
             </tr>
             <tr>
                 <td>Flag:</td>
-                <td class="answer">@Model.Flag</td>
+                <td class="answer">@Model.RegistrationFlag</td>
                 <td>&nbsp;</td>
                 <td>Call sign:</td>
                 <td class="answer">@Model.CallSign</td>
             </tr>
             <tr>
                 <td>Port of Registry:</td>
-                <td class="answer">@Model.RegistryPort</td>
+                <td class="answer">@Model.RegistrationRegistryPort</td>
                 <td>&nbsp;</td>
                 <td>Built:</td>
                 <td class="answer">@Model.Built</td>
@@ -43,7 +43,7 @@
                 <td class="answer">@Model.TypeName</td>
                 <td>&nbsp;</td>
                 <td>Type of hull:</td>
-                <td class="answer">@Model.Hull</td>
+                <td class="answer">@Model.HullType</td>
             </tr>
             <tr>
                 <td>Class Society:</td>
@@ -54,4 +54,8 @@
             </tr>
         </tbody>
     </table>
+</div>
+
+<div>
+    <a asp-controller="Vessels" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
 </div>

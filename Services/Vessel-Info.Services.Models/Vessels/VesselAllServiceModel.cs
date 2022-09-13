@@ -10,7 +10,7 @@
 
         public string Draft { get; set; }
 
-        public string Hull { get; set; }
+        public string HullType { get; set; }
 
         public string CallSign { get; set; }
     }
