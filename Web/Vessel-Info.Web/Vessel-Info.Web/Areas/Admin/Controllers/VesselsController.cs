@@ -9,6 +9,7 @@
 
     public class VesselsController : AdminController
     {
+        // TODO: use async Task and revise functionality
         private readonly IVesselService vessels;
 
         public VesselsController(IVesselService vessels)
@@ -54,15 +55,78 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(model);
+                return this.View();
             }
 
-            var vesselCreateServiceModel = ObjectMappingExtensions.To<VesselCreateServiceModel>(model);
-            vesselCreateServiceModel.Vessel.Id = Guid.NewGuid().ToString();
+            var create = ObjectMappingExtensions.To<VesselCreateServiceModel>(model);
+            create.Vessel.Id = Guid.NewGuid().ToString();
 
-            this.vessels.Create(vesselCreateServiceModel);
+            this.vessels.Create(create);
 
-            return this.RedirectToAction(nameof(All));
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        // [HttpGet("Admin/Vessels/Edit")]
+        public IActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var edit = this.vessels
+                .GetById(id)
+                .To<VesselEditInputModel>();
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            return this.View(edit);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(string id, VesselEditInputModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
+            var edit = ObjectMappingExtensions.To<VesselEditServiceModel>(model);
+            this.vessels.Edit(id, edit);
+
+            return this.RedirectToAction(nameof(this.All));
+        }
+
+        // [HttpGet("Admin/Vessels/Delete")]
+        public IActionResult Delete(string id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var delete = this.vessels
+                .GetById(id)
+                .To<VesselDeleteViewModel>();
+
+            if (delete == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(delete);
+        }
+
+        // [HttpGet("Admin/Vessels/Delete/id")]
+        [HttpPost]
+        public IActionResult DeleteConfirm(string id)
+        {
+            this.vessels.Delete(id);
+
+            return this.RedirectToAction(nameof(this.All));
         }
     }
 }
