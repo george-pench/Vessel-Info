@@ -5,14 +5,5 @@
 
     public class VesselEditInputModel : VesselDetailsViewModel, 
         IMapFrom<VesselEditServiceModel>, IMapTo<VesselEditServiceModel>,
-        IMapFrom<VesselAllServiceModel>, IMapTo<VesselAllServiceModel>
-    {
-        public string Loa { get; set; }
-
-        public string Cubic { get; set; }
-
-        public string Beam { get; set; }
-
-        public string Draft { get; set; }
-    }
+        IMapFrom<VesselAllServiceModel>, IMapTo<VesselAllServiceModel> {}
 }

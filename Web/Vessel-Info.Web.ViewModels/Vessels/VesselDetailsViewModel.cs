@@ -3,7 +3,7 @@
     using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
 
-    public class VesselDetailsViewModel : VesselBaseViewModel, IMapFrom<VesselDetailsServiceModel>
+    public class VesselDetailsViewModel : VesselAllViewModel, IMapFrom<VesselDetailsServiceModel>
     {
         public string ExName { get; set; }
 
