@@ -5,4 +5,8 @@
     <RootNamespace>Vessel_Info.Web.Constants</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Vessel-Info.Data.Constants\Vessel-Info.Data.Constants.csproj" />
+  </ItemGroup>
+
 </Project>

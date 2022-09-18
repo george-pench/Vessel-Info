@@ -8,7 +8,7 @@
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
 
-    using static Constants.WebConstants;
+    using static Constants.WebConstants.Admin;
 
     public static class ApplicationBuilderExtensions
     {
