@@ -48,7 +48,9 @@ namespace Vessel_Info.Web
 
             services.AddTransient<IQ88ScraperService, Q88ScraperService>();
             services.AddTransient<IVesselService, VesselService>();
-            
+            services.AddTransient<IClassificationSocietyService, ClassificationSocietyService>();
+            services.AddTransient<IRegistrationService, RegistrationService>();
+
             services.AddControllersWithViews(options => 
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
