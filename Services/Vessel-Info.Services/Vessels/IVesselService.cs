@@ -1,11 +1,12 @@
 ﻿namespace Vessel_Info.Services.Vessels
 {
     using System.Linq;
+    using System.Threading.Tasks;
     using Vessel_Info.Services.Models.Vessels;
 
     public interface IVesselService
     {
-        bool Create(VesselCreateServiceModel model);
+        Task<string> Create(VesselCreateServiceModel model);
 
         bool Delete(string id);
 
@@ -13,8 +14,8 @@
 
         IQueryable<VesselAllServiceModel> All();
 
-        VesselDetailsServiceModel Details(string id);
+        Task<VesselDetailsServiceModel> Details(string id);
 
-        VesselAllServiceModel GetById(string id);
+        Task<VesselAllServiceModel> GetById(string id);
     }
 }

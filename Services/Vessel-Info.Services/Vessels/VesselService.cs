@@ -1,6 +1,9 @@
 ﻿namespace Vessel_Info.Services.Vessels
 {
+    using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
@@ -9,34 +12,56 @@
     public class VesselService : IVesselService
     {
         private readonly VesselInfoDbContext dbContext;
-        public VesselService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
-        public bool Create(VesselCreateServiceModel model)
+        private readonly IClassificationSocietyService classificationSociety;
+        private readonly IRegistrationService registration;
+
+        public VesselService(
+            VesselInfoDbContext dbContext, 
+            IClassificationSocietyService classificationSociety,
+            IRegistrationService registration)
+        {
+            this.dbContext = dbContext;
+            this.classificationSociety = classificationSociety;
+            this.registration = registration;
+        }
+
+        public IQueryable<VesselAllServiceModel> All() => this.dbContext
+                .Vessels
+                .OrderBy(v => v.Name)
+                .To<VesselAllServiceModel>();
+
+        public async Task<string> Create(VesselCreateServiceModel model)
         {
             var vessel = model.Vessel.To<Vessel>();
 
-            vessel.RegistrationId = model.RegistrationId;
-            vessel.TypeId = model.TypeId;
-            vessel.ClassificationSocietyId = model.ClassificationSocietyId;
-            vessel.OwnerId = model.OwnerId;
+            var classificationSocietyFullName = model.ClassificationSociety.FullName;
+            var classificationSocietyId = await this.classificationSociety.FindClassificationSocietyIdByName(classificationSocietyFullName);
 
-            this.dbContext.Vessels.Add(vessel);
-            int result = this.dbContext.SaveChanges();
+            if (classificationSocietyId == 0)
+            {
+                classificationSocietyId = await this.classificationSociety.Create(model.ClassificationSociety);
+            }
 
-            return result > 0;
-        }
+            vessel.ClassificationSocietyId = classificationSocietyId;
 
-        public bool Delete(string id)
-        {
-            var delete = this.dbContext
-                .Vessels
-                .Where(v => v.Id == id)
-                .FirstOrDefault();
+            var registrationName = model.Registration.Flag;
+            var registrationId = await this.registration.FindRegistrationIdByName(registrationName);
 
-            this.dbContext.Vessels.Remove(delete);
-            int result = this.dbContext.SaveChanges();
+            if (registrationId == 0)
+            {
+                registrationId = await this.registration.Create(model.Registration);
+            }
 
-            return result > 0;
+            vessel.RegistrationId = registrationId;
+
+            vessel.OwnerId = 1;
+            vessel.TypeId = 1;
+
+            await this.dbContext.Vessels.AddAsync(vessel);
+            await this.dbContext.SaveChangesAsync();
+
+            return vessel.Id;
         }
 
         public bool Edit(string id, VesselEditServiceModel model)
@@ -45,10 +70,6 @@
                 .Vessels
                 .Where(v => v.Id == id)
                 .FirstOrDefault();
-
-            var edit2 = this.dbContext
-                .Vessels
-                .Find(id);
 
             if (edit == null)
             {
@@ -78,39 +99,52 @@
             return true;
         }
 
-        public IQueryable<VesselAllServiceModel> All() => this.dbContext
-                .Vessels
-                .OrderBy(v => v.Name)
-                .To<VesselAllServiceModel>();
-
-        public VesselDetailsServiceModel Details(string id)
+        public async Task<VesselDetailsServiceModel> Details(string id)
         {
-            var details = this.dbContext
+            var details = await this.dbContext
                 .Vessels
                 .Where(v => v.Id == id)
                 .To<VesselDetailsServiceModel>()
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
+
+            if (details == null)
+            {
+                throw new ArgumentNullException(nameof(details));
+            }
 
             details.HullType = HullTypeFullName(details.HullType); 
 
             return details;
         }
 
-        private static string HullTypeFullName(string hullType) => hullType switch
-            {
-                "DB" => "Double Bottom",
-                "DH" => "Double Hull",
-                "DS" => "Double Side",
-                "SB" => "Single Bottom",
-                "SH" => "Single Hull",
-                "SS" => "Single Side",
-                _ => "Other",
-            };
+        public bool Delete(string id)
+        {
+            var delete = this.dbContext
+                .Vessels
+                .Where(v => v.Id == id)
+                .FirstOrDefault();
 
-        public VesselAllServiceModel GetById(string id) => this.dbContext
+            this.dbContext.Vessels.Remove(delete);
+            int result = this.dbContext.SaveChanges();
+
+            return result > 0;
+        }
+
+        public async Task<VesselAllServiceModel> GetById(string id) => await this.dbContext
                 .Vessels
                 .Where(v => v.Id == id)
                 .To<VesselAllServiceModel>()
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
+
+        private static string HullTypeFullName(string hullType) => hullType switch
+        {
+            "DB" => "Double Bottom",
+            "DH" => "Double Hull",
+            "DS" => "Double Side",
+            "SB" => "Single Bottom",
+            "SH" => "Single Hull",
+            "SS" => "Single Side",
+            _ => "Other",
+        };
     }
 }
