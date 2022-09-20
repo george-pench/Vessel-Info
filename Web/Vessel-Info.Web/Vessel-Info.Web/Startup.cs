@@ -50,6 +50,8 @@ namespace Vessel_Info.Web
             services.AddTransient<IVesselService, VesselService>();
             services.AddTransient<IClassificationSocietyService, ClassificationSocietyService>();
             services.AddTransient<IRegistrationService, RegistrationService>();
+            services.AddTransient<ITypeService, TypeService>();
+            services.AddTransient<IOwnerService, OwnerService>();
 
             services.AddControllersWithViews(options => 
             {
