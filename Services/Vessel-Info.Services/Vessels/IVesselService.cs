@@ -8,9 +8,9 @@
     {
         Task<string> Create(VesselCreateServiceModel model);
 
-        bool Delete(string id);
+        void Delete(string id);
 
-        bool Edit(string id, VesselEditServiceModel model);
+        Task<bool> Edit(string id, VesselEditServiceModel model);
 
         IQueryable<VesselAllServiceModel> All();
 

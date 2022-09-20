@@ -2,8 +2,6 @@
 {
     public class VesselDetailsServiceModel : VesselAllServiceModel
     {
-        public string ExName { get; set; }
-
         public VesselRegistrationServiceModel Registration { get; set; }
 
         public VesselTypeServiceModel Type { get; set; }

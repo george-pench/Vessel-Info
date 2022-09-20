@@ -15,15 +15,22 @@
 
         private readonly IClassificationSocietyService classificationSociety;
         private readonly IRegistrationService registration;
+        private readonly IOwnerService owner;
+        private readonly ITypeService type;
 
         public VesselService(
             VesselInfoDbContext dbContext, 
             IClassificationSocietyService classificationSociety,
-            IRegistrationService registration)
+            IRegistrationService registration,
+            IOwnerService owner,
+            ITypeService type)
         {
             this.dbContext = dbContext;
+
             this.classificationSociety = classificationSociety;
             this.registration = registration;
+            this.owner = owner;
+            this.type = type;
         }
 
         public IQueryable<VesselAllServiceModel> All() => this.dbContext
@@ -35,28 +42,17 @@
         {
             var vessel = model.Vessel.To<Vessel>();
 
-            var classificationSocietyFullName = model.ClassificationSociety.FullName;
-            var classificationSocietyId = await this.classificationSociety.FindClassificationSocietyIdByName(classificationSocietyFullName);
-
-            if (classificationSocietyId == 0)
-            {
-                classificationSocietyId = await this.classificationSociety.Create(model.ClassificationSociety);
-            }
-
+            int classificationSocietyId = await this.GetClassificationSocietyId(model);
             vessel.ClassificationSocietyId = classificationSocietyId;
 
-            var registrationName = model.Registration.Flag;
-            var registrationId = await this.registration.FindRegistrationIdByName(registrationName);
-
-            if (registrationId == 0)
-            {
-                registrationId = await this.registration.Create(model.Registration);
-            }
-
+            int registrationId = await this.GetRegistrationId(model);
             vessel.RegistrationId = registrationId;
 
-            vessel.OwnerId = 1;
-            vessel.TypeId = 1;
+            int ownerId = await this.GetOwnerId(model);
+            vessel.OwnerId = ownerId;
+
+            int typeId = await this.GetTypeId(model);
+            vessel.TypeId = typeId;
 
             await this.dbContext.Vessels.AddAsync(vessel);
             await this.dbContext.SaveChangesAsync();
@@ -64,17 +60,19 @@
             return vessel.Id;
         }
 
-        public bool Edit(string id, VesselEditServiceModel model)
+        public async Task<bool> Edit(string id, VesselEditServiceModel model)
         {
-            var edit = this.dbContext
+            var edit = await this.dbContext
                 .Vessels
                 .Where(v => v.Id == id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (edit == null)
             {
                 return false;
             }
+
+            //var e = model.To<Vessel>();
 
             edit.Name = model.Name;
             edit.Imo = model.Imo;
@@ -88,13 +86,12 @@
             edit.Imo = model.Imo;
             edit.HullType = model.HullType;
             edit.CallSign = model.CallSign;
-            //edit.ExName = model.ExName;
-            //edit.RegistrationId = model.Registration;
-            //edit.TypeId = model.Type;
-            //edit.ClassificationSocietyId = model.ClassificationSociety;
-            //edit.OwnerId = model.Owner;
+            edit.RegistrationId = model.Registration.Id;
+            edit.TypeId = model.Type.Id;
+            edit.ClassificationSocietyId = model.ClassificationSociety.Id;
+            edit.OwnerId = model.Owner.Id;
 
-            int result = this.dbContext.SaveChanges();
+            int result = await this.dbContext.SaveChangesAsync();
 
             return true;
         }
@@ -117,17 +114,20 @@
             return details;
         }
 
-        public bool Delete(string id)
+        public void Delete(string id)
         {
             var delete = this.dbContext
                 .Vessels
                 .Where(v => v.Id == id)
                 .FirstOrDefault();
 
-            this.dbContext.Vessels.Remove(delete);
-            int result = this.dbContext.SaveChanges();
+            if (delete == null)
+            {
+                throw new ArgumentNullException(nameof(delete));
+            }
 
-            return result > 0;
+            this.dbContext.Vessels.Remove(delete);
+            this.dbContext.SaveChanges();            
         }
 
         public async Task<VesselAllServiceModel> GetById(string id) => await this.dbContext
@@ -135,6 +135,58 @@
                 .Where(v => v.Id == id)
                 .To<VesselAllServiceModel>()
                 .FirstOrDefaultAsync();
+
+        private async Task<int> GetTypeId(VesselCreateServiceModel model)
+        {
+            var typeName = model.Type.Name;
+            var typeId = await this.type.FindTypeIdByName(typeName);
+
+            if (typeId == 0)
+            {
+                typeId = await this.type.Create(model.Type);
+            }
+
+            return typeId;
+        }
+
+        private async Task<int> GetOwnerId(VesselCreateServiceModel model)
+        {
+            var ownerName = model.Owner.Name;
+            var ownerId = await this.owner.FindOwnerIdByName(ownerName);
+
+            if (ownerId == 0)
+            {
+                ownerId = await this.owner.Create(model.Owner);
+            }
+
+            return ownerId;
+        }
+
+        private async Task<int> GetRegistrationId(VesselCreateServiceModel model)
+        {
+            var registrationName = model.Registration.Flag;
+            var registrationId = await this.registration.FindRegistrationIdByName(registrationName);
+
+            if (registrationId == 0)
+            {
+                registrationId = await this.registration.Create(model.Registration);
+            }
+
+            return registrationId;
+        }
+
+        private async Task<int> GetClassificationSocietyId(VesselCreateServiceModel model)
+        {
+            var classificationSocietyFullName = model.ClassificationSociety.FullName;
+            var classificationSocietyId = await this.classificationSociety.FindClassificationSocietyIdByName(classificationSocietyFullName);
+
+            if (classificationSocietyId == 0)
+            {
+                classificationSocietyId = await this.classificationSociety.Create(model.ClassificationSociety);
+            }
+
+            return classificationSocietyId;
+        }
 
         private static string HullTypeFullName(string hullType) => hullType switch
         {

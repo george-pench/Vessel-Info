@@ -5,6 +5,8 @@
 
     public class VesselTypeServiceModel : IMapFrom<Type>, IMapTo<Type>
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
     }
 }
