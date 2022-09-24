@@ -5,8 +5,6 @@
 
     public class VesselDetailsViewModel : VesselAllViewModel, IMapFrom<VesselDetailsServiceModel>
     {
-        public string ExName { get; set; }
-
         public string RegistrationFlag { get; set; }
 
         public string RegistrationRegistryPort { get; set; }

@@ -33,70 +33,39 @@
             this.type = type;
         }
 
-        public IQueryable<VesselAllServiceModel> All() => this.dbContext
-                .Vessels
-                .OrderBy(v => v.Name)
-                .To<VesselAllServiceModel>();
-
-        public async Task<string> Create(VesselCreateServiceModel model)
+        public async Task<string> CreateAsync(VesselCreateServiceModel model)
         {
-            var vessel = model.Vessel.To<Vessel>();
+            var create = model.Vessel.To<Vessel>();
 
-            int classificationSocietyId = await this.GetClassificationSocietyId(model);
-            vessel.ClassificationSocietyId = classificationSocietyId;
+            int classificationSocietyId = await this.GetOrCreateClassificationSocietyAsync(model);            
+            create.ClassificationSocietyId = classificationSocietyId;
 
-            int registrationId = await this.GetRegistrationId(model);
-            vessel.RegistrationId = registrationId;
+            int registrationId = await this.GetOrCreateRegistrationAsync(model);
+            create.RegistrationId = registrationId;
 
-            int ownerId = await this.GetOwnerId(model);
-            vessel.OwnerId = ownerId;
+            int ownerId = await this.GetOrCreateOwnerAsync(model);
+            create.OwnerId = ownerId;
 
-            int typeId = await this.GetTypeId(model);
-            vessel.TypeId = typeId;
+            int typeId = await this.GetOrCreateTypeAsync(model);
+            create.TypeId = typeId;
 
-            await this.dbContext.Vessels.AddAsync(vessel);
+            await this.dbContext.Vessels.AddAsync(create);
             await this.dbContext.SaveChangesAsync();
 
-            return vessel.Id;
+            return create.Id;
         }
 
-        public async Task<bool> Edit(string id, VesselEditServiceModel model)
+        public async Task<bool> EditAsync(string id, VesselEditServiceModel model)
         {
-            var edit = await this.dbContext
-                .Vessels
-                .Where(v => v.Id == id)
-                .FirstOrDefaultAsync();
+            var edit = model.Vessel.To<Vessel>();
+            //TODO: bind ids
 
-            if (edit == null)
-            {
-                return false;
-            }
-
-            //var e = model.To<Vessel>();
-
-            edit.Name = model.Name;
-            edit.Imo = model.Imo;
-            edit.Built = model.Built;
-            edit.SummerDwt = model.SummerDwt;
-            edit.Loa = model.Loa;
-            edit.Cubic = model.Cubic;
-            edit.Beam = model.Beam;
-            edit.Draft = model.Draft;
-            edit.Name = model.Name;
-            edit.Imo = model.Imo;
-            edit.HullType = model.HullType;
-            edit.CallSign = model.CallSign;
-            edit.RegistrationId = model.Registration.Id;
-            edit.TypeId = model.Type.Id;
-            edit.ClassificationSocietyId = model.ClassificationSociety.Id;
-            edit.OwnerId = model.Owner.Id;
-
-            int result = await this.dbContext.SaveChangesAsync();
+            await this.dbContext.SaveChangesAsync();
 
             return true;
         }
 
-        public async Task<VesselDetailsServiceModel> Details(string id)
+        public async Task<VesselDetailsServiceModel> DetailsAsync(string id)
         {
             var details = await this.dbContext
                 .Vessels
@@ -114,12 +83,12 @@
             return details;
         }
 
-        public void Delete(string id)
+        public async Task DeleteAsync(string id)
         {
-            var delete = this.dbContext
+            var delete = await this.dbContext
                 .Vessels
                 .Where(v => v.Id == id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (delete == null)
             {
@@ -127,16 +96,21 @@
             }
 
             this.dbContext.Vessels.Remove(delete);
-            this.dbContext.SaveChanges();            
+            await this.dbContext.SaveChangesAsync();            
         }
+        public IQueryable<VesselAllServiceModel> All() => this.dbContext
+                .Vessels
+                .OrderBy(v => v.Name)
+                .To<VesselAllServiceModel>();
 
-        public async Task<VesselAllServiceModel> GetById(string id) => await this.dbContext
+        public async Task<VesselAllServiceModel> GetByIdAsync(string id) => await this.dbContext
                 .Vessels
                 .Where(v => v.Id == id)
                 .To<VesselAllServiceModel>()
                 .FirstOrDefaultAsync();
 
-        private async Task<int> GetTypeId(VesselCreateServiceModel model)
+        // TODO: move GetOrCreate methods to corresponding services
+        private async Task<int> GetOrCreateTypeAsync(VesselCreateServiceModel model)
         {
             var typeName = model.Type.Name;
             var typeId = await this.type.FindTypeIdByName(typeName);
@@ -149,7 +123,7 @@
             return typeId;
         }
 
-        private async Task<int> GetOwnerId(VesselCreateServiceModel model)
+        private async Task<int> GetOrCreateOwnerAsync(VesselCreateServiceModel model)
         {
             var ownerName = model.Owner.Name;
             var ownerId = await this.owner.FindOwnerIdByName(ownerName);
@@ -162,7 +136,7 @@
             return ownerId;
         }
 
-        private async Task<int> GetRegistrationId(VesselCreateServiceModel model)
+        private async Task<int> GetOrCreateRegistrationAsync(VesselCreateServiceModel model)
         {
             var registrationName = model.Registration.Flag;
             var registrationId = await this.registration.FindRegistrationIdByName(registrationName);
@@ -175,7 +149,7 @@
             return registrationId;
         }
 
-        private async Task<int> GetClassificationSocietyId(VesselCreateServiceModel model)
+        private async Task<int> GetOrCreateClassificationSocietyAsync(VesselCreateServiceModel model)
         {
             var classificationSocietyFullName = model.ClassificationSociety.FullName;
             var classificationSocietyId = await this.classificationSociety.FindClassificationSocietyIdByName(classificationSocietyFullName);

@@ -6,16 +6,16 @@
 
     public interface IVesselService
     {
-        Task<string> Create(VesselCreateServiceModel model);
+        Task<string> CreateAsync(VesselCreateServiceModel model);
+        
+        Task<bool> EditAsync(string id, VesselEditServiceModel model);
+        
+        Task<VesselDetailsServiceModel> DetailsAsync(string id);
 
-        void Delete(string id);
-
-        Task<bool> Edit(string id, VesselEditServiceModel model);
+        Task DeleteAsync(string id);
 
         IQueryable<VesselAllServiceModel> All();
 
-        Task<VesselDetailsServiceModel> Details(string id);
-
-        Task<VesselAllServiceModel> GetById(string id);
+        Task<VesselAllServiceModel> GetByIdAsync(string id);
     }
 }
