@@ -22,10 +22,10 @@
             public const int HyllTypeMaxLength = 20;
             public const int ImoLength = 9;
             public const int CallSignLength = 10;
-            public const int SummertDwtNameMinLength = 1000;
-            public const int SummertDwtNameMaxLength = 600000;
-            public const int BuiltMinValue = 1950;
-            public const int BuiltMaxValue = 2040;
+            public const int SummertDwtMinLength = 1000;
+            public const int SummertDwtMaxLength = 600000;
+            public const int BuiltMinValue = 1900;
+            public const int BuiltMaxValue = 2050;
         }
 
         public class Type

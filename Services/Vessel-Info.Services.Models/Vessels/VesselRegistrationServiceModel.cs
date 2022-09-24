@@ -5,8 +5,6 @@
 
     public class VesselRegistrationServiceModel : IMapFrom<Registration>, IMapTo<Registration>
     {
-        public int Id { get; set; }
-
         public string Flag { get; set; }
 
         public string RegistryPort { get; set; }
