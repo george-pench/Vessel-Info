@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using System;
+    using System.Threading.Tasks;
     using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
     using Vessel_Info.Services.Vessels;
@@ -9,7 +10,7 @@
 
     public class VesselsController : AdminController
     {
-        // TODO: use async Task and revise functionality
+        // TODO: exception handling and functionality
         private readonly IVesselService vessels;
 
         public VesselsController(IVesselService vessels)
@@ -28,21 +29,16 @@
         }
 
         // [HttpGet("Admin/Vessels/Details")]
-        public IActionResult Details(string id)
+        public async Task<IActionResult> Details(string id)
         {
             if (id == null)
             {
                 return this.NotFound();
             }
 
-            var details = this.vessels
-                .Details(id)
+            var details = (await this.vessels
+                .DetailsAsync(id))
                 .To<VesselDetailsViewModel>();
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View(details);
-            }
 
             return this.View(details);
         }
@@ -51,82 +47,73 @@
         public IActionResult Create() => this.View();
 
         [HttpPost]
-        public IActionResult Create(VesselCreateInputModel model)
+        public async Task<IActionResult> Create(VesselCreateInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View();
+                return this.View(model);
             }
 
             var create = ObjectMappingExtensions.To<VesselCreateServiceModel>(model);
-            create.Vessel.Id = Guid.NewGuid().ToString();
+            create.Vessel.Id = Guid.NewGuid().ToString();  
 
-            this.vessels.Create(create);
+            var vesselId = await this.vessels.CreateAsync(create);
 
-            return this.RedirectToAction(nameof(this.All));
+            return this.RedirectToAction(nameof(VesselsController.Details), new { id = vesselId });
         }
 
         // [HttpGet("Admin/Vessels/Edit")]
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
             {
                 return this.NotFound();
             }
 
-            var edit = this.vessels
-                .GetById(id)
+            var edit = (await this.vessels
+                .GetByIdAsync(id))
                 .To<VesselEditInputModel>();
-
-            if (!this.ModelState.IsValid)
-            {
-                return this.View();
-            }
 
             return this.View(edit);
         }
 
         [HttpPost]
-        public IActionResult Edit(string id, VesselEditInputModel model)
+        public async Task<IActionResult> Edit(string id, VesselEditInputModel model)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View();
+                return this.View(model);
             }
 
             var edit = ObjectMappingExtensions.To<VesselEditServiceModel>(model);
-            this.vessels.Edit(id, edit);
+            edit.Vessel.Id = id;
 
-            return this.RedirectToAction(nameof(this.All));
+            await this.vessels.EditAsync(id, edit);
+
+            return this.RedirectToAction(nameof(VesselsController.All));
         }
 
         // [HttpGet("Admin/Vessels/Delete")]
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
             {
                 return this.NotFound();
             }
 
-            var delete = this.vessels
-                .GetById(id)
+            var delete = (await this.vessels
+                .GetByIdAsync(id))
                 .To<VesselDeleteViewModel>();
-
-            if (delete == null)
-            {
-                return this.NotFound();
-            }
 
             return this.View(delete);
         }
 
-        // [HttpGet("Admin/Vessels/Delete/id")]
         [HttpPost]
-        public IActionResult DeleteConfirm(string id)
+        public async Task<IActionResult> DeleteConfirm(string id)
         {
-            this.vessels.Delete(id);
+            await this.vessels.DeleteAsync(id);
 
-            return this.RedirectToAction(nameof(this.All));
+            return this.RedirectToAction(nameof(VesselsController.All));
         }
     }
 }
