@@ -29,21 +29,22 @@
         public async Task ImportVesselDataAsync(char fromId = StartLetter, char toId = EndLetter)
         {         
             var vessels = this.GetVesselListing(fromId, toId);
+            var currenFromId = fromId;
 
-            if (vessels.Any())
+            foreach (var vessel in vessels)
             {
-                var names = vessels[0].Name;
-                var summerDwts = vessels[0].SummerDwt;
-                var loas = vessels[0].Loa;
-                var imos = vessels[0].Imo;
-                var hullTypes = vessels[0].HullType;
-                var cubic = vessels[0].Cubic;
-                var beams = vessels[0].Beam;
-                var drafts = vessels[0].Draft;
-                var callSigns = vessels[0].CallSign;
-                var builts = vessels[0].Built;
+                var names = vessel.Name;
+                var summerDwts = vessel.SummerDwt;
+                var loas = vessel.Loa;
+                var imos = vessel.Imo;
+                var hullTypes = vessel.HullType;
+                var cubic = vessel.Cubic;
+                var beams = vessel.Beam;
+                var drafts = vessel.Draft;
+                var callSigns = vessel.CallSign;
+                var builts = vessel.Built;
 
-                var guids = this.ScrapeGuids(this.browsingContext, fromId);
+                var guids = this.ScrapeGuids(this.browsingContext, currenFromId++);
                 var owners = this.ScrapeOwners(this.browsingContext, guids);
                 var types = this.ScrapeTypes(this.browsingContext, guids);
                 var classSocieties = this.ScrapeClassSocieties(this.browsingContext, guids);

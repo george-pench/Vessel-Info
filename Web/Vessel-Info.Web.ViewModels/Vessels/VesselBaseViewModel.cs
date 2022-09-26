@@ -14,14 +14,14 @@
 
         [Required]
         [Display(Name = "IMO")]
-        [MaxLength(ImoLength)]
+        [StringLength(ImoMaxLength, MinimumLength = ImoMinLength)]
         public string Imo { get; set; }
         
         [Range(BuiltMinValue, BuiltMaxValue)]
         public string Built { get; set; }
 
         [Display(Name = "Summert DWT")]
-        //[Range(SummertDwtMaxLength, SummertDwtMinLength)]
+        [Range(SummertDwtMaxLength, SummertDwtMinLength)]
         public string SummerDwt { get; set; }
     }
 }
