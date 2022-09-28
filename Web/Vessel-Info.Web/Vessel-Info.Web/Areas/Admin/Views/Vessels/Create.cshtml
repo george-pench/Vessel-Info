@@ -9,22 +9,29 @@
     <div class="col-md-10">
         <form method="post" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div id="name-and-id-holder" class="d-flex justify-content-between">
-                <div class="form-group mx-auto w-50">
-                    <div class="d-flex justify-content-center">
-                        <label asp-for="Vessel.Id" class="control-label"></label>
-                    </div>
 
-                    <input asp-for="Vessel.Id" class="form-control" />
-                    <span asp-validation-for="Vessel.Id" class="text-danger"></span>
-                </div>
+            <div id="name-and-callSign-holder" class="d-flex justify-content-between">
                 <div class="form-group mx-auto w-50">
                     <div class="d-flex justify-content-center">
                         <label asp-for="Vessel.Name" class="control-label"></label>
                     </div>
-
-                    <input asp-for="Vessel.Name" class="form-control" />
+                    <input type="text"
+                           asp-for="Vessel.Name"
+                           class="form-control text-primary text-center"
+                           id="name"
+                           placeholder="Name..." />
                     <span asp-validation-for="Vessel.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group mx-auto w-50">
+                    <div class="d-flex justify-content-center">
+                        <label asp-for="Vessel.CallSign" class="control-label"></label>
+                    </div>
+                    <input type="text"
+                           asp-for="Vessel.CallSign"
+                           class="form-control text-primary text-center"
+                           id="callSign"
+                           placeholder="Call Sign..." />
+                    <span asp-validation-for="Vessel.CallSign" class="text-danger"></span>
                 </div>
             </div>
 
@@ -33,14 +40,22 @@
                     <div class="d-flex justify-content-center">
                         <label asp-for="Vessel.Imo" class="control-label"></label>
                     </div>
-                    <input asp-for="Vessel.Imo" class="form-control" />
+                    <input type="text"
+                           asp-for="Vessel.Imo"
+                           class="form-control text-primary text-center"
+                           id="imo"
+                           placeholder="IMO..." />
                     <span asp-validation-for="Vessel.Imo" class="text-danger"></span>
                 </div>
                 <div class="form-group mx-auto w-50">
                     <div class="d-flex justify-content-center">
                         <label asp-for="Vessel.Built" class="control-label"></label>
                     </div>
-                    <input asp-for="Vessel.Built" class="form-control" />
+                    <input type="text"
+                           asp-for="Vessel.Built"
+                           class="form-control text-primary text-center"
+                           id="built"
+                           placeholder="Built..." />
                     <span asp-validation-for="Vessel.Built" class="text-danger"></span>
                 </div>
             </div>
@@ -50,14 +65,22 @@
                     <div class="d-flex justify-content-center">
                         <label asp-for="Vessel.SummerDwt" class="control-label"></label>
                     </div>
-                    <input asp-for="Vessel.SummerDwt" class="form-control" />
+                    <input type="text"
+                           asp-for="Vessel.SummerDwt"
+                           class="form-control text-primary text-center"
+                           id="summertDwt"
+                           placeholder="Summer DWT..." />
                     <span asp-validation-for="Vessel.SummerDwt" class="text-danger"></span>
                 </div>
                 <div class="form-group mx-auto w-50">
                     <div class="d-flex justify-content-center">
                         <label asp-for="Vessel.Loa" class="control-label"></label>
                     </div>
-                    <input asp-for="Vessel.Loa" class="form-control" />
+                    <input type="text"
+                           asp-for="Vessel.Loa"
+                           class="form-control text-primary text-center"
+                           id="loa"
+                           placeholder="LOA..." />
                     <span asp-validation-for="Vessel.Loa" class="text-danger"></span>
                 </div>
             </div>
@@ -67,54 +90,105 @@
                     <div class="d-flex justify-content-center">
                         <label asp-for="Vessel.Cubic" class="control-label"></label>
                     </div>
-                    <input asp-for="Vessel.Cubic" class="form-control" />
+                    <input type="text"
+                           asp-for="Vessel.Cubic"
+                           class="form-control text-primary text-center"
+                           id="cubic"
+                           placeholder="Cubic..." />
                     <span asp-validation-for="Vessel.Cubic" class="text-danger"></span>
                 </div>
                 <div class="form-group mx-auto w-50">
                     <div class="d-flex justify-content-center">
                         <label asp-for="Vessel.Beam" class="control-label"></label>
                     </div>
-                    <input asp-for="Vessel.Beam" class="form-control" />
+                    <input type="text"
+                           asp-for="Vessel.Beam"
+                           class="form-control text-primary text-center"
+                           id="beam"
+                           placeholder="Beam..." />
                     <span asp-validation-for="Vessel.Beam" class="text-danger"></span>
                 </div>
             </div>
 
+            <div id="draft-and-hullType-holder" class="d-flex justify-content-between">
+                <div class="form-group mx-auto w-50">
+                    <div class="d-flex justify-content-center">
+                        <label asp-for="Vessel.Draft" class="control-label"></label>
+                    </div>
+                    <input type="text"
+                           asp-for="Vessel.Draft"
+                           class="form-control text-primary text-center"
+                           id="draft"
+                           placeholder="Draft..." />
+                    <span asp-validation-for="Vessel.Draft" class="text-danger"></span>
+                </div>
+                <div class="form-group mx-auto w-50">
+                    <div class="d-flex justify-content-center">
+                        <label asp-for="Vessel.HullType" class="control-label"></label>
+                    </div>
+                    <input type="text"
+                           asp-for="Vessel.HullType"
+                           class="form-control text-primary text-center"
+                           id="hullType"
+                           placeholder="Hull Type..." />
+                    <span asp-validation-for="Vessel.HullType" class="text-danger"></span>
+                </div>
+            </div>
 
-            <div class="form-group">
-                <label asp-for="Vessel.Draft" class="control-label"></label>
-                <input asp-for="Vessel.Draft" class="form-control" />
-                <span asp-validation-for="Vessel.Draft" class="text-danger"></span>
+            <div id="registrationId-and-typeId-holder" class="d-flex justify-content-between">
+                <div class="form-group mx-auto w-50">
+                    <div class="d-flex justify-content-center">
+                        <label asp-for="RegistrationId"></label>
+                    </div>
+                    <select asp-for="RegistrationId" class="form-control">
+                        @foreach (var registration in Model.Registrations)
+                        {
+                            <option value="@registration.Id">@registration.Flag</option>
+                        }
+                    </select>
+                    <span asp-validation-for="RegistrationId" class="small text-danger"></span>
+                </div>
+                <div class="form-group mx-auto w-50">
+                    <div class="d-flex justify-content-center">
+                        <label asp-for="TypeId"></label>
+                    </div>
+                    <select asp-for="TypeId" class="form-control">
+                        @foreach (var type in Model.Types)
+                        {
+                            <option value="@type.Id">@type.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="TypeId" class="small text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Vessel.HullType" class="control-label"></label>
-                <input asp-for="Vessel.HullType" class="form-control" />
-                <span asp-validation-for="Vessel.HullType" class="text-danger"></span>
+
+            <div id="classificationSocietyId-and-ownerId-holder" class="d-flex justify-content-between">
+                <div class="form-group mx-auto w-50">
+                    <div class="d-flex justify-content-center">
+                        <label asp-for="ClassificationSocietyId"></label>
+                    </div>
+                    <select asp-for="ClassificationSocietyId" class="form-control">
+                        @foreach (var classSociety in Model.ClassificationSocieties)
+                        {
+                            <option value="@classSociety.Id">@classSociety.FullName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ClassificationSocietyId" class="small text-danger"></span>
+                </div>
+                <div class="form-group mx-auto w-50">
+                    <div class="d-flex justify-content-center">
+                        <label asp-for="OwnerId"></label>
+                    </div>
+                    <select asp-for="OwnerId" class="form-control">
+                        @foreach (var owner in Model.Owners)
+                        {
+                            <option value="@owner.Id">@owner.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="OwnerId" class="small text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Vessel.CallSign" class="control-label"></label>
-                <input asp-for="Vessel.CallSign" class="form-control" />
-                <span asp-validation-for="Vessel.CallSign" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RegistrationId" class="control-label"></label>
-                <input asp-for="RegistrationId" class="form-control" />
-                <span asp-validation-for="RegistrationId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TypeId" class="control-label"></label>
-                <input asp-for="TypeId" class="form-control" />
-                <span asp-validation-for="TypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OwnerId" class="control-label"></label>
-                <input asp-for="OwnerId" class="form-control" />
-                <span asp-validation-for="OwnerId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClassificationSocietyId" class="control-label"></label>
-                <input asp-for="ClassificationSocietyId" class="form-control" />
-                <span asp-validation-for="ClassificationSocietyId" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

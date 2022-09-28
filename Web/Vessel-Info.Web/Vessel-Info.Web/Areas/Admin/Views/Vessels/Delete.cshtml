@@ -51,7 +51,11 @@
     
     <form asp-action="DeleteConfirm">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" />
-        <a asp-controller="Vessels" asp-action="All">Back to List</a>
+        <input type="submit" value="Delete" class="btn btn-danger" />        
     </form>
+    <br />
+
+    <div>
+        <a asp-controller="Vessels" asp-action="All">Back to List</a>
+    </div>
 </div>

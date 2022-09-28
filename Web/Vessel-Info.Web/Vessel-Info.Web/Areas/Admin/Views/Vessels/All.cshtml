@@ -4,48 +4,57 @@
     ViewData["Title"] = "All Vessels";
 }
 
-<h2 class="text-center">
-    @ViewData["Title"]
-</h2>
+@if (Model.Any())
+{
+    <h2 class="text-center">
+        @ViewData["Title"]
+    </h2>
 
-<table class="table table-hover table-bordered table-striped">
-    <thead class="table-primary">
-        <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Imo</th>
-            <th scope="col">Built</th>
-            <th scope="col">SummerDwt</th>
-            <th scope="col">Loa</th>
-            <th scope="col">Cubic</th>
-            <th scope="col">Beam</th>
-            <th scope="col">Draft</th>
-            <th scope="col">HullType</th>
-            <th scope="col">Call Sign</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var vessel in Model)
-        {
-            <tr>
-                <td scope="col">
-                    <a asp-action="Details" asp-route-id="@vessel.Id">@vessel.Name</a>
-                </td>
-                <td scope="col">@vessel.Imo</td>
-                <td scope="col">@vessel.Built</td>
-                <td scope="col">@vessel.SummerDwt</td>
-                <td scope="col">@vessel.Loa</td>
-                <td scope="col">@vessel.Cubic</td>
-                <td scope="col">@vessel.Beam</td>
-                <td scope="col">@vessel.Draft</td>
-                <td scope="col">@vessel.HullType</td>
-                <td scope="col">@vessel.CallSign</td>
-
-                <td>
-                    <a class="btn btn-secondary btn-sm" asp-action="Details" asp-route-id="@vessel.Id">Details</a>
-                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@vessel.Id">Edit</a>
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@vessel.Id">Delete</a>
-                </td>
+    <table class="table table-hover table-bordered table-striped">
+        <thead class="table-primary">
+            <tr style="text-align: center;">
+                <th scope="col">Name</th>
+                <th scope="col">Imo</th>
+                <th scope="col">Built</th>
+                <th scope="col">SummerDwt</th>
+                <th scope="col">Loa</th>
+                <th scope="col">Cubic</th>
+                <th scope="col">Beam</th>
+                <th scope="col">Draft</th>
+                <th scope="col">HullType</th>
+                <th scope="col">Call Sign</th>
+                <th scope="col">Action</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var vessel in Model)
+            {
+                <tr>
+                    <td scope="col">
+                        <a asp-action="Details" asp-route-id="@vessel.Id">@vessel.Name</a>
+                    </td>
+                    <td scope="col">@vessel.Imo</td>
+                    <td scope="col">@vessel.Built</td>
+                    <td scope="col">@vessel.SummerDwt</td>
+                    <td scope="col">@vessel.Loa</td>
+                    <td scope="col">@vessel.Cubic</td>
+                    <td scope="col">@vessel.Beam</td>
+                    <td scope="col">@vessel.Draft</td>
+                    <td scope="col">@vessel.HullType</td>
+                    <td scope="col">@vessel.CallSign</td>
+
+                    <td>
+                        <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@vessel.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <br />
+    <div class="text-center">
+        <h2 class="text-info">No vessels published yet!</h2>
+    </div>
+}

@@ -57,5 +57,11 @@
 </div>
 
 <div>
+    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+</div>
+<br />
+
+<div> 
     <a asp-controller="Vessels" asp-action="All">Back to List</a>
 </div>
