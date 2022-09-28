@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
+    using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
 
     public class TypeService : ITypeService
@@ -31,5 +32,10 @@
                 .Where(t => t.Name == vesselType)
                 .Select(t => t.Id)
                 .FirstOrDefaultAsync();
+
+        public IQueryable<VesselTypeServiceModel> All() => dbContext
+                .Types
+                .OrderBy(t => t.Name)
+                .To<VesselTypeServiceModel>();
     }
 }

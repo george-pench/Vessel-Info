@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
+    using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
 
     public class RegistrationService : IRegistrationService
@@ -32,5 +33,10 @@
                 .Where(r => r.Flag == vesselRegistration)
                 .Select(r => r.Id)
                 .FirstOrDefaultAsync();
+
+        public IQueryable<VesselRegistrationServiceModel> All() => dbContext
+                .Registrations
+                .OrderBy(r => r.Flag)
+                .To<VesselRegistrationServiceModel>();
     }
 }

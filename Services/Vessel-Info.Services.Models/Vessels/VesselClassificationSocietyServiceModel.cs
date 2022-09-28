@@ -5,6 +5,8 @@
 
     public class VesselClassificationSocietyServiceModel : IMapFrom<ClassificationSociety>, IMapTo<ClassificationSociety>
     {
+        public int Id { get; set; }
+
         public string FullName { get; set; }
     }
 }

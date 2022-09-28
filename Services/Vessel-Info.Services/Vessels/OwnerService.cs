@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
+    using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
 
     public class OwnerService : IOwnerService
@@ -31,5 +32,10 @@
                 .Where(o => o.Name == vesselOwner)
                 .Select(o => o.Id)
                 .FirstOrDefaultAsync();
+
+        public IQueryable<VesselOwnerServiceModel> All() => dbContext
+                .Owners
+                .OrderBy(o => o.Name)
+                .To<VesselOwnerServiceModel>();
     }
 }

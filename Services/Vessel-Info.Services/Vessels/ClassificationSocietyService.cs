@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
+    using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
 
     public class ClassificationSocietyService : IClassificationSocietyService
@@ -31,5 +32,10 @@
                 .Where(cs => cs.FullName == vesselClass)
                 .Select(cs => cs.Id)
                 .FirstOrDefaultAsync();
+
+        public IQueryable<VesselClassificationSocietyServiceModel> All() => dbContext
+                .ClassificationSocieties
+                .OrderBy(cs => cs.FullName)
+                .To<VesselClassificationSocietyServiceModel>();
     }
 }
