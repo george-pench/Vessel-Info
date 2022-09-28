@@ -12,10 +12,23 @@
     {
         // TODO: exception handling and functionality
         private readonly IVesselService vessels;
+        private readonly IRegistrationService registrations;
+        private readonly ITypeService types;
+        private readonly IOwnerService owners;
+        private readonly IClassificationSocietyService classificationSocieties;
 
-        public VesselsController(IVesselService vessels)
+        public VesselsController(
+            IVesselService vessels, 
+            ITypeService types, 
+            IOwnerService owners, 
+            IClassificationSocietyService classificationSocieties,
+            IRegistrationService registrations)
         {
             this.vessels = vessels;
+            this.types = types;
+            this.owners = owners;
+            this.classificationSocieties = classificationSocieties;
+            this.registrations = registrations;
         }
 
         // [HttpGet("Admin/Vessels/All")]
@@ -44,7 +57,16 @@
         }
 
         // [HttpGet("Admin/Vessels/Create")]
-        public IActionResult Create() => this.View();
+        public IActionResult Create()
+        {
+            return this.View(new VesselCreateInputModel 
+            {
+                Registrations = this.registrations.All(),
+                Types = this.types.All(),
+                Owners = this.owners.All(),
+                ClassificationSocieties = this.classificationSocieties.All()
+            });
+        }
 
         [HttpPost]
         public async Task<IActionResult> Create(VesselCreateInputModel model)
@@ -55,7 +77,7 @@
             }
 
             var create = ObjectMappingExtensions.To<VesselCreateServiceModel>(model);
-            create.Vessel.Id = Guid.NewGuid().ToString();  
+            create.Vessel.Id = Guid.NewGuid().ToString();            
 
             var vesselId = await this.vessels.CreateAsync(create);
 
@@ -74,6 +96,11 @@
                 .GetByIdAsync(id))
                 .To<VesselEditInputModel>();
 
+            edit.Registrations = this.registrations.All();
+            edit.Types = this.types.All();
+            edit.Owners = this.owners.All();
+            edit.ClassificationSocieties = this.classificationSocieties.All();
+
             return this.View(edit);
         }
 
@@ -86,11 +113,10 @@
             }
 
             var edit = ObjectMappingExtensions.To<VesselEditServiceModel>(model);
-            edit.Vessel.Id = id;
 
             await this.vessels.EditAsync(id, edit);
 
-            return this.RedirectToAction(nameof(VesselsController.All));
+            return this.RedirectToAction(nameof(VesselsController.Details), new { id = id });
         }
 
         // [HttpGet("Admin/Vessels/Delete")]
