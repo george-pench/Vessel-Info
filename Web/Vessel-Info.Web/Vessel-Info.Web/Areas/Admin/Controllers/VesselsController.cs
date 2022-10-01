@@ -2,15 +2,18 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
     using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
     using Vessel_Info.Services.Vessels;
     using Vessel_Info.Web.ViewModels.Vessels;
 
+    using static Vessel_Info.Web.Constants.WebConstants;
+
     public class VesselsController : AdminController
-    {
-        // TODO: exception handling and functionality
+    {      
+        // TODO: exception handling, search action
         private readonly IVesselService vessels;
         private readonly IRegistrationService registrations;
         private readonly ITypeService types;
@@ -19,26 +22,48 @@
 
         public VesselsController(
             IVesselService vessels, 
+            IRegistrationService registrations,
             ITypeService types, 
             IOwnerService owners, 
-            IClassificationSocietyService classificationSocieties,
-            IRegistrationService registrations)
+            IClassificationSocietyService classificationSocieties)
         {
             this.vessels = vessels;
+            this.registrations = registrations;
             this.types = types;
             this.owners = owners;
             this.classificationSocieties = classificationSocieties;
-            this.registrations = registrations;
+        }    
+
+        public IActionResult Search(string searchTerm, int id)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return this.View(this.vessels.All(id, ItemsPerPage).To<VesselAllViewModel>());
+            }
+
+            return this.View(this.vessels
+                .All(id, ItemsPerPage)
+                .Where(v => v.Name.StartsWith(searchTerm))
+                .To<VesselAllViewModel>());
         }
 
         // [HttpGet("Admin/Vessels/All")]
-        public IActionResult All()
-        {
-            var all = this.vessels
-                .All()
-                .To<VesselAllViewModel>();
+        public IActionResult All(int id = 1)
+        {           
+            if (id < 0)
+            {
+                return this.NotFound();
+            }
+            
+            var viewModel = new VesselListingViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                VesselsCount = this.vessels.GetCount(),
+                Vessels = this.vessels.All(id, ItemsPerPage).To<VesselAllViewModel>()
+            };
 
-            return this.View(all);
+            return this.View(viewModel);
         }
 
         // [HttpGet("Admin/Vessels/Details")]
@@ -57,16 +82,13 @@
         }
 
         // [HttpGet("Admin/Vessels/Create")]
-        public IActionResult Create()
+        public IActionResult Create() => this.View(new VesselCreateInputModel
         {
-            return this.View(new VesselCreateInputModel 
-            {
-                Registrations = this.registrations.All(),
-                Types = this.types.All(),
-                Owners = this.owners.All(),
-                ClassificationSocieties = this.classificationSocieties.All()
-            });
-        }
+            Registrations = this.registrations.All(),
+            Types = this.types.All(),
+            Owners = this.owners.All(),
+            ClassificationSocieties = this.classificationSocieties.All()
+        });
 
         [HttpPost]
         public async Task<IActionResult> Create(VesselCreateInputModel model)

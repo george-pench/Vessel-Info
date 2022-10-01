@@ -13,10 +13,7 @@
     {
         private readonly VesselInfoDbContext dbContext;
 
-        public VesselService(VesselInfoDbContext dbContext)
-        {
-            this.dbContext = dbContext;
-        }
+        public VesselService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
         public async Task<string> CreateAsync(VesselCreateServiceModel model)
         {
@@ -86,9 +83,12 @@
             this.dbContext.Vessels.Remove(delete);
             await this.dbContext.SaveChangesAsync();            
         }
-        public IQueryable<VesselAllServiceModel> All() => this.dbContext
+
+        public IQueryable<VesselAllServiceModel> All(int page = 1, int pageSize = 10) => this.dbContext
                 .Vessels
-                .OrderBy(v => v.Name)
+                .OrderByDescending(v => v.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .To<VesselAllServiceModel>();
 
         public async Task<VesselAllServiceModel> GetByIdAsync(string id) => await this.dbContext
@@ -107,5 +107,7 @@
             "SS" => "Single Side",
             _ => "Other",
         };
+
+        public int GetCount() => dbContext.Vessels.Count();
     }
 }

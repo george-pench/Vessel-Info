@@ -14,8 +14,10 @@
 
         Task DeleteAsync(string id);
 
-        IQueryable<VesselAllServiceModel> All();
+        IQueryable<VesselAllServiceModel> All(int page, int itemsPerPage = 12);
 
         Task<VesselAllServiceModel> GetByIdAsync(string id);
+
+        int GetCount();
     }
 }
