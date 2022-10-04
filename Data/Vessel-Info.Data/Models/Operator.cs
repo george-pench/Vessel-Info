@@ -9,12 +9,11 @@
     {
         public int Id { get; set; }
 
-        [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; }
 
         [MaxLength(FoundedMaxValue)]
-        public ushort Founded { get; set; }
+        public string Founded { get; set; }
 
         [MaxLength(WebsiteMaxLength)]
         public string Website { get; set; }

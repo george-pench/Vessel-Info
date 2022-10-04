@@ -16,16 +16,24 @@
         {
             public const int NameMinLength = 2;
             public const int NameMaxLength = 100;
-            public const int ExNameMinLength = 2;
-            public const int ExNameMaxLength = 100;
-            public const int HullTypeMinLength = 5;
-            public const int HyllTypeMaxLength = 20;
-            public const int ImoLength = 9;
-            public const int CallSignLength = 10;
+            public const int ImoMinLength = 7;
+            public const int ImoMaxLength = 7;
+            public const int LoaMinLength = 5;
+            public const int LoaMaxLength = 500;
+            public const int CubicMinLength = 1000;
+            public const int CubicMaxLength = 500000;
+            public const int HullTypeMinLength = 2;
+            public const int HyllTypeMaxLength = 20;            
+            public const int CallSignMinLength = 5;
+            public const int CallSignMaxLength = 10;
             public const int SummertDwtMinLength = 1000;
             public const int SummertDwtMaxLength = 600000;
             public const int BuiltMinValue = 1900;
             public const int BuiltMaxValue = 2050;
+            public const int DraftMinValue = 5;
+            public const int DraftMaxValue = 40;
+            public const int BeamMinValue = 8;
+            public const int BeamMaxValue = 100;
         }
 
         public class Type
@@ -78,6 +86,8 @@
             public const int AbbreviationMaxLength = 10;
             public const int FoundedMinValue = 1890;
             public const int FoundedMaxValue = 2040;
+            public const int WebsiteMinLength = 8;
+            public const int WebsiteMaxLength = 50;
         }
     }
 }

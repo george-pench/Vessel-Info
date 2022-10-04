@@ -9,11 +9,9 @@
     {
         public int Id { get; set; }
 
-        [Required]
         [MaxLength(FlagMaxLength)]
         public string Flag { get; set; }
 
-        [Required]
         [MaxLength(RegistryPortMaxLength)]
         public string RegistryPort { get; set; }
 

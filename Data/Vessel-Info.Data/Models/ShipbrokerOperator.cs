@@ -2,6 +2,8 @@
 {
     public class ShipbrokerOperator
     {
+        public int Id { get; set; }
+
         public int ShipbrokerId { get; set; }
 
         public Shipbroker Shipbroker { get; set; }
