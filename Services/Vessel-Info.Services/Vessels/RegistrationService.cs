@@ -14,12 +14,21 @@
 
         public RegistrationService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task<int> Create(VesselRegistrationServiceModel model)
+        public async Task<int> GetOrCreateRegistrationAsync(string flagName, string registryPortName)
         {
-            Registration registration = new Registration
+            var registration = await this.dbContext
+                .Registrations
+                .FirstOrDefaultAsync(x => x.Flag == flagName);
+
+            if (registration != null)
             {
-                Flag = model.Flag,
-                RegistryPort = model.RegistryPort
+                return registration.Id;
+            }
+
+            registration = new Registration
+            {
+                Flag = flagName,
+                RegistryPort = registryPortName
             };
 
             await this.dbContext.Registrations.AddAsync(registration);

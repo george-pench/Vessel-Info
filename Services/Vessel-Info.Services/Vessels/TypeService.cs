@@ -4,7 +4,6 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Vessel_Info.Data;
-    using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
 
@@ -14,11 +13,20 @@
 
         public TypeService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task<int> Create(VesselTypeServiceModel model)
+        public async Task<int> GetOrCreateTypeAsync(string typeName)
         {
-            Type type = new Type
+            var type = await this.dbContext
+                .Types
+                .FirstOrDefaultAsync(x => x.Name == typeName);
+
+            if (type != null)
             {
-                Name = model.Name
+                return type.Id;
+            }
+
+            type = new Data.Models.Type
+            {
+                Name = typeName
             };
 
             await this.dbContext.Types.AddAsync(type);

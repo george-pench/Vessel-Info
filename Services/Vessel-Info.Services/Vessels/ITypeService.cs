@@ -6,7 +6,7 @@
 
     public interface ITypeService
     {
-        Task<int> Create(VesselTypeServiceModel model);
+        Task<int> GetOrCreateTypeAsync(string typeName);
 
         Task<int> FindTypeIdByName(string vesselType);
 

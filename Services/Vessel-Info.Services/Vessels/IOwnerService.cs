@@ -6,7 +6,7 @@
 
     public interface IOwnerService
     {
-        Task<int> Create(VesselOwnerServiceModel model);
+        Task<int> GetOrCreateOwnerAsync(string ownerName);
 
         Task<int> FindOwnerIdByName(string vesselOwner);
 

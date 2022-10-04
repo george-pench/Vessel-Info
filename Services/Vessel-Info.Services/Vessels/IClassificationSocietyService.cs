@@ -6,7 +6,9 @@
 
     public interface IClassificationSocietyService
     {
-        Task<int> Create(VesselClassificationSocietyServiceModel model);
+        Task<int> GetOrCreateClassSocietyAsync(string classSocietyFullName);
+
+        Task<VesselClassificationSocietyServiceModel> DetailsAsync(int? id);
 
         Task<int> FindClassificationSocietyIdByName(string vesselClass);
 

@@ -6,7 +6,7 @@
 
     public interface IRegistrationService
     {
-        Task<int> Create(VesselRegistrationServiceModel model);
+        Task<int> GetOrCreateRegistrationAsync(string flagName, string registryPortName);
 
         Task<int> FindRegistrationIdByName(string vesselRegistration);
 

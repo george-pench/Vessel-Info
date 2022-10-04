@@ -14,11 +14,20 @@
 
         public OwnerService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task<int> Create(VesselOwnerServiceModel model)
+        public async Task<int> GetOrCreateOwnerAsync(string ownerName)
         {
-            Owner owner = new Owner
+            var owner = await this.dbContext
+                .Owners
+                .FirstOrDefaultAsync(x => x.Name == ownerName);
+
+            if (owner != null)
             {
-                Name = model.Name
+                return owner.Id;
+            }
+
+            owner = new Owner
+            {
+                Name = ownerName
             };
 
             await this.dbContext.Owners.AddAsync(owner);
