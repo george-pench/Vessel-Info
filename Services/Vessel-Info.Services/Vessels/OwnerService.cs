@@ -46,5 +46,7 @@
                 .Owners
                 .OrderBy(o => o.Name)
                 .To<VesselOwnerServiceModel>();
+
+        public async Task<int> GetCountAsync() => await this.dbContext.Owners.CountAsync();
     }
 }

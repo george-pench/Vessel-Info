@@ -63,5 +63,7 @@
                 .ClassificationSocieties
                 .OrderBy(cs => cs.FullName)
                 .To<VesselClassificationSocietyServiceModel>();
+
+        public async Task<int> GetCountAsync() => await this.dbContext.ClassificationSocieties.CountAsync();
     }
 }

@@ -11,5 +11,7 @@
         Task<int> FindRegistrationIdByName(string vesselRegistration);
 
         IQueryable<VesselRegistrationServiceModel> All();
+
+        Task<int> GetCountAsync();
     }
 }

@@ -11,5 +11,7 @@
         Task<int> FindOwnerIdByName(string vesselOwner);
 
         IQueryable<VesselOwnerServiceModel> All();
+
+        Task<int> GetCountAsync();
     }
 }

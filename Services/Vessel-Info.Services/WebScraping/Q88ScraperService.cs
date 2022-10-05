@@ -10,6 +10,7 @@
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Models.WebScraping;
+    using Vessel_Info.Services.Vessels;
 
     using static Constants.ServicesConstants;
 
@@ -19,11 +20,26 @@
         private readonly IBrowsingContext browsingContext;
         private readonly VesselInfoDbContext dbContext;
 
-        public Q88ScraperService(VesselInfoDbContext dbContext)
+        private readonly ITypeService types;
+        private readonly IOwnerService owners;
+        private readonly IRegistrationService registrations;
+        private readonly IClassificationSocietyService classificationSocieties;
+
+        public Q88ScraperService(
+            VesselInfoDbContext dbContext,
+            ITypeService types,
+            IOwnerService owners,
+            IRegistrationService registrations,
+            IClassificationSocietyService classificationSocieties)
         {
             this.config = Configuration.Default.WithDefaultLoader();
             this.browsingContext = BrowsingContext.New(this.config);
             this.dbContext = dbContext;
+
+            this.types = types;
+            this.owners = owners;
+            this.registrations = registrations;
+            this.classificationSocieties = classificationSocieties;
         }
 
         public async Task ImportVesselDataAsync(char fromId = StartLetter, char toId = EndLetter)
@@ -56,14 +72,14 @@
 
                 for (int i = 0; i < vesselSize; i++)
                 {
-                    var typeId = await this.GetOrCreateTypeAsync(types[i]);
-                    var ownerId = await this.GetOrCreateOwnerAsync(owners[i]);
-                    var classSocietyId = await this.GetOrCreateClassSocietyAsync(classSocieties[i]);
+                    var typeId = await this.types.GetOrCreateTypeAsync(types[i]);
+                    var ownerId = await this.owners.GetOrCreateOwnerAsync(owners[i]);
+                    var classSocietyId = await this.classificationSocieties.GetOrCreateClassSocietyAsync(classSocieties[i]);
                     // var shipbrokerId = await this.GetOrCreateShipbrokerAsync();
 
                     var registrationKeys = registrations[i].Keys.FirstOrDefault();
                     var registrationValues = registrations[i].Values.FirstOrDefault();
-                    var registrationId = await this.GetOrCreateRegistrationAsync(registrationKeys, registrationValues);
+                    var registrationId = await this.registrations.GetOrCreateRegistrationAsync(registrationKeys, registrationValues);
 
                     var newVessel = new Vessel
                     {
@@ -108,51 +124,7 @@
 
             return all;
         }
-
-        private async Task<int> GetOrCreateTypeAsync(string typeName)
-        {
-            var type = await this.dbContext
-                .Types
-                .FirstOrDefaultAsync(x => x.Name == typeName);
-
-            if (type != null)
-            {
-                return type.Id;
-            }
-
-            type = new Data.Models.Type
-            {
-                Name = typeName
-            };
-
-            await this.dbContext.Types.AddAsync(type);
-            await this.dbContext.SaveChangesAsync();
-
-            return type.Id;
-        }
-
-        private async Task<int> GetOrCreateOwnerAsync(string ownerName)
-        {
-            var owner = await this.dbContext
-                .Owners
-                .FirstOrDefaultAsync(x => x.Name == ownerName);
-
-            if (owner != null)
-            {
-                return owner.Id;
-            }
-
-            owner = new Owner 
-            {
-                Name = ownerName
-            };
-
-            await this.dbContext.Owners.AddAsync(owner);
-            await this.dbContext.SaveChangesAsync();
-
-            return owner.Id;
-        }
-
+ 
         private async Task<int> GetOrCreateShipbrokerAsync(string agencyName)
         {
             var shipbroker = this.dbContext
@@ -173,52 +145,7 @@
             await this.dbContext.SaveChangesAsync();
 
             return shipbroker.Id;
-        }
-
-        private async Task<int> GetOrCreateClassSocietyAsync(string classSocietyFullName)
-        {
-            var classSociety = await this.dbContext
-                .ClassificationSocieties
-                .FirstOrDefaultAsync(x => x.FullName == classSocietyFullName);
-
-            if (classSociety != null)
-            {
-                return classSociety.Id;
-            }
-
-            classSociety = new ClassificationSociety 
-            {
-                FullName = classSocietyFullName
-            };
-
-            await this.dbContext.ClassificationSocieties.AddAsync(classSociety);
-            await this.dbContext.SaveChangesAsync();
-
-            return classSociety.Id;
-        }
-
-        private async Task<int> GetOrCreateRegistrationAsync(string flagName, string registryPortName)
-        {
-            var registration = await this.dbContext
-                .Registrations
-                .FirstOrDefaultAsync(x => x.Flag == flagName);
-
-            if (registration != null)
-            {
-                return registration.Id;
-            }
-
-            registration = new Registration 
-            {
-                Flag = flagName,
-                RegistryPort = registryPortName
-            };
-
-            await this.dbContext.Registrations.AddAsync(registration);
-            await this.dbContext.SaveChangesAsync();
-
-            return registration.Id;
-        }
+        }        
 
         private async Task<int> GetOrCreateOperator(string operatorName)
         {
@@ -249,6 +176,7 @@
 
             var vesselsData = new Q88ListingServiceModel();
 
+            // Due to data inconsistency all data retrieved is stored in List<string> properties for easier persisting into the database
             // Get Vessel Name
             var names = this.SelectorType(document, VesselNameSelector, 27);
             vesselsData.Name.AddRange(names);

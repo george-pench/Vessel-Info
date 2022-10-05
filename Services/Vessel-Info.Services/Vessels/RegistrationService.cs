@@ -47,5 +47,7 @@
                 .Registrations
                 .OrderBy(r => r.Flag)
                 .To<VesselRegistrationServiceModel>();
+
+        public async Task<int> GetCountAsync() => await this.dbContext.Registrations.CountAsync();
     }
 }

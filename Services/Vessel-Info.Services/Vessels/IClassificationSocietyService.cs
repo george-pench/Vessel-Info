@@ -13,5 +13,7 @@
         Task<int> FindClassificationSocietyIdByName(string vesselClass);
 
         IQueryable<VesselClassificationSocietyServiceModel> All();
+
+        Task<int> GetCountAsync();
     }
 }

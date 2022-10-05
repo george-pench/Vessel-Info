@@ -18,6 +18,6 @@
 
         Task<VesselAllServiceModel> GetByIdAsync(string id);
 
-        int GetCount();
+        Task<int> GetCountAsync();
     }
 }
