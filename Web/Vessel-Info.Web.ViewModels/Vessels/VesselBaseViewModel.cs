@@ -21,7 +21,7 @@
         public string Built { get; set; }
 
         [Display(Name = "Summert DWT")]
-        [Range(SummertDwtMaxLength, SummertDwtMinLength)]
+        [Range(SummertDwtMinLength, SummertDwtMaxLength)]
         public string SummerDwt { get; set; }
     }
 }

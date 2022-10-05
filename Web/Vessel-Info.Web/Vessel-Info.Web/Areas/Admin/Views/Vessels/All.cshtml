@@ -1,10 +1,19 @@
-﻿@model IQueryable<Vessel_Info.Web.ViewModels.Vessels.VesselAllViewModel>
+﻿@model Vessel_Info.Web.ViewModels.Vessels.VesselListingViewModel
 
 @{
     ViewData["Title"] = "All Vessels";
 }
 
-@if (Model.Any())
+@*<div class="justify-content-end">
+    <form method="post" asp-action="All">
+        <span class="btn-group">
+            <input class="form-control" type="text" name="searchTerm" placeholder="Search Key" />
+            <input class="btn btn-sm btn-info" type="submit" value="Search" />
+        </span>
+    </form>
+</div>*@
+
+@if (Model.Vessels.Any())
 {
     <h2 class="text-center">
         @ViewData["Title"]
@@ -27,7 +36,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var vessel in Model)
+            @foreach (var vessel in Model.Vessels)
             {
                 <tr>
                     <td scope="col">
@@ -55,6 +64,9 @@ else
 {
     <br />
     <div class="text-center">
-        <h2 class="text-info">No vessels published yet!</h2>
+        <h2 class="text-info">No vessel(s)!</h2>
     </div>
 }
+
+<hr />
+<partial name="_PagingPartial" model="@Model" />

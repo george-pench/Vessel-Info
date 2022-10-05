@@ -45,5 +45,7 @@
                 .Types
                 .OrderBy(t => t.Name)
                 .To<VesselTypeServiceModel>();
+
+        public async Task<int> GetCountAsync() => await this.dbContext.Types.CountAsync();
     }
 }

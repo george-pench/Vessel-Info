@@ -86,7 +86,8 @@
 
         public IQueryable<VesselAllServiceModel> All(int page = 1, int pageSize = 10) => this.dbContext
                 .Vessels
-                .OrderByDescending(v => v.Id)
+                .OrderBy(v => v.Name)
+                .ThenBy(v => v.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .To<VesselAllServiceModel>();
@@ -108,6 +109,6 @@
             _ => "Other",
         };
 
-        public int GetCount() => dbContext.Vessels.Count();
+        public async Task<int> GetCountAsync() => await dbContext.Vessels.CountAsync();
     }
 }

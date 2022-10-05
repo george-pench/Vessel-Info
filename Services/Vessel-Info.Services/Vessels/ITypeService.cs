@@ -11,5 +11,7 @@
         Task<int> FindTypeIdByName(string vesselType);
 
         IQueryable<VesselTypeServiceModel> All();
+
+        Task<int> GetCountAsync();
     }
 }
