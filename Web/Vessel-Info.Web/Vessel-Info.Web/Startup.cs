@@ -52,6 +52,7 @@ namespace Vessel_Info.Web
             services.AddTransient<IRegistrationService, RegistrationService>();
             services.AddTransient<ITypeService, TypeService>();
             services.AddTransient<IOwnerService, OwnerService>();
+            services.AddTransient<IGetCountsService, GetCountsService>();
 
             services.AddControllersWithViews(options => 
             {
