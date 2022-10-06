@@ -1,6 +1,7 @@
 ﻿namespace Vessel_Info.Services.Vessels
 {
     using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Vessel_Info.Data;
@@ -34,6 +35,22 @@
             await this.dbContext.SaveChangesAsync();
 
             return owner.Id;
+        }
+
+        public async Task<VesselOwnerServiceModel> DetailsAsync(int? id)
+        {
+            var details = await this.dbContext
+                .Owners
+                .Where(o => o.Id == id)
+                .To<VesselOwnerServiceModel>()
+                .FirstOrDefaultAsync();
+            
+            if (details == null)
+            {
+                throw new ArgumentNullException(nameof(details));
+            }
+
+            return details;
         }
 
         public async Task<int> FindOwnerIdByName(string vesselOwner) => await this.dbContext

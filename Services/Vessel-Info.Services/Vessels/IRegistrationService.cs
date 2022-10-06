@@ -8,6 +8,8 @@
     {
         Task<int> GetOrCreateRegistrationAsync(string flagName, string registryPortName);
 
+        Task<VesselRegistrationServiceModel> DetailsAsync(int? id);
+
         Task<int> FindRegistrationIdByName(string vesselRegistration);
 
         IQueryable<VesselRegistrationServiceModel> All();

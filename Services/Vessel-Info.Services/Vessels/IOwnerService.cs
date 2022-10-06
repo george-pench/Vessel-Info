@@ -8,6 +8,8 @@
     {
         Task<int> GetOrCreateOwnerAsync(string ownerName);
 
+        Task<VesselOwnerServiceModel> DetailsAsync(int? id);
+
         Task<int> FindOwnerIdByName(string vesselOwner);
 
         IQueryable<VesselOwnerServiceModel> All();
