@@ -1,0 +1,33 @@
+﻿@model IQueryable<Vessel_Info.Web.ViewModels.Owners.OwnerBaseViewModel>
+
+@{
+    ViewData["Title"] = "All Owners";
+}
+
+@if (Model.Any())
+{
+    <table class="table table-hover table-bordered table-striped text-center">
+        <thead class="table-dark">
+            <tr style="text-align: center;">
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var owner in this.Model)
+            {
+                <tr>
+                    <td scope="col">
+                        <a class="btn" asp-action="Details" asp-route-id="@owner.Id">@owner.Name</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <br />
+    <div class="text-center">
+        <h2 class="text-info">No owner(s)!</h2>
+    </div>
+}

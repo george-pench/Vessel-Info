@@ -1,0 +1,26 @@
+﻿@model Vessel_Info.Web.ViewModels.Registrations.RegistrationBaseViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h2 class="text-center">Registration Details</h2>
+    <hr />
+
+    <table class="table table-borderless table-hover">
+        <tbody>
+            <tr>
+                <td style="width:150px">Flag name:</td>
+                <td class="answer">@this.Model.Flag</td>
+                <td>&nbsp;</td>
+                <td style="width:150px">Registry port name:</td>
+                <td class="answer">@this.Model.RegistryPort</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-controller="Registrations" asp-action="All">Back to List</a>
+</div>

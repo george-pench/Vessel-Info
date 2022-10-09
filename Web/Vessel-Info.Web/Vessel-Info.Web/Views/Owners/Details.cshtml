@@ -1,0 +1,30 @@
+﻿@model Vessel_Info.Web.ViewModels.Owners.OwnerDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h2 class="text-center">Owner Details</h2>
+    <hr />
+
+    <table class="table table-borderless table-hover">
+        <tbody>
+            <tr>
+                <td style="width:150px">Owner's name:</td>
+                <td class="answer">@this.Model.Name</td>
+            </tr>
+            <tr>
+                <td>Founded:</td>
+                <td class="answer">@this.Model.Founded</td>
+                <td>&nbsp;</td>
+                <td>Website:</td>
+                <td class="answer">@this.Model.Website</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-controller="Owners" asp-action="All">Back to List</a>
+</div>
