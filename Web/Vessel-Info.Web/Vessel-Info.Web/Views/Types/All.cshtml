@@ -1,0 +1,33 @@
+﻿@model IQueryable<Vessel_Info.Web.ViewModels.Types.TypeBaseViewModel>
+
+@{
+    ViewData["Title"] = "All Types";
+}
+
+@if (Model.Any())
+{
+    <table class="table table-hover table-bordered table-striped text-center">
+        <thead class="table-dark">
+            <tr style="text-align: center;">
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var type in this.Model)
+            {
+                <tr>
+                    <td scope="col">
+                        <a class="btn" asp-action="Details" asp-route-id="@type.Id">@type.Name</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <br />
+    <div class="text-center">
+        <h2 class="text-info">No type(s)!</h2>
+    </div>
+}
