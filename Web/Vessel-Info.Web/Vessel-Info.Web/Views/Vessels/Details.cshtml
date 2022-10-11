@@ -1,0 +1,61 @@
+﻿@model Vessel_Info.Web.ViewModels.Vessels.VesselDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h2 class="text-center">Vessel Details</h2>
+    <hr />
+
+    <table class="table table-borderless table-hover">
+        <tbody>
+            <tr>
+                <td style="width:150px">Vessel's name:</td>
+                <td class="answer">@this.Model.Name</td>
+                <td>&nbsp;</td>
+                <td>Ex-name(s):</td>
+                <td class="answer"></td>
+            </tr>
+            <tr>
+                <td>IMO number:</td>
+                <td class="answer">@this.Model.Imo</td>
+                <td>&nbsp;</td>
+                <td>Summer DWT:</td>
+                <td class="answer">@this.Model.SummerDwt</td>
+            </tr>
+            <tr>
+                <td>Flag:</td>
+                <td class="answer">@this.Model.RegistrationFlag</td>
+                <td>&nbsp;</td>
+                <td>Call sign:</td>
+                <td class="answer">@this.Model.CallSign</td>
+            </tr>
+            <tr>
+                <td>Port of Registry:</td>
+                <td class="answer">@this.Model.RegistrationRegistryPort</td>
+                <td>&nbsp;</td>
+                <td>Built:</td>
+                <td class="answer">@this.Model.Built</td>
+            </tr>
+            <tr>
+                <td>Type of vessel:</td>
+                <td class="answer">@this.Model.TypeName</td>
+                <td>&nbsp;</td>
+                <td>Type of hull:</td>
+                <td class="answer">@this.Model.HullType</td>
+            </tr>
+            <tr>
+                <td>Class Society:</td>
+                <td class="answer">@this.Model.ClassificationSocietyFullName</td>
+                <td>&nbsp;</td>
+                <td>Owner:</td>
+                <td class="answer">@this.Model.OwnerName</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div> 
+    <a asp-controller="Vessels" asp-action="All">Back to List</a>
+</div>

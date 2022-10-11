@@ -1,0 +1,72 @@
+﻿@model Vessel_Info.Web.ViewModels.Vessels.VesselListingViewModel
+
+@{
+    ViewData["Title"] = "All Vessels";
+}
+
+@*<div class="justify-content-end">
+    <form method="post" asp-action="All">
+        <span class="btn-group">
+            <input class="form-control" type="text" name="searchTerm" placeholder="Search Key" />
+            <input class="btn btn-sm btn-info" type="submit" value="Search" />
+        </span>
+    </form>
+</div>*@
+
+@if (Model.Vessels.Any())
+{
+    <h2 class="text-center">
+        @ViewData["Title"]
+    </h2>
+
+    <table class="table table-hover table-bordered table-striped">
+        <thead class="table-primary">
+            <tr style="text-align: center;">
+                <th scope="col">Name</th>
+                <th scope="col">Imo</th>
+                <th scope="col">Built</th>
+                <th scope="col">SummerDwt</th>
+                <th scope="col">Loa</th>
+                <th scope="col">Cubic</th>
+                <th scope="col">Beam</th>
+                <th scope="col">Draft</th>
+                <th scope="col">HullType</th>
+                <th scope="col">Call Sign</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vessel in this.Model.Vessels)
+            {
+                <tr>
+                    <td scope="col">
+                        <a asp-action="Details" asp-route-id="@vessel.Id">@vessel.Name</a>
+                    </td>
+                    <td scope="col">@vessel.Imo</td>
+                    <td scope="col">@vessel.Built</td>
+                    <td scope="col">@vessel.SummerDwt</td>
+                    <td scope="col">@vessel.Loa</td>
+                    <td scope="col">@vessel.Cubic</td>
+                    <td scope="col">@vessel.Beam</td>
+                    <td scope="col">@vessel.Draft</td>
+                    <td scope="col">@vessel.HullType</td>
+                    <td scope="col">@vessel.CallSign</td>
+
+                    <td>
+                        <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@vessel.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <br />
+    <div class="text-center">
+        <h2 class="text-info">No vessel(s)!</h2>
+    </div>
+}
+
+<hr />
+<partial name="_PagingPartial" model="@Model" />

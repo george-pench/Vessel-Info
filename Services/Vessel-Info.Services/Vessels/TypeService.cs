@@ -1,6 +1,7 @@
 ﻿namespace Vessel_Info.Services.Vessels
 {
     using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Vessel_Info.Data;
@@ -33,6 +34,22 @@
             await this.dbContext.SaveChangesAsync();
 
             return type.Id;
+        }
+
+        public Task<VesselTypeServiceModel> DetailsAsync(int? id)
+        {
+            var details = this.dbContext
+                .Types
+                .Where(t => t.Id == id)
+                .To<VesselTypeServiceModel>()
+                .FirstOrDefaultAsync();
+
+            if (details == null)
+            {
+                throw new ArgumentNullException(nameof(details));
+            }
+
+            return details;
         }
 
         public async Task<int> FindTypeIdByName(string vesselType) => await this.dbContext

@@ -8,6 +8,8 @@
     {
         Task<int> GetOrCreateTypeAsync(string typeName);
 
+        Task<VesselTypeServiceModel> DetailsAsync(int? id);
+
         Task<int> FindTypeIdByName(string vesselType);
 
         IQueryable<VesselTypeServiceModel> All();
