@@ -33,7 +33,7 @@
 
         public async Task<bool> EditAsync(string id, VesselEditServiceModel model)
         {
-            var edit = this.dbContext.Vessels.Find(id);
+            var edit = await this.dbContext.Vessels.FindAsync(id);
 
             if (edit == null)
             {

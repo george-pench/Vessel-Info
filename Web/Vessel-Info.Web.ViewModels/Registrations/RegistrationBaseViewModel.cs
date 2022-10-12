@@ -2,11 +2,11 @@
 {
     using System.ComponentModel.DataAnnotations;
     using Vessel_Info.Services.Mapping;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.Registrations;
 
     using static Constants.WebConstants.Registration;
 
-    public class RegistrationBaseViewModel : IMapFrom<VesselRegistrationServiceModel>, IMapTo<VesselRegistrationServiceModel>
+    public class RegistrationBaseViewModel : IMapFrom<RegistrationBaseServiceModel>, IMapTo<RegistrationBaseServiceModel>
     {
         public int Id { get; set; }
 

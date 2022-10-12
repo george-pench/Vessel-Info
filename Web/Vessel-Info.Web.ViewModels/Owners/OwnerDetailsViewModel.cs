@@ -2,11 +2,11 @@
 {
     using System.ComponentModel.DataAnnotations;
     using Vessel_Info.Services.Mapping;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.Owners;
 
     using static Constants.WebConstants.Owner;
 
-    public class OwnerDetailsViewModel : OwnerBaseViewModel, IMapFrom<VesselOwnerServiceModel>
+    public class OwnerDetailsViewModel : OwnerBaseViewModel, IMapFrom<OwnerBaseServiceModel>
     {
         [Range(FoundedMinValue, FoundedMaxValue)]
         public string Founded { get; set; }

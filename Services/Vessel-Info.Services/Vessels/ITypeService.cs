@@ -2,17 +2,17 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.Types;
 
     public interface ITypeService
     {
         Task<int> GetOrCreateTypeAsync(string typeName);
 
-        Task<VesselTypeServiceModel> DetailsAsync(int? id);
+        Task<TypeBaseServiceModel> DetailsAsync(int? id);
 
         Task<int> FindTypeIdByName(string vesselType);
 
-        IQueryable<VesselTypeServiceModel> All();
+        IQueryable<TypeBaseServiceModel> All();
 
         Task<int> GetCountAsync();
     }

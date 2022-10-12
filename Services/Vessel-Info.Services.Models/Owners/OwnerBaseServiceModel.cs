@@ -1,9 +1,9 @@
-﻿namespace Vessel_Info.Services.Models.Vessels
+﻿namespace Vessel_Info.Services.Models.Owners
 {
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
 
-    public class VesselTypeServiceModel : IMapFrom<Type>, IMapTo<Type>
+    public class OwnerBaseServiceModel : IMapFrom<Owner>, IMapTo<Owner>
     {
         public int Id { get; set; }
 

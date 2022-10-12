@@ -7,7 +7,7 @@
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.Owners;
 
     public class OwnerService : IOwnerService
     {
@@ -37,12 +37,12 @@
             return owner.Id;
         }
 
-        public async Task<VesselOwnerServiceModel> DetailsAsync(int? id)
+        public async Task<OwnerBaseServiceModel> DetailsAsync(int? id)
         {
             var details = await this.dbContext
                 .Owners
                 .Where(o => o.Id == id)
-                .To<VesselOwnerServiceModel>()
+                .To<OwnerBaseServiceModel>()
                 .FirstOrDefaultAsync();
             
             if (details == null)
@@ -59,10 +59,10 @@
                 .Select(o => o.Id)
                 .FirstOrDefaultAsync();
 
-        public IQueryable<VesselOwnerServiceModel> All() => dbContext
+        public IQueryable<OwnerBaseServiceModel> All() => dbContext
                 .Owners
                 .OrderBy(o => o.Name)
-                .To<VesselOwnerServiceModel>();
+                .To<OwnerBaseServiceModel>();
 
         public async Task<int> GetCountAsync() => await this.dbContext.Owners.CountAsync();
     }

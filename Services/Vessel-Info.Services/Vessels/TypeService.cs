@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
     using Vessel_Info.Data;
     using Vessel_Info.Services.Mapping;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.Types;
 
     public class TypeService : ITypeService
     {
@@ -36,12 +36,12 @@
             return type.Id;
         }
 
-        public Task<VesselTypeServiceModel> DetailsAsync(int? id)
+        public Task<TypeBaseServiceModel> DetailsAsync(int? id)
         {
             var details = this.dbContext
                 .Types
                 .Where(t => t.Id == id)
-                .To<VesselTypeServiceModel>()
+                .To<TypeBaseServiceModel>()
                 .FirstOrDefaultAsync();
 
             if (details == null)
@@ -58,10 +58,10 @@
                 .Select(t => t.Id)
                 .FirstOrDefaultAsync();
 
-        public IQueryable<VesselTypeServiceModel> All() => dbContext
+        public IQueryable<TypeBaseServiceModel> All() => dbContext
                 .Types
                 .OrderBy(t => t.Name)
-                .To<VesselTypeServiceModel>();
+                .To<TypeBaseServiceModel>();
 
         public async Task<int> GetCountAsync() => await this.dbContext.Types.CountAsync();
     }

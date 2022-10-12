@@ -2,17 +2,17 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.Registrations;
 
     public interface IRegistrationService
     {
         Task<int> GetOrCreateRegistrationAsync(string flagName, string registryPortName);
 
-        Task<VesselRegistrationServiceModel> DetailsAsync(int? id);
+        Task<RegistrationBaseServiceModel> DetailsAsync(int? id);
 
         Task<int> FindRegistrationIdByName(string vesselRegistration);
 
-        IQueryable<VesselRegistrationServiceModel> All();
+        IQueryable<RegistrationBaseServiceModel> All();
 
         Task<int> GetCountAsync();
     }

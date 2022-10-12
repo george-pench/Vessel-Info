@@ -7,7 +7,7 @@
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.Registrations;
 
     public class RegistrationService : IRegistrationService
     {
@@ -38,12 +38,12 @@
             return registration.Id;
         }
 
-        public async Task<VesselRegistrationServiceModel> DetailsAsync(int? id)
+        public async Task<RegistrationBaseServiceModel> DetailsAsync(int? id)
         {
             var details = await this.dbContext
                 .Registrations
                 .Where(r => r.Id == id)
-                .To<VesselRegistrationServiceModel>()
+                .To<RegistrationBaseServiceModel>()
                 .FirstOrDefaultAsync();
 
             if (details == null)
@@ -60,10 +60,10 @@
                 .Select(r => r.Id)
                 .FirstOrDefaultAsync();
 
-        public IQueryable<VesselRegistrationServiceModel> All() => dbContext
+        public IQueryable<RegistrationBaseServiceModel> All() => dbContext
                 .Registrations
                 .OrderBy(r => r.Flag)
-                .To<VesselRegistrationServiceModel>();
+                .To<RegistrationBaseServiceModel>();
 
         public async Task<int> GetCountAsync() => await this.dbContext.Registrations.CountAsync();
     }

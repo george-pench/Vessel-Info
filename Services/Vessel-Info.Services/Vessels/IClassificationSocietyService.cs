@@ -2,17 +2,21 @@
 {
     using System.Linq;
     using System.Threading.Tasks;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.ClassSocieties;
 
     public interface IClassificationSocietyService
     {
+        Task<ClassSocietyAllServiceModel> GetById(int? id);
+
         Task<int> GetOrCreateClassSocietyAsync(string classSocietyFullName);
 
-        Task<VesselClassificationSocietyServiceModel> DetailsAsync(int? id);
+        Task<ClassSocietyDetailsServiceModel> DetailsAsync(int? id);
 
-        Task<int> FindClassificationSocietyIdByName(string vesselClass);
+        Task<bool> EditAsync(int? id, ClassSocietyEditServiceModel model);
 
-        IQueryable<VesselClassificationSocietyServiceModel> All();
+        Task<int> FindClassificationSocietyIdByNameAsync(string vesselClass);
+
+        IQueryable<ClassSocietyBaseServiceModel> All();
 
         Task<int> GetCountAsync();
     }

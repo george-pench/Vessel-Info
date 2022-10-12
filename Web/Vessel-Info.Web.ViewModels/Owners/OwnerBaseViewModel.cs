@@ -2,11 +2,11 @@
 {
     using System.ComponentModel.DataAnnotations;
     using Vessel_Info.Services.Mapping;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.Owners;
 
     using static Constants.WebConstants.Owner;
 
-    public class OwnerBaseViewModel : IMapFrom<VesselOwnerServiceModel>, IMapTo<VesselOwnerServiceModel>
+    public class OwnerBaseViewModel : IMapFrom<OwnerBaseServiceModel>, IMapTo<OwnerBaseServiceModel>
     {
         public int Id { get; set; }
 

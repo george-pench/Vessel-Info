@@ -7,13 +7,19 @@
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.ClassSocieties;
 
     public class ClassificationSocietyService : IClassificationSocietyService
     {
         private readonly VesselInfoDbContext dbContext;
 
         public ClassificationSocietyService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
+
+        public async Task<ClassSocietyAllServiceModel> GetById(int? id) => await this.dbContext
+            .ClassificationSocieties
+            .Where(cs => cs.Id == id)
+            .To<ClassSocietyAllServiceModel>()
+            .FirstOrDefaultAsync();
 
         public async Task<int> GetOrCreateClassSocietyAsync(string classSocietyFullName)
         {
@@ -37,12 +43,12 @@
             return classSociety.Id;
         }
 
-        public async Task<VesselClassificationSocietyServiceModel> DetailsAsync(int? id)
+        public async Task<ClassSocietyDetailsServiceModel> DetailsAsync(int? id)
         {
             var details = await this.dbContext
                 .ClassificationSocieties
                 .Where(cs => cs.Id == id)
-                .To<VesselClassificationSocietyServiceModel>()
+                .To<ClassSocietyDetailsServiceModel>()
                 .FirstOrDefaultAsync();
 
             if (details == null)
@@ -53,16 +59,35 @@
             return details;
         }
 
-        public async Task<int> FindClassificationSocietyIdByName(string vesselClass) => await this.dbContext
+        public async Task<bool> EditAsync(int? id, ClassSocietyEditServiceModel model)
+        {
+            var edit = await this.dbContext.ClassificationSocieties.FindAsync(id);
+
+            if (edit == null)
+            {
+                return false;
+            }
+
+            edit.FullName = model.FullName;
+            edit.Abbreviation = model.Abbreviation;
+            edit.Founded = model.Founded;
+            edit.Website = model.Website;
+
+            await this.dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<int> FindClassificationSocietyIdByNameAsync(string vesselClass) => await this.dbContext
                 .ClassificationSocieties
                 .Where(cs => cs.FullName == vesselClass)
                 .Select(cs => cs.Id)
                 .FirstOrDefaultAsync();
 
-        public IQueryable<VesselClassificationSocietyServiceModel> All() => dbContext
+        public IQueryable<ClassSocietyBaseServiceModel> All() => this.dbContext
                 .ClassificationSocieties
                 .OrderBy(cs => cs.FullName)
-                .To<VesselClassificationSocietyServiceModel>();
+                .To<ClassSocietyBaseServiceModel>();
 
         public async Task<int> GetCountAsync() => await this.dbContext.ClassificationSocieties.CountAsync();
     }

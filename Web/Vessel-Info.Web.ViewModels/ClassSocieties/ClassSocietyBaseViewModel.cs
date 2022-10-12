@@ -2,11 +2,11 @@
 {
     using System.ComponentModel.DataAnnotations;
     using Vessel_Info.Services.Mapping;
-    using Vessel_Info.Services.Models.Vessels;
+    using Vessel_Info.Services.Models.ClassSocieties;
 
     using static Constants.WebConstants.ClassificationSociety;
 
-    public class ClassSocietyBaseViewModel : IMapFrom<VesselClassificationSocietyServiceModel>, IMapTo<VesselClassificationSocietyServiceModel>
+    public class ClassSocietyBaseViewModel : IMapFrom<ClassSocietyBaseServiceModel>, IMapTo<ClassSocietyBaseServiceModel>
     {
         public int Id { get; set; }
 
