@@ -17,13 +17,19 @@
             <tr>
                 <td>Founded:</td>
                 <td class="answer">@this.Model.Founded</td>
-                <td>&nbsp;</td>
+            </tr>
+            <tr>
                 <td>Website:</td>
                 <td class="answer">@this.Model.Website</td>
             </tr>
         </tbody>
     </table>
 </div>
+
+<div>
+    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@this.Model.Id">Edit</a>
+</div>
+<br />
 
 <div>
     <a asp-controller="Owners" asp-action="All">Back to List</a>

@@ -14,9 +14,9 @@
 
         public int NextPageNumber => this.PageNumber + 1;
 
-        public int PagesCount => (int)Math.Ceiling((double)this.VesselsCount / this.ItemsPerPage);
+        public int PagesCount => (int)Math.Ceiling((double)this.EntityCount / this.ItemsPerPage);
 
-        public int VesselsCount { get; set; }
+        public int EntityCount { get; set; }
 
         public int ItemsPerPage { get; set; }
     }

@@ -6,12 +6,12 @@
 
     using static Constants.WebConstants.Owner;
 
-    public class OwnerDetailsViewModel : OwnerBaseViewModel, IMapFrom<OwnerBaseServiceModel>
+    public class OwnerDetailsViewModel : OwnerBaseViewModel, IMapFrom<OwnerBaseServiceModel>, IMapFrom<OwnerDetailsServiceModel>
     {
         [Range(FoundedMinValue, FoundedMaxValue)]
         public string Founded { get; set; }
 
-        [StringLength(WebsiteMinLength, MinimumLength = WebsiteMaxLength)]
+        [StringLength(WebsiteMaxLength, MinimumLength = WebsiteMinLength)]
         public string Website { get; set; }
     }
 }

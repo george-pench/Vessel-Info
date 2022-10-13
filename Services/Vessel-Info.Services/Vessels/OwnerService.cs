@@ -15,6 +15,12 @@
 
         public OwnerService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
+        public async Task<OwnerAllServiceModel> GetById(int? id) => await this.dbContext
+                .Owners
+                .Where(o => o.Id == id)
+                .To<OwnerAllServiceModel>()
+                .FirstOrDefaultAsync();
+
         public async Task<int> GetOrCreateOwnerAsync(string ownerName)
         {
             var owner = await this.dbContext
@@ -37,12 +43,12 @@
             return owner.Id;
         }
 
-        public async Task<OwnerBaseServiceModel> DetailsAsync(int? id)
+        public async Task<OwnerDetailsServiceModel> DetailsAsync(int? id)
         {
             var details = await this.dbContext
                 .Owners
                 .Where(o => o.Id == id)
-                .To<OwnerBaseServiceModel>()
+                .To<OwnerDetailsServiceModel>()
                 .FirstOrDefaultAsync();
             
             if (details == null)
@@ -53,15 +59,36 @@
             return details;
         }
 
+        public async Task<bool> EditAsync(int? id, OwnerEditServiceModel model)
+        {
+            var edit = await this.dbContext.Owners.FindAsync(id);
+
+            if (edit == null)
+            {
+                return false;
+            }
+
+            edit.Name = model.Name;
+            edit.Founded = model.Founded;
+            edit.Website = model.Website;
+
+            await this.dbContext.SaveChangesAsync();
+
+            return true;
+        }
+
         public async Task<int> FindOwnerIdByName(string vesselOwner) => await this.dbContext
                 .Owners
                 .Where(o => o.Name == vesselOwner)
                 .Select(o => o.Id)
                 .FirstOrDefaultAsync();
 
-        public IQueryable<OwnerBaseServiceModel> All() => dbContext
+        public IQueryable<OwnerBaseServiceModel> All(int page, int pageSize = 10) => this.dbContext
                 .Owners
                 .OrderBy(o => o.Name)
+                .ThenBy(o => o.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .To<OwnerBaseServiceModel>();
 
         public async Task<int> GetCountAsync() => await this.dbContext.Owners.CountAsync();

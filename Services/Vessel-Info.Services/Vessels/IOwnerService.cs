@@ -6,13 +6,17 @@
 
     public interface IOwnerService
     {
+        Task<OwnerAllServiceModel> GetById(int? id);
+
         Task<int> GetOrCreateOwnerAsync(string ownerName);
 
-        Task<OwnerBaseServiceModel> DetailsAsync(int? id);
+        Task<OwnerDetailsServiceModel> DetailsAsync(int? id);
+
+        Task<bool> EditAsync(int? id, OwnerEditServiceModel model);
 
         Task<int> FindOwnerIdByName(string vesselOwner);
 
-        IQueryable<OwnerBaseServiceModel> All();
+        IQueryable<OwnerBaseServiceModel> All(int page, int itemsPerPage = 12);
 
         Task<int> GetCountAsync();
     }
