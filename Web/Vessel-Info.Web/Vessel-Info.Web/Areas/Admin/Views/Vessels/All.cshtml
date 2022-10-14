@@ -36,11 +36,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var vessel in Model.Vessels)
+            @foreach (var vessel in this.Model.Vessels)
             {
                 <tr>
                     <td scope="col">
-                        <a asp-action="Details" asp-route-id="@vessel.Id">@vessel.Name</a>
+                        <a class="btn" asp-action="Details" asp-route-id="@vessel.Id">@vessel.Name</a>
                     </td>
                     <td scope="col">@vessel.Imo</td>
                     <td scope="col">@vessel.Built</td>

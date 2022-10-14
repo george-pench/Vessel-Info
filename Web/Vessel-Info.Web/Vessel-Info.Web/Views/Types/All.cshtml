@@ -9,16 +9,14 @@
     <table class="table table-hover table-bordered table-striped text-center">
         <thead class="table-dark">
             <tr style="text-align: center;">
-                <th scope="col">Name</th>
+                <th scope="col">Type of vessel</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var type in this.Model)
             {
                 <tr>
-                    <td scope="col">
-                        <a class="btn" asp-action="Details" asp-route-id="@type.Id">@type.Name</a>
-                    </td>
+                    <td scope="col">@type.Name</td>
                 </tr>
             }
         </tbody>

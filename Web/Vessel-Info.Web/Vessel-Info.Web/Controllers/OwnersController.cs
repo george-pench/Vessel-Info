@@ -1,10 +1,14 @@
 ﻿namespace Vessel_Info.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
     using Vessel_Info.Services.Mapping;
+    using Vessel_Info.Services.Models.Owners;
     using Vessel_Info.Services.Vessels;
     using Vessel_Info.Web.ViewModels.Owners;
+
+    using static Vessel_Info.Web.Constants.WebConstants;
 
     public class OwnersController : Controller
     {
@@ -15,15 +19,23 @@
             this.owners = owners;
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All(int id = 1)
         {
-            var all = this.owners
-                .All()
-                .To<OwnerBaseViewModel>();
+            if (id < 0)
+            {
+                return this.NotFound();
+            }
 
-            return this.View(all);
+            return this.View(new OwnerListingViewModel 
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                EntityCount = await this.owners.GetCountAsync(),
+                Owners = this.owners.All(id, ItemsPerPage).To<OwnerDetailsViewModel>()
+            });
         }
 
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,6 +48,37 @@
               .To<OwnerDetailsViewModel>();
 
             return this.View(details);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var edit = (await this.owners
+                .GetById(id))
+                .To<OwnerEditInputModel>();
+
+            return this.View(edit);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(int? id, OwnerEditInputModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var edit = ObjectMappingExtensions.To<OwnerEditServiceModel>(model);
+
+            await this.owners.EditAsync(id, edit);
+
+            return this.RedirectToAction(nameof(OwnersController.Details), new { id = id });
         }
     }
 }

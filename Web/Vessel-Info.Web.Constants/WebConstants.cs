@@ -4,6 +4,9 @@
     
     public class WebConstants : DataConstants
     {
+        public const string GlobalMessage = "GlobalMessage";
+        public const int ItemsPerPage = 12;
+
         public class Admin
         {
             public const string AreaName = "Admin";

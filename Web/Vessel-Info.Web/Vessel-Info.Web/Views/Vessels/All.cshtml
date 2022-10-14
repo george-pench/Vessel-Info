@@ -13,7 +13,7 @@
     </form>
 </div>*@
 
-@if (Model.Vessels.Any())
+@if (this.Model.Vessels.Any())
 {
     <h2 class="text-center">
         @ViewData["Title"]
@@ -69,4 +69,4 @@ else
 }
 
 <hr />
-<partial name="_PagingPartial" model="@Model" />
+<partial name="_PagingPartial" model="@this.Model" />

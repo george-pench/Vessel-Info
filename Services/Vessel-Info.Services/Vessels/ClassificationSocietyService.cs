@@ -78,7 +78,7 @@
             return true;
         }
 
-        public async Task<int> FindClassificationSocietyIdByNameAsync(string vesselClass) => await this.dbContext
+        public async Task<int> FindClassSocietyIdByNameAsync(string vesselClass) => await this.dbContext
                 .ClassificationSocieties
                 .Where(cs => cs.FullName == vesselClass)
                 .Select(cs => cs.Id)

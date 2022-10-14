@@ -14,7 +14,7 @@
                 <td style="width:150px">Vessel's name:</td>
                 <td class="answer">@this.Model.FullName</td>
                 <td>&nbsp;</td>
-                <td style="width:150px">Abbreviation:</td>
+                <td >Abbreviation:</td>
                 <td class="answer">@this.Model.Abbreviation</td>
             </tr>
             <tr>
@@ -27,6 +27,11 @@
         </tbody>
     </table>
 </div>
+
+<div>
+    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@this.Model.Id">Edit</a>    
+</div>
+<br />
 
 <div>
     <a asp-controller="ClassSocieties" asp-action="All">Back to List</a>

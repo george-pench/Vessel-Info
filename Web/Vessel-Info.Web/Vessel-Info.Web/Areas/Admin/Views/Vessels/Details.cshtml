@@ -12,53 +12,53 @@
         <tbody>
             <tr>
                 <td style="width:150px">Vessel's name:</td>
-                <td class="answer">@Model.Name</td>
+                <td class="answer">@this.Model.Name</td>
                 <td>&nbsp;</td>
                 <td>Ex-name(s):</td>
                 <td class="answer"></td>
             </tr>
             <tr>
                 <td>IMO number:</td>
-                <td class="answer">@Model.Imo</td>
+                <td class="answer">@this.Model.Imo</td>
                 <td>&nbsp;</td>
                 <td>Summer DWT:</td>
-                <td class="answer">@Model.SummerDwt</td>
+                <td class="answer">@this.Model.SummerDwt</td>
             </tr>
             <tr>
                 <td>Flag:</td>
-                <td class="answer">@Model.RegistrationFlag</td>
+                <td class="answer">@this.Model.RegistrationFlag</td>
                 <td>&nbsp;</td>
                 <td>Call sign:</td>
-                <td class="answer">@Model.CallSign</td>
+                <td class="answer">@this.Model.CallSign</td>
             </tr>
             <tr>
                 <td>Port of Registry:</td>
-                <td class="answer">@Model.RegistrationRegistryPort</td>
+                <td class="answer">@this.Model.RegistrationRegistryPort</td>
                 <td>&nbsp;</td>
                 <td>Built:</td>
-                <td class="answer">@Model.Built</td>
+                <td class="answer">@this.Model.Built</td>
             </tr>
             <tr>
                 <td>Type of vessel:</td>
-                <td class="answer">@Model.TypeName</td>
+                <td class="answer">@this.Model.TypeName</td>
                 <td>&nbsp;</td>
                 <td>Type of hull:</td>
-                <td class="answer">@Model.HullType</td>
+                <td class="answer">@this.Model.HullType</td>
             </tr>
             <tr>
                 <td>Class Society:</td>
-                <td class="answer">@Model.ClassificationSocietyFullName</td>
+                <td class="answer">@this.Model.ClassificationSocietyFullName</td>
                 <td>&nbsp;</td>
                 <td>Owner:</td>
-                <td class="answer">@Model.OwnerName</td>
+                <td class="answer">@this.Model.OwnerName</td>
             </tr>
         </tbody>
     </table>
 </div>
 
 <div>
-    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@this.Model.Id">Edit</a>
+    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@this.Model.Id">Delete</a>
 </div>
 <br />
 

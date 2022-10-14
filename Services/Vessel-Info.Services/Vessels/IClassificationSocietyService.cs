@@ -14,7 +14,7 @@
 
         Task<bool> EditAsync(int? id, ClassSocietyEditServiceModel model);
 
-        Task<int> FindClassificationSocietyIdByNameAsync(string vesselClass);
+        Task<int> FindClassSocietyIdByNameAsync(string vesselClass);
 
         IQueryable<ClassSocietyBaseServiceModel> All();
 

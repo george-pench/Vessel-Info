@@ -6,7 +6,7 @@
 }
 
 <div class="table text-center">
-    <div class="col-md-10">
+    <div>
         <form method="post" asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -141,7 +141,7 @@
                         <label asp-for="RegistrationId"></label>
                     </div>
                     <select asp-for="RegistrationId" class="form-control">
-                        @foreach (var registration in Model.Registrations)
+                        @foreach (var registration in this.Model.Registrations)
                         {
                             <option value="@registration.Id">@registration.Flag</option>
                         }
@@ -153,7 +153,7 @@
                         <label asp-for="TypeId"></label>
                     </div>
                     <select asp-for="TypeId" class="form-control">
-                        @foreach (var type in Model.Types)
+                        @foreach (var type in this.Model.Types)
                         {
                             <option value="@type.Id">@type.Name</option>
                         }
@@ -168,7 +168,7 @@
                         <label asp-for="ClassificationSocietyId"></label>
                     </div>
                     <select asp-for="ClassificationSocietyId" class="form-control">
-                        @foreach (var classSociety in Model.ClassificationSocieties)
+                        @foreach (var classSociety in this.Model.ClassificationSocieties)
                         {
                             <option value="@classSociety.Id">@classSociety.FullName</option>
                         }
@@ -180,7 +180,7 @@
                         <label asp-for="OwnerId"></label>
                     </div>
                     <select asp-for="OwnerId" class="form-control">
-                        @foreach (var owner in Model.Owners)
+                        @foreach (var owner in this.Model.Owners)
                         {
                             <option value="@owner.Id">@owner.Name</option>
                         }

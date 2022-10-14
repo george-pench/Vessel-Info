@@ -1,8 +1,10 @@
 ﻿namespace Vessel_Info.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
     using Vessel_Info.Services.Mapping;
+    using Vessel_Info.Services.Models.ClassSocieties;
     using Vessel_Info.Services.Vessels;
     using Vessel_Info.Web.ViewModels.ClassSocieties;
 
@@ -24,6 +26,7 @@
             return this.View(all);
         }
 
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,6 +39,37 @@
               .To<ClassSocietyDetailsViewModel>();
 
             return this.View(details);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var edit = (await this.classificationSocieties
+                .GetById(id))
+                .To<ClassSocietyEditInputModel>();
+
+            return this.View(edit);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, ClassSocietyEditInputModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var edit = ObjectMappingExtensions.To<ClassSocietyEditServiceModel>(model);
+
+            await this.classificationSocieties.EditAsync(id, edit);
+
+            return this.RedirectToAction(nameof(ClassSocietiesController.Details), new { id = id });
         }
     }
 }

@@ -13,7 +13,7 @@
 
     public class VesselsController : AdminController
     {      
-        // TODO: exception handling, search action
+        // TODO: exception handling, search action, data validation, add messages to actions
         private readonly IVesselService vessels;
         private readonly IRegistrationService registrations;
         private readonly ITypeService types;
@@ -32,7 +32,7 @@
             this.types = types;
             this.owners = owners;
             this.classificationSocieties = classificationSocieties;
-        }    
+        }
 
         public IActionResult Search(string searchTerm, int id)
         {
@@ -48,22 +48,20 @@
         }
 
         // [HttpGet("Admin/Vessels/All")]
-        public IActionResult All(int id = 1)
+        public async Task<IActionResult> All(int id = 1)
         {           
             if (id < 0)
             {
                 return this.NotFound();
             }
-            
-            var viewModel = new VesselListingViewModel
+          
+            return this.View(new VesselListingViewModel
             {
                 ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
-                VesselsCount = this.vessels.GetCount(),
+                EntityCount = await this.vessels.GetCountAsync(),
                 Vessels = this.vessels.All(id, ItemsPerPage).To<VesselAllViewModel>()
-            };
-
-            return this.View(viewModel);
+            });
         }
 
         // [HttpGet("Admin/Vessels/Details")]
@@ -86,7 +84,7 @@
         {
             Registrations = this.registrations.All(),
             Types = this.types.All(),
-            Owners = this.owners.All(),
+            Owners = this.owners.All(0 , 0),
             ClassificationSocieties = this.classificationSocieties.All()
         });
 
@@ -120,7 +118,7 @@
 
             edit.Registrations = this.registrations.All();
             edit.Types = this.types.All();
-            edit.Owners = this.owners.All();
+            edit.Owners = this.owners.All(0, 0);
             edit.ClassificationSocieties = this.classificationSocieties.All();
 
             return this.View(edit);

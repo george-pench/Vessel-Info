@@ -58,7 +58,7 @@
                 .Select(t => t.Id)
                 .FirstOrDefaultAsync();
 
-        public IQueryable<TypeBaseServiceModel> All() => dbContext
+        public IQueryable<TypeBaseServiceModel> All() => this.dbContext
                 .Types
                 .OrderBy(t => t.Name)
                 .To<TypeBaseServiceModel>();
