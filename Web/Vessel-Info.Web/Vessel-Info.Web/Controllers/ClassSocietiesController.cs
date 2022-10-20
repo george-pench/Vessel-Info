@@ -50,7 +50,7 @@
             }
 
             var edit = (await this.classificationSocieties
-                .GetById(id))
+                .GetByIdAsync(id))
                 .To<ClassSocietyEditInputModel>();
 
             return this.View(edit);

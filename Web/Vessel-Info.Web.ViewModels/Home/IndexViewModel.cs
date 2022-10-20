@@ -14,5 +14,7 @@
         public int TypesCount { get; set; }
 
         public int ClassSocietiesCount { get; set; }
+
+        public int OperatorsCount { get; set; }
     }
 }

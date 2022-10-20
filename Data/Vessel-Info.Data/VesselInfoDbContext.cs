@@ -73,18 +73,11 @@
                 .HasForeignKey(v => v.ClassificationSocietyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //builder
-            //    .Entity<Vessel>()
-            //    .HasOne(v => v.Shipbroker)
-            //    .WithMany(sp => sp.Vessels)
-            //    .HasForeignKey(v => v.ShipbrokerId)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
             builder
-                .Entity<Shipbroker>()
-                .HasOne<User>()
-                .WithOne()
-                .HasForeignKey<Shipbroker>(sb => sb.UserId)
+                .Entity<Vessel>()
+                .HasOne(v => v.Shipbroker)
+                .WithMany(sp => sp.Vessels)
+                .HasForeignKey(v => v.ShipbrokerId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             //builder

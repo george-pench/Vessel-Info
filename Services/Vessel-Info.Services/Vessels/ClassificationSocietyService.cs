@@ -15,7 +15,7 @@
 
         public ClassificationSocietyService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task<ClassSocietyAllServiceModel> GetById(int? id) => await this.dbContext
+        public async Task<ClassSocietyAllServiceModel> GetByIdAsync(int? id) => await this.dbContext
             .ClassificationSocieties
             .Where(cs => cs.Id == id)
             .To<ClassSocietyAllServiceModel>()

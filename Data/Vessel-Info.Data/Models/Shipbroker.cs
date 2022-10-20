@@ -17,6 +17,8 @@
 
         public string UserId { get; set; }
 
+        public User User { get; set; }
+
         public IEnumerable<Vessel> Vessels { get; set; } = new List<Vessel>();
 
         public IEnumerable<ShipbrokerOperator> Operators { get; set; } = new List<ShipbrokerOperator>();

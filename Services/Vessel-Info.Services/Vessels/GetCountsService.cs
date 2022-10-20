@@ -10,19 +10,22 @@
         private readonly IOwnerService owners;
         private readonly ITypeService types;
         private readonly IClassificationSocietyService classificationSocieties;
+        private readonly IOperatorService operators;
 
         public GetCountsService(
             IVesselService vessels,
             IRegistrationService registrations,
             IOwnerService owners,
             ITypeService types,
-            IClassificationSocietyService classificationSocieties)
+            IClassificationSocietyService classificationSocieties,
+            IOperatorService operators)
         {
             this.vessels = vessels;
             this.registrations = registrations;
             this.owners = owners;
             this.types = types;
             this.classificationSocieties = classificationSocieties;
+            this.operators = operators;
         }
 
         public async Task<GetAllCountsServiceModel> GetAllCounts() => new GetAllCountsServiceModel
@@ -31,7 +34,8 @@
             RegistrationsCount = await this.registrations.GetCountAsync(),
             OwnersCount = await this.owners.GetCountAsync(),
             TypesCount = await this.types.GetCountAsync(),
-            ClassSocietiesCount = await this.classificationSocieties.GetCountAsync()
+            ClassSocietiesCount = await this.classificationSocieties.GetCountAsync(),
+            OperatorsCount = await this.operators.GetCountAsync()
         };
     }
 }

@@ -6,7 +6,7 @@
 
     public interface IClassificationSocietyService
     {
-        Task<ClassSocietyAllServiceModel> GetById(int? id);
+        Task<ClassSocietyAllServiceModel> GetByIdAsync(int? id);
 
         Task<int> GetOrCreateClassSocietyAsync(string classSocietyFullName);
 
