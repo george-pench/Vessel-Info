@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Vessel_Info.Web.ViewModels.Vessels.VesselByTypeViewModel>
+
+@{
+    ViewData["Title"] = "";
+}
+
+@if (this.Model.Any())
+{
+    <table class="table table-hover table-bordered table-striped text-center">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type of vessel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vessel in this.Model)
+            {
+            <tr>
+                <td scope="col">
+                    <p>@vessel.Name</p>
+                </td>
+                <td scope="col">
+                    <p>@vessel.VesselType.Name</p>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <br />
+    <div class="text-center">
+        <h2 class="text-info">No vessel(s)!</h2>
+    </div>
+}

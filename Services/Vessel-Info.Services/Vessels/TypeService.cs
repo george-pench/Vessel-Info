@@ -64,5 +64,21 @@
                 .To<TypeBaseServiceModel>();
 
         public async Task<int> GetCountAsync() => await this.dbContext.Types.CountAsync();
+
+        public async Task<int> GetTypeMaxCountByFrequencyAsync()
+        {
+            var max = await this.dbContext
+                .Types
+                .GroupBy(x => new { x.Id, x.Name })
+                .OrderByDescending(x => x.Count())                
+                .Select(x => new
+                {
+                    IdMaxCount = x.Key.Id,
+                    Name = x.Key.Name
+                })
+                .FirstAsync();
+
+            return max.IdMaxCount;
+        }
     }
 }

@@ -7,6 +7,7 @@
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
+    using Vessel_Info.Services.Models.Types;
     using Vessel_Info.Services.Models.Vessels;
 
     public class VesselService : IVesselService
@@ -15,7 +16,7 @@
 
         public VesselService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task<string> CreateAsync(VesselCreateServiceModel model)
+        public async Task<string> CreateAsync(VesselFormServiceModel model)
         {
             var create = model.Vessel.To<Vessel>();
             
@@ -31,7 +32,7 @@
             return create.Id;
         }
 
-        public async Task<bool> EditAsync(string id, VesselEditServiceModel model)
+        public async Task<bool> EditAsync(string id, VesselFormServiceModel model)
         {
             var edit = await this.dbContext.Vessels.FindAsync(id);
 
@@ -110,5 +111,18 @@
         };
 
         public async Task<int> GetCountAsync() => await dbContext.Vessels.CountAsync();
+
+        public IQueryable<VesselByTypeServiceModel> GetAllVesselByType() => this.dbContext
+                .Vessels
+                .Select(v => new VesselByTypeServiceModel
+                {
+                    Name = v.Name,
+                    Imo = v.Imo,
+                    VesselType = new TypeBaseServiceModel 
+                    { 
+                        Id = v.Type.Id, 
+                        Name = v.Type.Name 
+                    }
+                });
     }
 }

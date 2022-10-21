@@ -16,6 +16,6 @@
 
         Task<int> GetCountAsync();
 
-        Task<int> GetTypeIdMaxCountByFrequencyAsync();
+        Task<int> GetTypeMaxCountByFrequencyAsync();
     }
 }

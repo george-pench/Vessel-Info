@@ -2,6 +2,8 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using System.Linq;
     using System.Threading.Tasks;
     using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Vessels;
@@ -12,10 +14,14 @@
     public class VesselsController : Controller
     {
         private readonly IVesselService vessels;
+        private readonly ITypeService types;
 
-        public VesselsController(IVesselService vessels)
+        public VesselsController(
+            IVesselService vessels,
+            ITypeService types)
         {
             this.vessels = vessels;
+            this.types = types;
         }
 
         public async Task<IActionResult> All(int id = 1)
@@ -29,7 +35,7 @@
             {
                 ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
-                VesselsCount = await this.vessels.GetCountAsync(),
+                EntityCount = await this.vessels.GetCountAsync(),
                 Vessels = this.vessels.All(id, ItemsPerPage).To<VesselAllViewModel>()
             });
         }
@@ -47,6 +53,21 @@
                 .To<VesselDetailsViewModel>();
 
             return this.View(details);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> TypeMaxCount()
+        {
+            // TODO: sorting by different type of vessels
+            var maxCount = await this.types.GetTypeMaxCountByFrequencyAsync();
+
+            var result = await this.vessels
+                .GetAllVesselByType()
+                .Where(v => v.VesselType.Id == maxCount)
+                .To<VesselByTypeViewModel>()
+                .ToListAsync();
+
+            return this.View(result);
         }
     }
 }
