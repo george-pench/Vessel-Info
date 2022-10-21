@@ -83,12 +83,17 @@
                 .Select(o => o.Id)
                 .FirstOrDefaultAsync();
 
-        public IQueryable<OwnerBaseServiceModel> All(int page, int pageSize = 10) => this.dbContext
+        public IQueryable<OwnerBaseServiceModel> AllPaging(int page, int pageSize = 10) => this.dbContext
                 .Owners
                 .OrderBy(o => o.Name)
                 .ThenBy(o => o.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .To<OwnerBaseServiceModel>();
+
+        public IQueryable<OwnerBaseServiceModel> All() => this.dbContext
+                .Owners
+                .OrderBy(o => o.Name)
                 .To<OwnerBaseServiceModel>();
 
         public async Task<int> GetCountAsync() => await this.dbContext.Owners.CountAsync();

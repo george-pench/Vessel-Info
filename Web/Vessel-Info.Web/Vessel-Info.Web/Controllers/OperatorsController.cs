@@ -16,7 +16,7 @@
 
         public OperatorsController(IOperatorService operators) => this.operators = operators;
 
-        public async Task<IActionResult> All(int id)
+        public async Task<IActionResult> All(int id = 1)
         {
             if (id < 0)
             {

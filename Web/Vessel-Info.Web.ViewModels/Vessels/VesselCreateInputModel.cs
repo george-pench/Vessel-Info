@@ -9,7 +9,7 @@
     using Vessel_Info.Services.Models.Types;
     using Vessel_Info.Services.Models.Vessels;
 
-    public class VesselCreateInputModel : IMapTo<VesselCreateServiceModel>
+    public class VesselCreateInputModel : IMapTo<VesselFormServiceModel>
     {
         [Display(Name = "Flag")]
         public int RegistrationId { get; set; }

@@ -3,7 +3,7 @@
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
 
-    public class VesselEditServiceModel : IMapFrom<Vessel>, IMapTo<Vessel>
+    public class VesselFormServiceModel : IMapFrom<Vessel>, IMapTo<Vessel>
     {
         public int RegistrationId { get; set; }
 

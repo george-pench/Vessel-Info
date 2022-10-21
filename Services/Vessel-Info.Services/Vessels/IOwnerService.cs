@@ -16,7 +16,9 @@
 
         Task<int> FindOwnerIdByName(string vesselOwner);
 
-        IQueryable<OwnerBaseServiceModel> All(int page, int itemsPerPage = 12);
+        IQueryable<OwnerBaseServiceModel> AllPaging(int page, int itemsPerPage = 12);
+
+        IQueryable<OwnerBaseServiceModel> All();
 
         Task<int> GetCountAsync();
     }

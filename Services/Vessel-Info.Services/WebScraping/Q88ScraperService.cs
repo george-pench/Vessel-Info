@@ -2,7 +2,6 @@
 {
     using AngleSharp;
     using AngleSharp.Dom;
-    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -24,13 +23,17 @@
         private readonly IOwnerService owners;
         private readonly IRegistrationService registrations;
         private readonly IClassificationSocietyService classificationSocieties;
+        private readonly IOperatorService operators;
+        private readonly IShipbrokerService shipbrokers;
 
         public Q88ScraperService(
             VesselInfoDbContext dbContext,
             ITypeService types,
             IOwnerService owners,
             IRegistrationService registrations,
-            IClassificationSocietyService classificationSocieties)
+            IClassificationSocietyService classificationSocieties,
+            IOperatorService operators,
+            IShipbrokerService shipbrokers)
         {
             this.config = Configuration.Default.WithDefaultLoader();
             this.browsingContext = BrowsingContext.New(this.config);
@@ -40,10 +43,12 @@
             this.owners = owners;
             this.registrations = registrations;
             this.classificationSocieties = classificationSocieties;
+            this.operators = operators;
+            this.shipbrokers = shipbrokers;
         }
 
         public async Task ImportVesselDataAsync(char fromId = StartLetter, char toId = EndLetter)
-        {         
+        {
             var vessels = this.GetVesselListing(fromId, toId);
             var currenFromId = fromId;
 
@@ -65,7 +70,7 @@
                 var types = this.ScrapeTypes(this.browsingContext, guids);
                 var classSocieties = this.ScrapeClassSocieties(this.browsingContext, guids);
                 var registrations = this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
-                // var operators = this.ScrapeOperators(this.browsingContext, guids); 
+                var operators = this.ScrapeOperators(this.browsingContext, guids); 
 
                 // Size of each entity. They should always be equal.
                 var vesselSize = names.Count;
@@ -75,7 +80,9 @@
                     var typeId = await this.types.GetOrCreateTypeAsync(types[i]);
                     var ownerId = await this.owners.GetOrCreateOwnerAsync(owners[i]);
                     var classSocietyId = await this.classificationSocieties.GetOrCreateClassSocietyAsync(classSocieties[i]);
-                    // var shipbrokerId = await this.GetOrCreateShipbrokerAsync();
+                    var operatorId = await this.operators.GetOrCreateOperatorAsync(operators[i]);
+                    // Shipbrokers data won't be scraped at this moment.
+                    var shipbrokerId = await this.shipbrokers.GetOrCreateShipbrokerAsync("shipbroker");
 
                     var registrationKeys = registrations[i].Keys.FirstOrDefault();
                     var registrationValues = registrations[i].Values.FirstOrDefault();
@@ -98,7 +105,7 @@
                         OwnerId = ownerId,
                         RegistrationId = registrationId,
                         ClassificationSocietyId = classSocietyId,
-                        // ShipbrokerId = shipbrokerId
+                        ShipbrokerId = shipbrokerId
                     };
 
                     await this.dbContext.Vessels.AddAsync(newVessel);
@@ -107,7 +114,7 @@
                 await this.dbContext.SaveChangesAsync();
             }
         }
-
+       
         private List<Q88ListingServiceModel> GetVesselListing(char fromId, char toId)
         {
             var all = new List<Q88ListingServiceModel>();
@@ -123,50 +130,6 @@
             }
 
             return all;
-        }
- 
-        private async Task<int> GetOrCreateShipbrokerAsync(string agencyName)
-        {
-            var shipbroker = this.dbContext
-                .Shipbrokers
-                .FirstOrDefault(x => x.AgencyName == agencyName);
-
-            if (shipbroker != null)
-            {
-                return shipbroker.Id;
-            }
-
-            shipbroker = new Shipbroker
-            {
-                AgencyName = agencyName
-            };
-
-            await this.dbContext.Shipbrokers.AddAsync(shipbroker);
-            await this.dbContext.SaveChangesAsync();
-
-            return shipbroker.Id;
-        }        
-
-        private async Task<int> GetOrCreateOperator(string operatorName)
-        {
-            var @operator = await this.dbContext
-                .Operators
-                .FirstOrDefaultAsync(x => x.Name == operatorName);
-
-            if (@operator != null)
-            {
-                return @operator.Id;
-            }
-
-            @operator = new Operator 
-            {
-                Name = operatorName
-            };
-
-            await this.dbContext.Operators.AddAsync(@operator);
-            await this.dbContext.SaveChangesAsync();
-
-            return @operator.Id;
         }
 
         private Q88ListingServiceModel ScrapeVessel(char id)
