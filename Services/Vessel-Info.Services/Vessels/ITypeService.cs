@@ -15,7 +15,5 @@
         IQueryable<TypeBaseServiceModel> All();
 
         Task<int> GetCountAsync();
-
-        Task<int> GetTypeMaxCountByFrequencyAsync();
     }
 }

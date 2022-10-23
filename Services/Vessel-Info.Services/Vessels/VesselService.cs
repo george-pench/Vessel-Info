@@ -116,8 +116,11 @@
                 .Vessels
                 .Select(v => new VesselByTypeServiceModel
                 {
+                    Id = v.Id,
                     Name = v.Name,
                     Imo = v.Imo,
+                    SummerDwt = v.SummerDwt,
+                    Built = v.Built,
                     VesselType = new TypeBaseServiceModel 
                     { 
                         Id = v.Type.Id, 

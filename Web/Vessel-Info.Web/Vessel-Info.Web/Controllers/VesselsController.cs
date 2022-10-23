@@ -58,12 +58,21 @@
         [Authorize]
         public async Task<IActionResult> TypeMaxCount()
         {
-            // TODO: sorting by different type of vessels
-            var maxCount = await this.types.GetTypeMaxCountByFrequencyAsync();
+            var vesselTypeMaxCount = this.vessels
+                .GetAllVesselByType()
+                .Select(x => new
+                {
+                    TypeId = x.VesselType.Id,
+                    TypeName = x.VesselType.Name
+                })
+                .AsEnumerable()
+                .GroupBy(x => x)
+                .OrderByDescending(x => x.Count())
+                .FirstOrDefault();
 
             var result = await this.vessels
                 .GetAllVesselByType()
-                .Where(v => v.VesselType.Id == maxCount)
+                .Where(x => x.VesselType.Id == vesselTypeMaxCount.Key.TypeId)
                 .To<VesselByTypeViewModel>()
                 .ToListAsync();
 

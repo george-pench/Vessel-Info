@@ -10,6 +10,9 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Imo</th>
+                <th>Summert Dwt</th>
+                <th>Built</th>
                 <th>Type of vessel</th>
             </tr>
         </thead>
@@ -21,7 +24,20 @@
                     <p>@vessel.Name</p>
                 </td>
                 <td scope="col">
+                    <p>@vessel.Imo</p>
+                </td>
+                <td scope="col">
+                    <p>@vessel.SummerDwt</p>
+                </td>
+                <td scope="col">
+                    <p>@vessel.Built</p>
+                </td>
+                <td scope="col">
                     <p>@vessel.VesselType.Name</p>
+                </td>
+
+                <td>
+                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@vessel.Id">Details</a>
                 </td>
             </tr>
             }
