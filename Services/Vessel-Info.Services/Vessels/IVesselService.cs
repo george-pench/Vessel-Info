@@ -21,5 +21,7 @@
         Task<int> GetCountAsync();
 
         IQueryable<VesselByTypeServiceModel> GetAllVesselByType();
+
+        IQueryable<VesselByRegistrationServiceModel> GetAllVesselByRegistration();
     }
 }
