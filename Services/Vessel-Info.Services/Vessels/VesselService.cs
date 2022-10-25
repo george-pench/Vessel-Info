@@ -7,6 +7,8 @@
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
+    using Vessel_Info.Services.Models.ClassSocieties;
+    using Vessel_Info.Services.Models.Owners;
     using Vessel_Info.Services.Models.Registrations;
     using Vessel_Info.Services.Models.Types;
     using Vessel_Info.Services.Models.Vessels;
@@ -143,6 +145,38 @@
                         Id = v.Registration.Id,
                         Flag = v.Registration.Flag,
                         RegistryPort = v.Registration.RegistryPort
+                    }
+                });
+
+        public IQueryable<VesselByOwnerServiceModel> GetAllVesselByOwner() => this.dbContext
+                .Vessels
+                .Select(v => new VesselByOwnerServiceModel
+                {
+                    Id = v.Id,
+                    Name = v.Name,
+                    Imo = v.Imo,
+                    SummerDwt = v.SummerDwt,
+                    Built = v.Built,
+                    VesselOwner = new OwnerBaseServiceModel
+                    {
+                        Id = v.Owner.Id,
+                        Name = v.Owner.Name
+                    }
+                });
+
+        public IQueryable<VesselByClassSocietyServiceModel> GetAllVesselByClassSociety() => this.dbContext
+                .Vessels
+                .Select(v => new VesselByClassSocietyServiceModel
+                {
+                    Id = v.Id,
+                    Name = v.Name,
+                    Imo = v.Imo,
+                    SummerDwt = v.SummerDwt,
+                    Built = v.Built,
+                    VesselClassSociety = new ClassSocietyBaseServiceModel
+                    {
+                        Id = v.ClassificationSociety.Id,
+                        FullName = v.ClassificationSociety.FullName
                     }
                 });
     }

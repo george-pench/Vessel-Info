@@ -23,5 +23,9 @@
         IQueryable<VesselByTypeServiceModel> GetAllVesselByType();
 
         IQueryable<VesselByRegistrationServiceModel> GetAllVesselByRegistration();
+
+        IQueryable<VesselByOwnerServiceModel> GetAllVesselByOwner();
+
+        IQueryable<VesselByClassSocietyServiceModel> GetAllVesselByClassSociety();
     }
 }
