@@ -1,5 +1,6 @@
 ﻿namespace Vessel_Info.Web.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
     using Vessel_Info.Services.Mapping;
@@ -24,6 +25,7 @@
             return this.View(all);
         }
 
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

@@ -84,7 +84,7 @@
         {
             Registrations = this.registrations.All(),
             Types = this.types.All(),
-            Owners = this.owners.All(0 , 0),
+            Owners = this.owners.All(),
             ClassificationSocieties = this.classificationSocieties.All()
         });
 
@@ -96,7 +96,7 @@
                 return this.View(model);
             }
 
-            var create = ObjectMappingExtensions.To<VesselCreateServiceModel>(model);
+            var create = ObjectMappingExtensions.To<VesselFormServiceModel>(model);
             create.Vessel.Id = Guid.NewGuid().ToString();            
 
             var vesselId = await this.vessels.CreateAsync(create);
@@ -118,7 +118,7 @@
 
             edit.Registrations = this.registrations.All();
             edit.Types = this.types.All();
-            edit.Owners = this.owners.All(0, 0);
+            edit.Owners = this.owners.All();
             edit.ClassificationSocieties = this.classificationSocieties.All();
 
             return this.View(edit);
@@ -132,7 +132,7 @@
                 return this.View(model);
             }
 
-            var edit = ObjectMappingExtensions.To<VesselEditServiceModel>(model);
+            var edit = ObjectMappingExtensions.To<VesselFormServiceModel>(model);
 
             await this.vessels.EditAsync(id, edit);
 

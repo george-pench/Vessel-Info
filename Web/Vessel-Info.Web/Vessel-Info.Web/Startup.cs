@@ -9,6 +9,7 @@ namespace Vessel_Info.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using System.Reflection;
+
     using Vessel_Info.Data;
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Mapping;
@@ -53,6 +54,8 @@ namespace Vessel_Info.Web
             services.AddTransient<ITypeService, TypeService>();
             services.AddTransient<IOwnerService, OwnerService>();
             services.AddTransient<IGetCountsService, GetCountsService>();
+            services.AddTransient<IOperatorService, OperatorService>();
+            services.AddTransient<IShipbrokerService, ShipbrokerService>();
 
             services.AddControllersWithViews(options => 
             {
