@@ -23,9 +23,9 @@
             public const int CubicMinLength = 1000;
             public const int CubicMaxLength = 500000;
             public const int HullTypeMinLength = 2;
-            public const int HyllTypeMaxLength = 20;            
+            public const int HyllTypeMaxLength = 40;            
             public const int CallSignMinLength = 5;
-            public const int CallSignMaxLength = 10;
+            public const int CallSignMaxLength = 40;
             public const int SummertDwtMinLength = 1000;
             public const int SummertDwtMaxLength = 600000;
             public const int BuiltMinValue = 1900;
@@ -39,13 +39,13 @@
         public class Type
         {
             public const int NameMinLength = 5;
-            public const int NameMaxLength = 50;
+            public const int NameMaxLength = 200;
         }
 
         public class Shipbroker
         {
             public const int AgencyNameMinLength = 4;
-            public const int AgencyNameMaxLength = 100;
+            public const int AgencyNameMaxLength = 200;
             public const int TelephoneNumberMinLength = 8;
             public const int TelephoneNumberMaxLength = 20;
         }
@@ -61,7 +61,7 @@
         public class Owner
         {
             public const int NameMinLength = 5;
-            public const int NameMaxLength = 100;
+            public const int NameMaxLength = 200;
             public const int FoundedMinValue = 1890;
             public const int FoundedMaxValue = 2040;
             public const int WebsiteMinLength = 10;
@@ -71,7 +71,7 @@
         public class Operator
         {
             public const int NameMinLength = 5;
-            public const int NameMaxLength = 100;
+            public const int NameMaxLength = 200;
             public const int FoundedMinValue = 1890;
             public const int FoundedMaxValue = 2040;
             public const int WebsiteMinLength = 10;
@@ -81,10 +81,10 @@
         public class ClassificationSociety
         {
             public const int FullNameMinLength = 10;
-            public const int FullNameMaxLength = 100;
+            public const int FullNameMaxLength = 200;
             public const int AbbreviationMinLength = 2;
             public const int AbbreviationMaxLength = 10;
-            public const int FoundedMinValue = 1890;
+            public const int FoundedMinValue = 1760;
             public const int FoundedMaxValue = 2040;
             public const int WebsiteMinLength = 8;
             public const int WebsiteMaxLength = 50;

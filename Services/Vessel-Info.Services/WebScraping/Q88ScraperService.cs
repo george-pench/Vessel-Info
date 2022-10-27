@@ -192,7 +192,7 @@
                 var formattedUrl = this.UrlFormatting(ViewShipUrl, guids, i);
                 var document = this.GetDocument(formattedUrl);
                 var outerHtmlPerVessel = this.SelectorType(document, OwnerSelector, ScrapeSkipNumber);
-
+                
                 owners.Add(outerHtmlPerVessel[0].Trim());
             }
 
@@ -310,13 +310,22 @@
             return document;
         }
 
-        private List<string> SelectorType(IDocument document, string selector, int skipNumber) 
-            => document
+        private List<string> SelectorType(IDocument document, string selector, int skipNumber)
+        {
+            var type = document
                 .QuerySelectorAll(selector)
                 .Select(x => x.TextContent)
                 .Skip(skipNumber)
                 .ToList();
 
+            if (!type.Any())
+            {
+                return new List<string> { "NO DATA SCRAPPED!" };
+            }
+
+            return type;
+        }
+        
         private string UrlFormatting(string url, List<string> guids, int i)
         {
             var formatted = String.Format(url, guids[i]);

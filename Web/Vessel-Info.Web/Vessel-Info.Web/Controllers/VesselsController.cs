@@ -14,15 +14,8 @@
     public class VesselsController : Controller
     {
         private readonly IVesselService vessels;
-        private readonly ITypeService types;
 
-        public VesselsController(
-            IVesselService vessels,
-            ITypeService types)
-        {
-            this.vessels = vessels;
-            this.types = types;
-        }
+        public VesselsController(IVesselService vessels) => this.vessels = vessels;
 
         public async Task<IActionResult> All(int id = 1)
         {
@@ -56,7 +49,7 @@
         }
 
         [Authorize]
-        public async Task<IActionResult> TypeMaxCount()
+        public async Task<IActionResult> GetTypeMax()
         {
             var vesselTypeMaxCount = this.vessels
                 .GetAllVesselByType()
@@ -74,6 +67,79 @@
                 .GetAllVesselByType()
                 .Where(x => x.VesselType.Id == vesselTypeMaxCount.Key.TypeId)
                 .To<VesselByTypeViewModel>()
+                .ToListAsync();
+
+            return this.View(result);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetRegistrationMax()
+        {
+            var vesselRegistrationMaxCount = this.vessels
+                .GetAllVesselByRegistration()
+                .Select(x => new 
+                {
+                    RegId = x.VesselRegistration.Id,
+                    RedFlag = x.VesselRegistration.Flag,
+                    RegPort = x.VesselRegistration.RegistryPort
+                })
+                .AsEnumerable()
+                .GroupBy(x => x)
+                .OrderByDescending(x => x.Count())
+                .FirstOrDefault();
+
+            var result = await this.vessels
+                .GetAllVesselByRegistration()
+                .Where(x => x.VesselRegistration.Id == vesselRegistrationMaxCount.Key.RegId)
+                .To<VesselByRegistrationViewModel>()
+                .ToListAsync();
+
+            return this.View(result);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetOwnerMax()
+        {
+            var vesselOwnerMaxCount = this.vessels
+                .GetAllVesselByOwner()
+                .Select(x => new
+                {
+                    OwnerId = x.VesselOwner.Id,
+                    OwnerName = x.VesselOwner.Name
+                })
+                .AsEnumerable()
+                .GroupBy(x => x)
+                .OrderByDescending(x => x.Count())
+                .FirstOrDefault();
+
+            var result = await this.vessels
+                .GetAllVesselByOwner()
+                .Where(x => x.VesselOwner.Id == vesselOwnerMaxCount.Key.OwnerId)
+                .To<VesselByOwnerViewModel>()
+                .ToListAsync();
+
+            return this.View(result);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetClassSocietyMax()
+        {
+            var vesselClassSocietyMaxCount = this.vessels
+                .GetAllVesselByClassSociety()
+                .Select(x => new
+                {
+                    ClassSocietyId = x.VesselClassSociety.Id,
+                    ClassSocietyName = x.VesselClassSociety.FullName
+                })
+                .AsEnumerable()
+                .GroupBy(x => x)
+                .OrderByDescending(x => x.Count())
+                .FirstOrDefault();
+
+            var result = await this.vessels
+                .GetAllVesselByClassSociety()
+                .Where(x => x.VesselClassSociety.Id == vesselClassSocietyMaxCount.Key.ClassSocietyId)
+                .To<VesselByClassSocietyViewModel>()
                 .ToListAsync();
 
             return this.View(result);

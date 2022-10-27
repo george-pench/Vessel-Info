@@ -1,1 +1,35 @@
-﻿
+﻿@model Vessel_Info.Web.ViewModels.Home.IndexViewModel
+
+@{ 
+    this.ViewData["Title"] = "Home Page";
+}
+
+@if (!this.User.IsInRole(WebConstants.Admin.AdministratorRoleName))
+{
+    <h1 class="display-4 text-center">Vessel Info by numbers:</h1>
+    
+    <div class="text-center">
+        <div class="col-md-auto">
+            <ul class="list-group">
+                <li class="list-group-item bg-light">
+                    <a asp-controller="Vessels" asp-action="All" class="btn">@Model.VesselsCount Vessels</a>
+                </li>
+                <li class="list-group-item bg-light">
+                    <a asp-controller="Registrations" asp-action="All" class="btn">@Model.RegistrationsCount Registrations</a>
+                </li>
+                <li class="list-group-item bg-light">
+                    <a asp-controller="Owners" asp-action="All" class="btn">@Model.OwnersCount Owners</a>
+                </li>
+                <li class="list-group-item bg-light">
+                    <a asp-controller="Types" asp-action="All" class="btn">@Model.TypesCount Types</a>
+                </li>
+                <li class="list-group-item bg-light">
+                    <a asp-controller="ClassSocieties" asp-action="All" class="btn">@Model.ClassSocietiesCount Classification Societies</a>
+                </li>
+                <li class="list-group-item bg-light">
+                    <a asp-controller="Operators" asp-action="All" class="btn">@Model.OperatorsCount Operators</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+}

@@ -31,7 +31,7 @@
                 ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
                 EntityCount = await this.owners.GetCountAsync(),
-                Owners = this.owners.All(id, ItemsPerPage).To<OwnerDetailsViewModel>()
+                Owners = this.owners.AllPaging(id, ItemsPerPage).To<OwnerDetailsViewModel>()
             });
         }
 
