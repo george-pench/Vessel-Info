@@ -2,8 +2,8 @@
 {
     public class ServicesConstants
     {
-        public const char StartLetter = 'O';
-        public const char EndLetter = 'P';
+        public const char StartLetter = 'A';
+        public const char EndLetter = 'Z';
 
         public const string BaseUrl = "https://www.q88.com/ships.aspx?letter={0}&v=list";
         public const string ViewShipUrl = "https://www.q88.com/ViewShip.aspx?id={0}";
