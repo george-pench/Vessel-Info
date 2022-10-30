@@ -83,6 +83,14 @@
                 .Select(r => r.Id)
                 .FirstOrDefaultAsync();
 
+        public IQueryable<RegistrationBaseServiceModel> AllPaging(int page, int pageSize = 10) => this.dbContext
+                .Registrations
+                .OrderBy(r => r.Flag)
+                .ThenBy(r => r.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .To<RegistrationBaseServiceModel>();
+
         public IQueryable<RegistrationBaseServiceModel> All() => dbContext
                 .Registrations
                 .OrderBy(r => r.Flag)

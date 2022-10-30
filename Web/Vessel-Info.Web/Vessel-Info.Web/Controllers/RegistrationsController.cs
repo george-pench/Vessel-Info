@@ -7,6 +7,8 @@
     using Vessel_Info.Services.Vessels;
     using Vessel_Info.Web.ViewModels.Registrations;
 
+    using static Vessel_Info.Web.Constants.WebConstants;
+
     public class RegistrationsController : Controller
     {
         private readonly IRegistrationService registrations;
@@ -16,13 +18,20 @@
             this.registrations = registrations;
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All(int id = 1)
         {
-            var all = this.registrations
-                .All()
-                .To<RegistrationBaseViewModel>();
-
-            return this.View(all);
+            if (id < 0)
+            {
+                return this.NotFound();
+            }
+            
+            return this.View(new RegistrationListingViewModel 
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                EntityCount = await this.registrations.GetCountAsync(),
+                Registrations = this.registrations.AllPaging(id, ItemsPerPage).To<RegistrationBaseViewModel>()
+            });
         }
 
         [Authorize]

@@ -16,6 +16,8 @@
 
         Task<int> FindRegistrationIdByName(string vesselRegistration);
 
+        IQueryable<RegistrationBaseServiceModel> AllPaging(int page, int pageSize = 12);
+
         IQueryable<RegistrationBaseServiceModel> All();
 
         Task<int> GetCountAsync();

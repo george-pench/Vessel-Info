@@ -8,6 +8,8 @@
     using Vessel_Info.Services.Vessels;
     using Vessel_Info.Web.ViewModels.ClassSocieties;
 
+    using static Vessel_Info.Web.Constants.WebConstants;
+
     public class ClassSocietiesController : Controller
     {
         private readonly IClassificationSocietyService classificationSocieties;
@@ -17,13 +19,20 @@
             this.classificationSocieties = classificationSocieties;
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All(int id = 1)
         {
-            var all = this.classificationSocieties
-                .All()
-                .To<ClassSocietyBaseViewModel>();
+            if (id < 0)
+            {
+                return this.NotFound();
+            }
 
-            return this.View(all);
+            return this.View(new ClassSocietyListingViewModel
+            {
+                ItemsPerPage = ItemsPerPage,
+                PageNumber = id,
+                EntityCount = await this.classificationSocieties.GetCountAsync(),
+                ClassSocieties = this.classificationSocieties.AllPaging(id, ItemsPerPage).To<ClassSocietyDetailsViewModel>()
+            });
         }
 
         [Authorize]

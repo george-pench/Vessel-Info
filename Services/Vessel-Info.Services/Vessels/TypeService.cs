@@ -58,6 +58,14 @@
                 .Select(t => t.Id)
                 .FirstOrDefaultAsync();
 
+        public IQueryable<TypeBaseServiceModel> AllPaging(int page, int pageSize = 10) => this.dbContext
+                .Types
+                .OrderBy(t => t.Name)
+                .ThenBy(t => t.Id)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .To<TypeBaseServiceModel>();
+
         public IQueryable<TypeBaseServiceModel> All() => this.dbContext
                 .Types
                 .OrderBy(t => t.Name)

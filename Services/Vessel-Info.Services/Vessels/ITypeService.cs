@@ -12,6 +12,8 @@
 
         Task<int> FindTypeIdByName(string vesselType);
 
+        IQueryable<TypeBaseServiceModel> AllPaging(int page, int pageSize = 12);
+
         IQueryable<TypeBaseServiceModel> All();
 
         Task<int> GetCountAsync();

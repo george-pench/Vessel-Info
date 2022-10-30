@@ -1,10 +1,10 @@
-﻿@model IQueryable<Vessel_Info.Web.ViewModels.Types.TypeBaseViewModel>
+﻿@model Vessel_Info.Web.ViewModels.Types.TypeListingViewModel
 
 @{
     ViewData["Title"] = "All Types";
 }
 
-@if (Model.Any())
+@if (this.Model.Types.Any())
 {
     <table class="table table-hover table-bordered table-striped text-center">
         <thead class="table-dark">
@@ -13,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var type in this.Model)
+            @foreach (var type in this.Model.Types)
             {
                 <tr>
                     <td scope="col">@type.Name</td>
@@ -29,3 +29,6 @@ else
         <h2 class="text-info">No type(s)!</h2>
     </div>
 }
+
+<hr />
+<partial name="_PagingPartial" model="@this.Model" />

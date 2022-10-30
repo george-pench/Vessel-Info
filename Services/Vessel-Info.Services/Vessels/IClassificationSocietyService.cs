@@ -16,6 +16,8 @@
 
         Task<int> FindClassSocietyIdByNameAsync(string vesselClass);
 
+        IQueryable<ClassSocietyBaseServiceModel> AllPaging(int page, int pageSize = 12);
+
         IQueryable<ClassSocietyBaseServiceModel> All();
 
         Task<int> GetCountAsync();

@@ -84,6 +84,14 @@
                 .Select(cs => cs.Id)
                 .FirstOrDefaultAsync();
 
+        public IQueryable<ClassSocietyBaseServiceModel> AllPaging(int page, int pageSize = 10) => this.dbContext
+               .ClassificationSocieties
+               .OrderBy(cs => cs.FullName)
+               .ThenBy(cs => cs.Id)
+               .Skip((page - 1) * pageSize)
+               .Take(pageSize)
+               .To<ClassSocietyBaseServiceModel>();
+
         public IQueryable<ClassSocietyBaseServiceModel> All() => this.dbContext
                 .ClassificationSocieties
                 .OrderBy(cs => cs.FullName)

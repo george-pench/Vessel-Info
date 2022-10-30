@@ -1,10 +1,10 @@
-﻿@model IQueryable<Vessel_Info.Web.ViewModels.ClassSocieties.ClassSocietyBaseViewModel>
+﻿@model Vessel_Info.Web.ViewModels.ClassSocieties.ClassSocietyListingViewModel
 
 @{
     ViewData["Title"] = "All Class Societies";
 }
 
-@if (this.Model.Any())
+@if (this.Model.ClassSocieties.Any())
 {
     <table class="table table-hover table-bordered table-striped text-center">
         <thead class="table-dark">
@@ -13,7 +13,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var classSociety in this.Model)
+            @foreach (var classSociety in this.Model.ClassSocieties)
             {
                 <tr>
                     <td scope="col">
@@ -31,3 +31,6 @@ else
         <h2 class="text-info">No class(es)!</h2>
     </div>
 }
+
+<hr />
+<partial name="_PagingPartial" model="@this.Model" />
