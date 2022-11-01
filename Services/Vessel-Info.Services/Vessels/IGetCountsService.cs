@@ -5,6 +5,6 @@
     
     public interface IGetCountsService
     {
-        Task<GetAllCountsServiceModel> GetAllCounts();
+        Task<GetAllCountsServiceModel> GetAllCountsAsync();
     }
 }

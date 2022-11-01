@@ -8,6 +8,8 @@
     {
         Task<RegistrationBaseServiceModel> GetByIdAsync(int? id);
 
+        IQueryable<RegistrationBaseServiceModel> GetAllBySearchTerm(string searchTerm);
+
         Task<int> GetOrCreateRegistrationAsync(string flagName, string registryPortName);
 
         Task<RegistrationBaseServiceModel> DetailsAsync(int? id);

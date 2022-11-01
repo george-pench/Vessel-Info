@@ -28,7 +28,7 @@
             this.operators = operators;
         }
 
-        public async Task<GetAllCountsServiceModel> GetAllCounts() => new GetAllCountsServiceModel
+        public async Task<GetAllCountsServiceModel> GetAllCountsAsync() => new GetAllCountsServiceModel
         {
             VesselsCount = await this.vessels.GetCountAsync(),
             RegistrationsCount = await this.registrations.GetCountAsync(),

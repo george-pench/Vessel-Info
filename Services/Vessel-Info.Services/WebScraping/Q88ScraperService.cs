@@ -50,7 +50,7 @@
         public async Task ImportVesselDataAsync(char fromId = StartLetter, char toId = EndLetter)
         {
             var vessels = this.GetVesselListing(fromId, toId);
-            var currenFromId = fromId;
+            var currentFromId = fromId;
 
             foreach (var vessel in vessels)
             {
@@ -65,7 +65,7 @@
                 var callSigns = vessel.CallSign;
                 var builts = vessel.Built;
 
-                var guids = this.ScrapeGuids(this.browsingContext, currenFromId++);
+                var guids = this.ScrapeGuids(this.browsingContext, currentFromId++);
                 var owners = this.ScrapeOwners(this.browsingContext, guids);
                 var types = this.ScrapeTypes(this.browsingContext, guids);
                 var classSocieties = this.ScrapeClassSocieties(this.browsingContext, guids);
@@ -139,7 +139,7 @@
 
             var vesselsData = new Q88ListingServiceModel();
 
-            // Due to data inconsistency all data retrieved is stored in List<string> properties for easier persisting into the database
+            // Due to inconsistency all data retrieved is stored in List<string> properties for easier persisting
             // Get Vessel Name
             var names = this.SelectorType(document, VesselNameSelector, 27);
             vesselsData.Name.AddRange(names);

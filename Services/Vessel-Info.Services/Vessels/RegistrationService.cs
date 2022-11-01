@@ -21,6 +21,13 @@
                 .To<RegistrationBaseServiceModel>()
                 .FirstOrDefaultAsync();
 
+        public IQueryable<RegistrationBaseServiceModel> GetAllBySearchTerm(string searchTerm) => this.dbContext
+                .Registrations
+                .Where(v => v.Flag.StartsWith(searchTerm))
+                .OrderBy(v => v.Flag)
+                .ThenBy(v => v.Id)
+                .To<RegistrationBaseServiceModel>();
+
         public async Task<int> GetOrCreateRegistrationAsync(string flagName, string registryPortName)
         {
             var registration = await this.dbContext

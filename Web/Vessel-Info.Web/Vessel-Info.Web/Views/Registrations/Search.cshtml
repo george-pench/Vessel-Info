@@ -1,0 +1,10 @@
+﻿@model Vessel_Info.Web.ViewModels.Registrations.RegistrationListingViewModel
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<partial name="_SearchPartial" />
+
+<hr />
+<partial name="_RegistrationAllPartial" model="@this.Model" />
