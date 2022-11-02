@@ -27,6 +27,9 @@ A user is granted access to detailed information about ship specifications like:
 
 The data is being scrapped from: *https://www.q88.com/Ships.aspx?letter=A&v=list*
 
+# Database Diagram
+![DatabaseDiagram](https://user-images.githubusercontent.com/97052397/199499995-f137e550-b8e5-4967-9526-bf81d2422ad2.png)
+
 # Roles
 
 - Admin
@@ -45,9 +48,20 @@ The data is being scrapped from: *https://www.q88.com/Ships.aspx?letter=A&v=list
 - Entity Framework Core 5.0
 - MS SQL Server
 - Bootstrap 4
+- Bootstrap Lazy Kit
 - HTML5
 - CSS
+- JavaScript
 - MS Visual Studio 2019
 - MS SQL Server Management Studio 2018
 - AngleSharp 0.14.0
 - AutoMapper
+
+# Images
+
+- Register/Log in
+
+![RegisterPNG](https://user-images.githubusercontent.com/97052397/199501388-3a6eb0ce-7d0e-42aa-b6d6-3a815af2f7e4.PNG)
+
+![LogIn](https://user-images.githubusercontent.com/97052397/199501432-d67fafa2-9a79-495b-8fd9-4c9e077c9121.PNG)
+
