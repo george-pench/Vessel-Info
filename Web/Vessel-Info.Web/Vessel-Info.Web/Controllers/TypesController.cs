@@ -17,6 +17,11 @@
             this.types = types;
         }
 
+        public IActionResult Search(string searchTerm) => this.View(new TypeListingViewModel
+        {
+            Types = this.types.GetAllBySearchTerm(searchTerm).To<TypeBaseViewModel>()
+        });
+
         public async Task<IActionResult> All(int id = 1)
         {
             if (id < 0)

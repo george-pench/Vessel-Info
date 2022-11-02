@@ -4,6 +4,6 @@
     
     public class OwnerListingViewModel : PagingViewModel
     {
-        public IQueryable<OwnerDetailsViewModel> Owners { get; set; }
+        public IQueryable<OwnerBaseViewModel> Owners { get; set; }
     }
 }

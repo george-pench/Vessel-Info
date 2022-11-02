@@ -1,0 +1,10 @@
+﻿@model Vessel_Info.Web.ViewModels.Operators.OperatorListingViewModel
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<partial name="_SearchPartial" />
+
+<hr />
+<partial name="_OperatorAllPartial" model="@this.Model" />

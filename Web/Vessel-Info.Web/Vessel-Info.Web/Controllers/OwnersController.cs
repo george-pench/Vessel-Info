@@ -19,6 +19,11 @@
             this.owners = owners;
         }
 
+        public IActionResult Search(string searchTerm) => this.View(new OwnerListingViewModel
+        {
+            Owners = this.owners.GetAllBySearchTerm(searchTerm).To<OwnerBaseViewModel>()
+        });
+
         public async Task<IActionResult> All(int id = 1)
         {
             if (id < 0)
@@ -31,7 +36,7 @@
                 ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
                 EntityCount = await this.owners.GetCountAsync(),
-                Owners = this.owners.AllPaging(id, ItemsPerPage).To<OwnerDetailsViewModel>()
+                Owners = this.owners.AllPaging(id, ItemsPerPage).To<OwnerBaseViewModel>()
             });
         }
 

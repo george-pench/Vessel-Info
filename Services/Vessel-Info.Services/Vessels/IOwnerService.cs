@@ -8,6 +8,8 @@
     {
         Task<OwnerAllServiceModel> GetById(int? id);
 
+        IQueryable<OwnerAllServiceModel> GetAllBySearchTerm(string searchTerm);
+
         Task<int> GetOrCreateOwnerAsync(string ownerName);
 
         Task<OwnerDetailsServiceModel> DetailsAsync(int? id);

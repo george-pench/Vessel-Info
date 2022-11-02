@@ -1,36 +1,10 @@
 ﻿@model Vessel_Info.Web.ViewModels.Registrations.RegistrationListingViewModel
 
-@{
-    ViewData["Title"] = "All Registrations";
-}
+<hr />
+<partial name="_SearchPartial" />
 
-@if (this.Model.Registrations.Any())
-{
-    <table class="table table-hover table-bordered table-striped text-center">
-        <thead class="table-dark">
-            <tr style="text-align: center;">
-                <th scope="col">Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var registration in this.Model.Registrations)
-            {
-                <tr>
-                    <td scope="col">
-                        <a class="btn" asp-action="Details" asp-route-id="@registration.Id">@registration.Flag : @registration.RegistryPort</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <br />
-    <div class="text-center">
-        <h2 class="text-info">No registration(s)!</h2>
-    </div>
-}
+<hr />
+<partial name="_RegistrationAllPartial" model="@this.Model" />
 
 <hr />
 <partial name="_PagingPartial" model="@this.Model" />

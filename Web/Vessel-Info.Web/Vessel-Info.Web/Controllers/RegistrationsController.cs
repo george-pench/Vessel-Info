@@ -18,6 +18,11 @@
             this.registrations = registrations;
         }
 
+        public IActionResult Search(string searchTerm) => this.View(new RegistrationListingViewModel
+        {
+            Registrations = this.registrations.GetAllBySearchTerm(searchTerm).To<RegistrationBaseViewModel>()
+        });
+
         public async Task<IActionResult> All(int id = 1)
         {
             if (id < 0)

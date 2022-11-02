@@ -1,0 +1,31 @@
+﻿@model Vessel_Info.Web.ViewModels.Types.TypeListingViewModel
+
+@{
+    ViewData["Title"] = "All Types";
+}
+
+@if (this.Model.Types.Any())
+{
+    <table class="table table-hover table-bordered table-striped text-center">
+        <thead class="table-dark">
+            <tr style="text-align: center;">
+                <th scope="col">Type of vessel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var type in this.Model.Types)
+            {
+                <tr>
+                    <td scope="col">@type.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <br />
+    <div class="text-center">
+        <h2 class="text-info">No type(s)!</h2>
+    </div>
+}

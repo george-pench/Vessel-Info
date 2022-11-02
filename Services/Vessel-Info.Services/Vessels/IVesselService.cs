@@ -14,9 +14,13 @@
 
         Task DeleteAsync(string id);
 
-        IQueryable<VesselAllServiceModel> All(int page, int itemsPerPage = 12);
+        IQueryable<VesselAllServiceModel> AllPaging(int page, int itemsPerPage = 12);
+
+        IQueryable<VesselAllServiceModel> All();
 
         Task<VesselAllServiceModel> GetByIdAsync(string id);
+
+        IQueryable<VesselAllServiceModel> GetAllBySearchTerm(string searchTerm);
 
         Task<int> GetCountAsync();
 

@@ -8,6 +8,8 @@
     {
         Task<OperatorAllServiceModel> GetById(int? id);
 
+        IQueryable<OperatorAllServiceModel> GetAllBySearchTerm(string searchTerm);
+
         Task<int> GetOrCreateOperatorAsync(string operatorName);
 
         Task<OperatorDetailsServiceModel> DetailsAsync(int? id);

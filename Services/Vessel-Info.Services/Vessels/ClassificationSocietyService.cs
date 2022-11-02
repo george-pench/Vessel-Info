@@ -21,6 +21,13 @@
             .To<ClassSocietyAllServiceModel>()
             .FirstOrDefaultAsync();
 
+        public IQueryable<ClassSocietyAllServiceModel> GetAllBySearchTerm(string searchTerm) => this.dbContext
+               .ClassificationSocieties
+               .Where(v => v.FullName.StartsWith(searchTerm))
+               .OrderBy(v => v.FullName)
+               .ThenBy(v => v.Id)
+               .To<ClassSocietyAllServiceModel>();
+
         public async Task<int> GetOrCreateClassSocietyAsync(string classSocietyFullName)
         {
             var classSociety = await this.dbContext

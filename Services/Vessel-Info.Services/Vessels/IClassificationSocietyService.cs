@@ -8,6 +8,8 @@
     {
         Task<ClassSocietyAllServiceModel> GetByIdAsync(int? id);
 
+        IQueryable<ClassSocietyAllServiceModel> GetAllBySearchTerm(string searchTerm);
+
         Task<int> GetOrCreateClassSocietyAsync(string classSocietyFullName);
 
         Task<ClassSocietyDetailsServiceModel> DetailsAsync(int? id);

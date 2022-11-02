@@ -14,6 +14,13 @@
 
         public TypeService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
+        public IQueryable<TypeBaseServiceModel> GetAllBySearchTerm(string searchTerm) => this.dbContext
+               .Types
+               .Where(v => v.Name.StartsWith(searchTerm))
+               .OrderBy(v => v.Name)
+               .ThenBy(v => v.Id)
+               .To<TypeBaseServiceModel>();
+
         public async Task<int> GetOrCreateTypeAsync(string typeName)
         {
             var type = await this.dbContext

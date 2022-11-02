@@ -21,6 +21,13 @@
                 .To<OwnerAllServiceModel>()
                 .FirstOrDefaultAsync();
 
+        public IQueryable<OwnerAllServiceModel> GetAllBySearchTerm(string searchTerm) => this.dbContext
+               .Owners
+               .Where(v => v.Name.StartsWith(searchTerm))
+               .OrderBy(v => v.Name)
+               .ThenBy(v => v.Id)
+               .To<OwnerAllServiceModel>();
+
         public async Task<int> GetOrCreateOwnerAsync(string ownerName)
         {
             var owner = await this.dbContext

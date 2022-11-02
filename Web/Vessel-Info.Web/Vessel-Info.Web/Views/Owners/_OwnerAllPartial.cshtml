@@ -1,0 +1,41 @@
+﻿@model Vessel_Info.Web.ViewModels.Owners.OwnerListingViewModel
+
+@{
+    ViewData["Title"] = "All Owners";
+}
+
+@if (this.Model.Owners.Any())
+{
+    <h2 class="text-center">
+        @ViewData["Title"]
+    </h2>
+
+    <table class="table table-hover table-bordered table-striped text-center">
+        <thead class="table-dark">
+            <tr style="text-align: center;">
+                <th scope="col">Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var owner in this.Model.Owners)
+            {
+                <tr>
+                    <td scope="col">
+                        <a class="btn" asp-action="Details" asp-route-id="@owner.Id">@owner.Name</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <br />
+    <div class="text-center">
+        <h2 class="text-info">No owner(s)!</h2>
+    </div>
+
+    <div>
+        <a asp-controller="Owners" asp-action="All">Back to Owners List</a>
+    </div>
+}

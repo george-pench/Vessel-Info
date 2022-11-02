@@ -1,0 +1,10 @@
+﻿@model Vessel_Info.Web.ViewModels.ClassSocieties.ClassSocietyListingViewModel
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<partial name="_SearchPartial" />
+
+<hr />
+<partial name="_ClassSocietyAllPartial" model="@this.Model" />

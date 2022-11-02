@@ -19,6 +19,11 @@
             this.classificationSocieties = classificationSocieties;
         }
 
+        public IActionResult Search(string searchTerm) => this.View(new ClassSocietyListingViewModel
+        {
+            ClassSocieties = this.classificationSocieties.GetAllBySearchTerm(searchTerm).To<ClassSocietyBaseViewModel>()
+        });
+
         public async Task<IActionResult> All(int id = 1)
         {
             if (id < 0)

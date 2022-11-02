@@ -4,6 +4,6 @@
     
     public class ClassSocietyListingViewModel : PagingViewModel
     {
-        public IQueryable<ClassSocietyDetailsViewModel> ClassSocieties { get; set; }
+        public IQueryable<ClassSocietyBaseViewModel> ClassSocieties { get; set; }
     }
 }

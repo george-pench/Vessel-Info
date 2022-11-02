@@ -1,40 +1,10 @@
 ﻿@model Vessel_Info.Web.ViewModels.Operators.OperatorListingViewModel
 
-@{
-    ViewData["Title"] = "All Operators";
-}
+<hr />
+<partial name="_SearchPartial" />
 
-@if (this.Model.Operators.Any())
-{
-    <h2 class="text-center">
-        @ViewData["Title"]
-    </h2>
-
-    <table class="table table-hover table-bordered table-striped text-center">
-        <thead class="table-dark">
-            <tr style="text-align: center;">
-                <th scope="col">Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var opr in this.Model.Operators)
-            {
-                <tr>
-                    <td scope="col">
-                        <a class="btn" asp-action="Details" asp-route-id="@opr.Id">@opr.Name</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <br />
-    <div class="text-center">
-        <h2 class="text-info">No operator(s)!</h2>
-    </div>
-}
+<hr />
+<partial name="_OperatorAllPartial" model="@this.Model" />
 
 <hr />
 <partial name="_PagingPartial" model="@this.Model" />

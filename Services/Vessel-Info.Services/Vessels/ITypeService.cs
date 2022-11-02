@@ -6,6 +6,8 @@
 
     public interface ITypeService
     {
+        IQueryable<TypeBaseServiceModel> GetAllBySearchTerm(string searchTerm);
+
         Task<int> GetOrCreateTypeAsync(string typeName);
 
         Task<TypeBaseServiceModel> DetailsAsync(int? id);

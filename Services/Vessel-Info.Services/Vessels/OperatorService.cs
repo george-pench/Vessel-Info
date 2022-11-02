@@ -21,6 +21,13 @@
                 .To<OperatorAllServiceModel>()
                 .FirstOrDefaultAsync();
 
+        public IQueryable<OperatorAllServiceModel> GetAllBySearchTerm(string searchTerm) => this.dbContext
+                .Operators
+                .Where(v => v.Name.StartsWith(searchTerm))
+                .OrderBy(v => v.Name)
+                .ThenBy(v => v.Id)
+                .To<OperatorAllServiceModel>();
+
         public async Task<int> GetOrCreateOperatorAsync(string operatorName)
         {
             var @operator = await this.dbContext

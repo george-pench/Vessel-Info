@@ -16,6 +16,11 @@
 
         public OperatorsController(IOperatorService operators) => this.operators = operators;
 
+        public IActionResult Search(string searchTerm) => this.View(new OperatorListingViewModel
+        {
+            Operators = this.operators.GetAllBySearchTerm(searchTerm).To<OperatorBaseViewModel>()
+        });
+
         public async Task<IActionResult> All(int id = 1)
         {
             if (id < 0)

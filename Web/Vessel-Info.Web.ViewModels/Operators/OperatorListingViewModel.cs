@@ -4,6 +4,6 @@
     
     public class OperatorListingViewModel : PagingViewModel
     {
-         public IQueryable<OperatorDetailsViewModel> Operators { get; set; }
+         public IQueryable<OperatorBaseViewModel> Operators { get; set; }
     }
 }

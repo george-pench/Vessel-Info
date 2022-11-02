@@ -1,0 +1,10 @@
+﻿@model Vessel_Info.Web.ViewModels.Types.TypeListingViewModel
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<partial name="_SearchPartial" />
+
+<hr />
+<partial name="_TypeAllPartial" model="@this.Model" />

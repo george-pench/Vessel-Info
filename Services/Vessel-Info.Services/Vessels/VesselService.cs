@@ -88,7 +88,7 @@
             await this.dbContext.SaveChangesAsync();            
         }
 
-        public IQueryable<VesselAllServiceModel> All(int page = 1, int pageSize = 10) => this.dbContext
+        public IQueryable<VesselAllServiceModel> AllPaging(int page = 1, int pageSize = 10) => this.dbContext
                 .Vessels
                 .OrderBy(v => v.Name)
                 .ThenBy(v => v.Id)
@@ -96,11 +96,24 @@
                 .Take(pageSize)
                 .To<VesselAllServiceModel>();
 
+        public IQueryable<VesselAllServiceModel> All() => this.dbContext
+               .Vessels
+               .OrderBy(v => v.Name)
+               .ThenBy(v => v.Id)
+               .To<VesselAllServiceModel>();
+
         public async Task<VesselAllServiceModel> GetByIdAsync(string id) => await this.dbContext
                 .Vessels
                 .Where(v => v.Id == id)
                 .To<VesselAllServiceModel>()
                 .FirstOrDefaultAsync();
+
+        public IQueryable<VesselAllServiceModel> GetAllBySearchTerm(string searchTerm) => this.dbContext
+                .Vessels
+                .Where(v => v.Name.StartsWith(searchTerm))
+                .OrderBy(v => v.Name)
+                .ThenBy(v => v.Id)
+                .To<VesselAllServiceModel>();
 
         private static string HullTypeFullName(string hullType) => hullType switch
         {
