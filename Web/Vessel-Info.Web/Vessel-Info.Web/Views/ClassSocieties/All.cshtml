@@ -1,36 +1,10 @@
 ﻿@model Vessel_Info.Web.ViewModels.ClassSocieties.ClassSocietyListingViewModel
 
-@{
-    ViewData["Title"] = "All Class Societies";
-}
+<hr />
+<partial name="_SearchPartial" />
 
-@if (this.Model.ClassSocieties.Any())
-{
-    <table class="table table-hover table-bordered table-striped text-center">
-        <thead class="table-dark">
-            <tr style="text-align: center;">
-                <th scope="col">Full Name</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var classSociety in this.Model.ClassSocieties)
-            {
-                <tr>
-                    <td scope="col">
-                        <a class="btn" asp-action="Details" asp-route-id="@classSociety.Id">@classSociety.FullName</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <br />
-    <div class="text-center">
-        <h2 class="text-info">No class(es)!</h2>
-    </div>
-}
+<hr />
+<partial name="_ClassSocietyAllPartial" model="@this.Model" />
 
 <hr />
 <partial name="_PagingPartial" model="@this.Model" />

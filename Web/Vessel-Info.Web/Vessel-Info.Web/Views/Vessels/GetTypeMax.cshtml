@@ -1,11 +1,13 @@
 ﻿@model IEnumerable<Vessel_Info.Web.ViewModels.Vessels.VesselByTypeViewModel>
 
 @{
-    ViewData["Title"] = "";
+    ViewData["Title"] = "Get All Vessels By Most Types";
 }
 
 @if (this.Model.Any())
 {
+    <h2 class="text-center">@ViewData["Title"]</h2>
+
     <table class="table table-hover table-bordered table-striped text-center">
         <thead>
             <tr>
@@ -19,27 +21,27 @@
         <tbody>
             @foreach (var vessel in this.Model)
             {
-            <tr>
-                <td scope="col">
-                    <p>@vessel.Name</p>
-                </td>
-                <td scope="col">
-                    <p>@vessel.Imo</p>
-                </td>
-                <td scope="col">
-                    <p>@vessel.SummerDwt</p>
-                </td>
-                <td scope="col">
-                    <p>@vessel.Built</p>
-                </td>
-                <td scope="col">
-                    <p>@vessel.VesselType.Name</p>
-                </td>
+                <tr>
+                    <td scope="col">
+                        <p>@vessel.Name</p>
+                    </td>
+                    <td scope="col">
+                        <p>@vessel.Imo</p>
+                    </td>
+                    <td scope="col">
+                        <p>@vessel.SummerDwt</p>
+                    </td>
+                    <td scope="col">
+                        <p>@vessel.Built</p>
+                    </td>
+                    <td scope="col">
+                        <p>@vessel.VesselType.Name</p>
+                    </td>
 
-                <td>
-                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@vessel.Id">Details</a>
-                </td>
-            </tr>
+                    <td>
+                        <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@vessel.Id">Details</a>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

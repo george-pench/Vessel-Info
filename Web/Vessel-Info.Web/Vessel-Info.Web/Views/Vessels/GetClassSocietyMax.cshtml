@@ -1,11 +1,13 @@
 ﻿@model IEnumerable<Vessel_Info.Web.ViewModels.Vessels.VesselByClassSocietyViewModel>
 
 @{
-    ViewData["Title"] = "";
+    ViewData["Title"] = "Get All Vessels By Most Class Societies";
 }
 
 @if (this.Model.Any())
 {
+    <h2 class="text-center">@ViewData["Title"]</h2>
+
     <table class="table table-hover table-bordered table-striped text-center">
         <thead>
             <tr>

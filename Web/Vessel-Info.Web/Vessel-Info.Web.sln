@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vessel-Info.Web.Constants",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vessel-Info.Web.ViewModels", "..\Vessel-Info.Web.ViewModels\Vessel-Info.Web.ViewModels.csproj", "{B58EE370-D064-4AC3-AAB0-E487F93D8C5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vessel-Info.Services.Mapping", "..\..\Services\Vessel-Info.Services.Mapping\Vessel-Info.Services.Mapping.csproj", "{7274BD9D-B76A-45C6-ACA7-AFF1715F3E71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vessel-Info.Services.Mapping", "..\..\Services\Vessel-Info.Services.Mapping\Vessel-Info.Services.Mapping.csproj", "{7274BD9D-B76A-45C6-ACA7-AFF1715F3E71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

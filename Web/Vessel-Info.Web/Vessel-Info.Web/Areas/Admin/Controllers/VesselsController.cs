@@ -38,11 +38,11 @@
         {
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                return this.View(this.vessels.All(id, ItemsPerPage).To<VesselAllViewModel>());
+                return this.View(this.vessels.AllPaging(id, ItemsPerPage).To<VesselAllViewModel>());
             }
 
             return this.View(this.vessels
-                .All(id, ItemsPerPage)
+                .AllPaging(id, ItemsPerPage)
                 .Where(v => v.Name.StartsWith(searchTerm))
                 .To<VesselAllViewModel>());
         }
@@ -60,14 +60,14 @@
                 ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
                 EntityCount = await this.vessels.GetCountAsync(),
-                Vessels = this.vessels.All(id, ItemsPerPage).To<VesselAllViewModel>()
+                Vessels = this.vessels.AllPaging(id, ItemsPerPage).To<VesselAllViewModel>()
             });
         }
 
         // [HttpGet("Admin/Vessels/Details")]
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return this.NotFound();
             }
@@ -107,7 +107,7 @@
         // [HttpGet("Admin/Vessels/Edit")]
         public async Task<IActionResult> Edit(string id)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return this.NotFound();
             }
@@ -142,7 +142,7 @@
         // [HttpGet("Admin/Vessels/Delete")]
         public async Task<IActionResult> Delete(string id)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return this.NotFound();
             }

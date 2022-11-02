@@ -22,7 +22,7 @@
                 TempData[GlobalMessage] = $"Welcome Admin!";
             }
 
-            return this.View((await this.counts.GetAllCounts()).To<IndexViewModel>());
+            return this.View((await this.counts.GetAllCountsAsync()).To<IndexViewModel>());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

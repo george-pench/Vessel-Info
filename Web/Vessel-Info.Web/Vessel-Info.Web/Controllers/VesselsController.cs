@@ -17,6 +17,11 @@
 
         public VesselsController(IVesselService vessels) => this.vessels = vessels;
 
+        public IActionResult Search(string searchTerm) => this.View(new VesselListingViewModel
+        {            
+            Vessels = this.vessels.GetAllBySearchTerm(searchTerm).To<VesselAllViewModel>()
+        });
+
         public async Task<IActionResult> All(int id = 1)
         {
             if (id < 0)
@@ -29,14 +34,14 @@
                 ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
                 EntityCount = await this.vessels.GetCountAsync(),
-                Vessels = this.vessels.All(id, ItemsPerPage).To<VesselAllViewModel>()
+                Vessels = this.vessels.AllPaging(id, ItemsPerPage).To<VesselAllViewModel>()
             });
         }
 
         [Authorize]
         public async Task<IActionResult> Details(string id)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id))
             {
                 return this.NotFound();
             }
