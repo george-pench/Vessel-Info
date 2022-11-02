@@ -29,6 +29,8 @@ The data has been scrapped from: *https://www.q88.com/Ships.aspx?letter=A&v=list
 
 ![Q88Sample](https://user-images.githubusercontent.com/97052397/199532689-5f47cf6e-6155-4a53-b998-5e805833418c.PNG)
 
+The database's backup file can be found here: *https://github.com/george-pench/Vessel-Info/tree/main/Data/Vassel-Info.Data.Backup*
+
 # Database Diagram
 ![DatabaseDiagram](https://user-images.githubusercontent.com/97052397/199499995-f137e550-b8e5-4967-9526-bf81d2422ad2.png)
 
