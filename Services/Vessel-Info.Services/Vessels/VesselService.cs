@@ -22,12 +22,12 @@
         public async Task<string> CreateAsync(VesselFormServiceModel model)
         {
             var create = model.Vessel.To<Vessel>();
-            
-            // TODO: try binding createService' ids to Vessel' ids
+
             create.RegistrationId = model.RegistrationId;
             create.TypeId = model.TypeId;
             create.OwnerId = model.OwnerId;
             create.ClassificationSocietyId = model.ClassificationSocietyId;
+            create.ShipbrokerId = 1;
 
             await this.dbContext.Vessels.AddAsync(create);
             await this.dbContext.SaveChangesAsync();
@@ -44,6 +44,16 @@
                 return false;
             }
 
+            edit.Name = model.Vessel.Name;
+            edit.Imo = model.Vessel.Imo;
+            edit.Loa = model.Vessel.Loa;
+            edit.HullType = model.Vessel.HullType;
+            edit.Draft = model.Vessel.Draft;
+            edit.CallSign = model.Vessel.CallSign;
+            edit.Cubic = model.Vessel.Cubic;
+            edit.Built = model.Vessel.Built;
+            edit.Beam = model.Vessel.Beam;
+            edit.SummerDwt = model.Vessel.SummerDwt;
             edit.RegistrationId = model.RegistrationId;
             edit.TypeId = model.TypeId;
             edit.ClassificationSocietyId = model.ClassificationSocietyId;

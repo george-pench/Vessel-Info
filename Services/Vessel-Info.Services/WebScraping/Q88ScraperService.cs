@@ -72,7 +72,6 @@
                 var registrations = this.ScrapeRegistrationsWithPorts(this.browsingContext, guids);
                 var operators = this.ScrapeOperators(this.browsingContext, guids); 
 
-                // Size of each entity. They should always be equal.
                 var vesselSize = names.Count;
 
                 for (int i = 0; i < vesselSize; i++)
@@ -140,43 +139,33 @@
             var vesselsData = new Q88ListingServiceModel();
 
             // Due to inconsistency all data retrieved is stored in List<string> properties for easier persisting
-            // Get Vessel Name
             var names = this.SelectorType(document, VesselNameSelector, 27);
             vesselsData.Name.AddRange(names);
 
-            // Get IMOs 
             var imos = this.SelectorType(document, ImoSelector, ScrapeVesselSkipNumber);
             vesselsData.Imo.AddRange(imos);
 
-            // Get Built Data
             var builtData = this.SelectorType(document, BuiltDataSelector, ScrapeVesselSkipNumber);
             vesselsData.Built.AddRange(builtData);
 
-            // Get DTWs
             var dwts = this.SelectorType(document, DwtSelector, ScrapeVesselSkipNumber);
             vesselsData.SummerDwt.AddRange(dwts);
 
-            // Get LOAs
             var loas = this.SelectorType(document, LoaSelector, ScrapeVesselSkipNumber);
             vesselsData.Loa.AddRange(loas);
 
-            // Get Cubic
             var cubic = this.SelectorType(document, CubicSelector, ScrapeVesselSkipNumber);
             vesselsData.Cubic.AddRange(cubic);
 
-            // Get Beams
             var beams = this.SelectorType(document, BeamSelector, ScrapeVesselSkipNumber);
             vesselsData.Beam.AddRange(beams);
 
-            // Get Drafts
             var drafts = this.SelectorType(document, DraftSelector, ScrapeVesselSkipNumber);
             vesselsData.Draft.AddRange(drafts);
 
-            // Get Hulls
             var hullTypes = this.SelectorType(document, HullSelector, ScrapeVesselSkipNumber);
             vesselsData.HullType.AddRange(hullTypes);
 
-            //Get Call Sings
             var callSings = this.SelectorType(document, CallSignSelector, ScrapeVesselSkipNumber);
             vesselsData.CallSign.AddRange(callSings);
 
@@ -325,12 +314,7 @@
 
             return type;
         }
-        
-        private string UrlFormatting(string url, List<string> guids, int i)
-        {
-            var formatted = String.Format(url, guids[i]);
 
-            return formatted;
-        }
+        private string UrlFormatting(string url, List<string> guids, int i) => String.Format(url, guids[i]);
     }
 }

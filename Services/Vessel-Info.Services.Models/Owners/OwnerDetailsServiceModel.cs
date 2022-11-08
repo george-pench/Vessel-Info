@@ -1,4 +1,4 @@
 ﻿namespace Vessel_Info.Services.Models.Owners
 {
-    public class OwnerDetailsServiceModel : OwnerAllServiceModel { }
+    public class OwnerDetailsServiceModel : OwnerAllServiceModel {}
 }

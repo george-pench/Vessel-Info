@@ -1,4 +1,4 @@
 ﻿namespace Vessel_Info.Services.Models.ClassSocieties
 {
-    public class ClassSocietyDetailsServiceModel : ClassSocietyAllServiceModel { }
+    public class ClassSocietyDetailsServiceModel : ClassSocietyAllServiceModel {}
 }
