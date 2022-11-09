@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using System;
-    using System.Linq;
     using System.Threading.Tasks;
     using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
@@ -13,7 +12,7 @@
 
     public class VesselsController : AdminController
     {      
-        // TODO: exception handling, search action, data validation, add messages to actions
+        // TODO: exception handling, data validation
         private readonly IVesselService vessels;
         private readonly IRegistrationService registrations;
         private readonly ITypeService types;
@@ -34,18 +33,10 @@
             this.classificationSocieties = classificationSocieties;
         }
 
-        public IActionResult Search(string searchTerm, int id)
+        public IActionResult Search(string searchTerm) => this.View(new VesselListingViewModel
         {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-            {
-                return this.View(this.vessels.AllPaging(id, ItemsPerPage).To<VesselAllViewModel>());
-            }
-
-            return this.View(this.vessels
-                .AllPaging(id, ItemsPerPage)
-                .Where(v => v.Name.StartsWith(searchTerm))
-                .To<VesselAllViewModel>());
-        }
+            Vessels = this.vessels.GetAllBySearchTerm(searchTerm).To<VesselAllViewModel>()
+        });
 
         // [HttpGet("Admin/Vessels/All")]
         public async Task<IActionResult> All(int id = 1)
@@ -85,7 +76,8 @@
             Registrations = this.registrations.All(),
             Types = this.types.All(),
             Owners = this.owners.All(),
-            ClassificationSocieties = this.classificationSocieties.All()
+            ClassificationSocieties = this.classificationSocieties.All(),
+
         });
 
         [HttpPost]
@@ -100,6 +92,8 @@
             create.Vessel.Id = Guid.NewGuid().ToString();            
 
             var vesselId = await this.vessels.CreateAsync(create);
+
+            TempData[GlobalMessage] = $"{create.Vessel.Name} successfully added!";
 
             return this.RedirectToAction(nameof(VesselsController.Details), new { id = vesselId });
         }
@@ -136,6 +130,8 @@
 
             await this.vessels.EditAsync(id, edit);
 
+            TempData[GlobalMessage] = $"{edit.Vessel.Name} successfully edited!";
+
             return this.RedirectToAction(nameof(VesselsController.Details), new { id = id });
         }
 
@@ -145,11 +141,13 @@
             if (string.IsNullOrEmpty(id))
             {
                 return this.NotFound();
-            }
+            }            
 
             var delete = (await this.vessels
                 .GetByIdAsync(id))
                 .To<VesselDeleteViewModel>();
+
+            TempData[GlobalMessage] = $"{delete.Name} successfully deleted!";
 
             return this.View(delete);
         }

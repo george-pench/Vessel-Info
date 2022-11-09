@@ -12,7 +12,7 @@
     [Route("api/[controller]")]
     public class VesselsApiController : ControllerBase
     {
-        // TODO: implement POST/PUT and add data validation
+        // TODO: Fix POST/PUT/DELETE
         private readonly IVesselService vessels;
 
         public VesselsApiController(IVesselService vessels) => this.vessels = vessels;
@@ -35,7 +35,10 @@
         [HttpPost]
         public IActionResult Post([FromBody]VesselRequestModel model)
         {
-            
+            var mapped = ObjectMappingExtensions.To<VesselFormServiceModel>(model);
+            var id = this.vessels.CreateAsync(mapped);
+
+            return this.Ok(id);
         }
 
         // PUT api/<VesselsApiController>/5
