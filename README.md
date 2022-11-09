@@ -83,6 +83,7 @@ The database's backup file can be found here: *https://github.com/george-pench/V
 
 ```http
   DELETE /api/VesselsApi/{id} - deletes a vessel by given id
+```
 
 # Images
 
