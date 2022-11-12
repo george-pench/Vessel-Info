@@ -61,6 +61,30 @@ The database's backup file can be found here: *https://github.com/george-pench/V
 - *AngleSharp 0.14.0*
 - *AutoMapper*
 
+## API Reference
+
+```http
+  GET /api/CountsApi - returns the count of vessels related data
+
+  {"vesselsCount":8146,"registrationsCount":99,"ownersCount":6448,"typesCount":265,"classSocietiesCount":97,"operatorsCount":1531}
+```
+
+```http
+  GET /api/VesselsApi - shows all vessels by basic specifications
+
+  {"loa":"29.26","cubic":"\u00A0","beam":"9.14","draft":"3.05","hullType":"\u00A0","callSign":"WDI8684","id":"d7f5495a-7cfe-4ef5-8ebe-ec01a23eb22a","name":"A J","imo":"8890310","built":"1995","summerDwt":"109"}
+```
+
+```http
+  GET /api/VesselsApi/{id} - returns a vessel by given id 
+
+  {"loa":"49.90","cubic":"\u00A0","beam":"14.00","draft":"4.16","hullType":"DH","callSign":"5BMM5","id":"007d004e-8bf5-4015-81ec-e19b29ff0c4d","name":"Iris","imo":"9594119","built":"2010","summerDwt":"1,838"}
+```
+
+```http
+  DELETE /api/VesselsApi/{id} - deletes a vessel by given id
+```
+
 # Images
 
 - Register/Log in
@@ -85,3 +109,6 @@ The database's backup file can be found here: *https://github.com/george-pench/V
 
 ![All](https://user-images.githubusercontent.com/97052397/199534727-77a2903b-dfc8-4342-b3f3-f21dcc12a405.PNG)
 
+- Delete page
+
+![Capture](https://user-images.githubusercontent.com/97052397/200939915-9874372a-0002-4c02-bdbd-fa606af16e1e.PNG)
