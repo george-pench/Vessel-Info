@@ -125,19 +125,6 @@
                 .ThenBy(v => v.Id)
                 .To<VesselAllServiceModel>();
 
-        private static string HullTypeFullName(string hullType) => hullType switch
-        {
-            "DB" => "Double Bottom",
-            "DH" => "Double Hull",
-            "DS" => "Double Side",
-            "SB" => "Single Bottom",
-            "SH" => "Single Hull",
-            "SS" => "Single Side",
-            _ => "Other",
-        };
-
-        public async Task<int> GetCountAsync() => await dbContext.Vessels.CountAsync();
-
         public IQueryable<VesselByTypeServiceModel> GetAllVesselByType() => this.dbContext
                 .Vessels
                 .Select(v => new VesselByTypeServiceModel
@@ -202,5 +189,18 @@
                         FullName = v.ClassificationSociety.FullName
                     }
                 });
+
+        public async Task<int> GetCountAsync() => await dbContext.Vessels.CountAsync();
+
+        private static string HullTypeFullName(string hullType) => hullType switch
+        {
+            "DB" => "Double Bottom",
+            "DH" => "Double Hull",
+            "DS" => "Double Side",
+            "SB" => "Single Bottom",
+            "SH" => "Single Hull",
+            "SS" => "Single Side",
+            _ => "Other",
+        };
     }
 }

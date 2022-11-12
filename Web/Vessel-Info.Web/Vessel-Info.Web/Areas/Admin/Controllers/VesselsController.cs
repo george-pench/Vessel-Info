@@ -146,16 +146,18 @@
             var delete = (await this.vessels
                 .GetByIdAsync(id))
                 .To<VesselDeleteViewModel>();
-
-            TempData[GlobalMessage] = $"{delete.Name} successfully deleted!";
-
+            
             return this.View(delete);
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteConfirm(string id)
         {
+            var deletedVesselName = (await this.vessels.GetByIdAsync(id)).Name;
+
             await this.vessels.DeleteAsync(id);
+
+            TempData[GlobalMessage] = $"{deletedVesselName} successfully deleted!";
 
             return this.RedirectToAction(nameof(VesselsController.All));
         }
