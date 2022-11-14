@@ -32,7 +32,12 @@ The data has been scrapped from: *https://www.q88.com/Ships.aspx?letter=A&v=list
 The database's backup file can be found here: *https://github.com/george-pench/Vessel-Info/tree/main/Data/Vassel-Info.Data.Backup*
 
 # Database Diagram
+
 ![DatabaseDiagram](https://user-images.githubusercontent.com/97052397/199499995-f137e550-b8e5-4967-9526-bf81d2422ad2.png)
+
+# Project Layout
+
+![Capture](https://user-images.githubusercontent.com/97052397/201772885-bfe3f210-897a-48b5-8d73-15be48f70c90.PNG)
 
 # Roles
 
@@ -60,6 +65,9 @@ The database's backup file can be found here: *https://github.com/george-pench/V
 - *MS SQL Server Management Studio 2018*
 - *AngleSharp 0.14.0*
 - *AutoMapper*
+- *xUnit*
+- *FluentAssertions*
+- *Moq*
 
 ## API Reference
 
