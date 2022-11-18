@@ -1,9 +1,6 @@
 ﻿namespace Vessel_Info.Tests.Services
 {
-    using Data;
     using FluentAssertions;
-    using Microsoft.EntityFrameworkCore;
-    using System;
     using System.Linq;
     using Vessel_Info.Data.Models;
     using Vessel_Info.Services.Vessels;
@@ -22,12 +19,8 @@
         [Fact]
         public void GetAllBySearchTermShouldReturnCorrectResultWithWhereAndOrder()
         {
-            // Arrange
-            var dbOptions = new DbContextOptionsBuilder<VesselInfoDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
-                .Options;
-
-            var db = new VesselInfoDbContext(dbOptions);
+            // Arrange           
+            var db = VesselInfoDbContextInMemory.GetDatabase();
 
             var firstClass = new ClassificationSociety { Id = 1, FullName = "First" };
             var secondClass = new ClassificationSociety { Id = 2, FullName = "Second" };
@@ -48,5 +41,7 @@
                 .And
                 .HaveCount(1);
         }
+
+
     }
 }
