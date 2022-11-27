@@ -1,6 +1,7 @@
 ﻿namespace Vessel_Info.Tests.Services
 {
     using FluentAssertions;
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using Vessel_Info.Data.Models;
@@ -41,7 +42,82 @@
             Assert.Equal(classSocietyId, contentResult.Id);
         }
 
-            [Fact]
+        [Fact]
+        public async Task DetailsShouldReturnCorrectResult()
+        {
+            // Arrange
+            var db = VesselInfoDbContextInMemory.GetDatabase();
+
+            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = "First" };
+
+            await db.AddAsync(firstClass);
+            await db.SaveChangesAsync();
+
+            var classSocietyService = new ClassificationSocietyService(db);
+
+            // Act
+            var result = await classSocietyService.DetailsAsync(classSocietyId);
+
+            // Assert
+            var contentResult = Assert.IsType<ClassSocietyDetailsServiceModel>(result);
+
+            Assert.Equal("First", contentResult.FullName);
+            Assert.Equal(classSocietyId, contentResult.Id);
+        }
+
+        [Fact]
+        public void DetailsShouldReturnArgumentNullExceptionWithParameter()
+        {
+            // Arrange
+            var db = VesselInfoDbContextInMemory.GetDatabase();
+
+            var classSocietyService = new ClassificationSocietyService(db);
+
+            // Act
+            var exc = Assert.ThrowsAsync<ArgumentNullException>(async () 
+                => await classSocietyService.DetailsAsync(null));
+
+            // Assert
+            Assert.Equal("Value cannot be null. (Parameter 'details')", exc.Result.Message);
+        }
+
+        [Fact]
+        public async Task EditShouldReturnFalseWhenModelIsNull()
+        {
+            // Arrange
+            var db = VesselInfoDbContextInMemory.GetDatabase();
+
+            var classSocietyService = new ClassificationSocietyService(db);
+
+            // Act
+            var result = await classSocietyService.EditAsync(null, null);
+            
+            // Assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public async Task EditShouldReturnCorrectResult()
+        {
+            // Arrange
+            var db = VesselInfoDbContextInMemory.GetDatabase();
+
+            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = "First" };
+            var secondClass = new ClassSocietyEditServiceModel { Id = 2, FullName = "Second" };
+
+            await db.AddAsync(firstClass);
+            await db.SaveChangesAsync();
+
+            var classSocietyService = new ClassificationSocietyService(db);
+
+            // Act
+            var result = await classSocietyService.EditAsync(classSocietyId, secondClass);
+
+            // Assert
+            Assert.True(result);
+        }
+
+        [Fact]
         public async Task GetAllBySearchTermShouldReturnCorrectResultWithWhereAndOrderBy()
         {
             // Arrange           
