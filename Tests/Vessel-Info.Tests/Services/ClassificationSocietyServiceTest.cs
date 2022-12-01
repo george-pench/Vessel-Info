@@ -14,6 +14,7 @@
     {
         // TODO: AAA patern
         private const int classSocietyId = 1;
+        private const string classSocietyFullName = "First";
         
         public ClassificationSocietyServiceTest()
         {
@@ -25,7 +26,7 @@
         {
             var db = VesselInfoDbContextInMemory.GetDatabase();
 
-            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = "First" };
+            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = classSocietyFullName };
             
             await db.AddAsync(firstClass);
             await db.SaveChangesAsync();
@@ -38,8 +39,47 @@
             // Assert
             var contentResult = Assert.IsType<ClassSocietyAllServiceModel>(result);
 
-            Assert.Equal("First", contentResult.FullName);
+            Assert.Equal(classSocietyFullName, contentResult.FullName);
             Assert.Equal(classSocietyId, contentResult.Id);
+        }
+
+        [Fact]
+        public async Task GetOrCreateClassSocietyShouldReturnCorrectClassSocietyIdWhenItIsNotNull()
+        {
+            // Arrange
+            var db = VesselInfoDbContextInMemory.GetDatabase();
+
+            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = classSocietyFullName };
+
+            await db.AddAsync(firstClass);
+            await db.SaveChangesAsync();
+
+            var classSocietyService = new ClassificationSocietyService(db);
+
+            // Act
+            var result = await classSocietyService.GetOrCreateClassSocietyAsync(classSocietyFullName);
+
+            // Assert
+            var contentResult = Assert.IsType<System.Int32>(result);
+
+            Assert.Equal(classSocietyId, contentResult);
+        }
+
+        [Fact]
+        public async Task GetOrCreateClassSocietyShouldReturnNewClassSocietyId()
+        {
+            // Arrange
+            var db = VesselInfoDbContextInMemory.GetDatabase();
+            
+            var classSocietyService = new ClassificationSocietyService(db);
+
+            // Act
+            var result = await classSocietyService.GetOrCreateClassSocietyAsync("SomeName");
+
+            // Assert
+            var contentResult = Assert.IsType<System.Int32>(result);
+
+            Assert.Equal(classSocietyId, contentResult);
         }
 
         [Fact]
@@ -48,7 +88,7 @@
             // Arrange
             var db = VesselInfoDbContextInMemory.GetDatabase();
 
-            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = "First" };
+            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = classSocietyFullName };
 
             await db.AddAsync(firstClass);
             await db.SaveChangesAsync();
@@ -61,7 +101,7 @@
             // Assert
             var contentResult = Assert.IsType<ClassSocietyDetailsServiceModel>(result);
 
-            Assert.Equal("First", contentResult.FullName);
+            Assert.Equal(classSocietyFullName, contentResult.FullName);
             Assert.Equal(classSocietyId, contentResult.Id);
         }
 
@@ -102,7 +142,7 @@
             // Arrange
             var db = VesselInfoDbContextInMemory.GetDatabase();
 
-            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = "First" };
+            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = classSocietyFullName };
             var secondClass = new ClassSocietyEditServiceModel { Id = 2, FullName = "Second" };
 
             await db.AddAsync(firstClass);
@@ -123,7 +163,7 @@
             // Arrange           
             var db = VesselInfoDbContextInMemory.GetDatabase();
 
-            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = "First" };
+            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = classSocietyFullName };
             var secondClass = new ClassificationSociety { Id = 2, FullName = "Second" };
             var thirdClass = new ClassificationSociety { Id = 3, FullName = "Third" };
 
@@ -170,7 +210,7 @@
         {
             var db = VesselInfoDbContextInMemory.GetDatabase();
 
-            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = "First" };
+            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = classSocietyFullName };
             var secondClass = new ClassificationSociety { Id = 2, FullName = "Second" };
 
             db.AddRange(firstClass, secondClass);
@@ -195,7 +235,7 @@
             // Arrange
             var db = VesselInfoDbContextInMemory.GetDatabase();
 
-            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = "First" };
+            var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = classSocietyFullName };
             var secondClass = new ClassificationSociety { Id = 2, FullName = "Second" };
 
             await db.AddRangeAsync(firstClass, secondClass);
