@@ -15,7 +15,7 @@
 
         public OperatorService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task<OperatorAllServiceModel> GetById(int? id) => await this.dbContext
+        public async Task<OperatorAllServiceModel> GetByIdAsync(int? id) => await this.dbContext
                 .Operators
                 .Where(o => o.Id == id)
                 .To<OperatorAllServiceModel>()
@@ -84,7 +84,7 @@
             return true;
         }
 
-        public async Task<int> FindOperatorIdByName(string vesselOperator) => await this.dbContext
+        public async Task<int> FindOperatorIdByNameAsync(string vesselOperator) => await this.dbContext
                 .Operators
                 .Where(o => o.Name == vesselOperator)
                 .Select(o => o.Id)

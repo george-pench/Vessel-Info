@@ -6,7 +6,7 @@
 
     public interface IOperatorService
     {
-        Task<OperatorAllServiceModel> GetById(int? id);
+        Task<OperatorAllServiceModel> GetByIdAsync(int? id);
 
         IQueryable<OperatorAllServiceModel> GetAllBySearchTerm(string searchTerm);
 
@@ -16,7 +16,7 @@
 
         Task<bool> EditAsync(int? id, OperatorEditServiceModel model);
 
-        Task<int> FindOperatorIdByName(string vesselOperator);
+        Task<int> FindOperatorIdByNameAsync(string vesselOperator);
 
         IQueryable<OperatorBaseServiceModel> AllPaging(int page, int itemsPerPage = 12);
 

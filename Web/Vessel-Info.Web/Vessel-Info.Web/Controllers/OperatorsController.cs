@@ -61,7 +61,7 @@
             }
 
             var edit = (await this.operators
-                .GetById(id))
+                .GetByIdAsync(id))
                 .To<OperatorEditInputModel>();
 
             return this.View(edit);
@@ -73,7 +73,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(model);
+                return this.BadRequest(model);
             }
 
             var edit = ObjectMappingExtensions.To<OperatorEditServiceModel>(model);

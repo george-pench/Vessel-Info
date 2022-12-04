@@ -10,4 +10,8 @@
     <ProjectReference Include="..\Vessel-Info.Services.Mapping\Vessel-Info.Services.Mapping.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Vessels\Api\" />
+  </ItemGroup>
+
 </Project>
