@@ -15,7 +15,7 @@
 
         public OwnerService(VesselInfoDbContext dbContext) => this.dbContext = dbContext;
 
-        public async Task<OwnerAllServiceModel> GetById(int? id) => await this.dbContext
+        public async Task<OwnerAllServiceModel> GetByIdAsync(int? id) => await this.dbContext
                 .Owners
                 .Where(o => o.Id == id)
                 .To<OwnerAllServiceModel>()
@@ -84,7 +84,7 @@
             return true;
         }
 
-        public async Task<int> FindOwnerIdByName(string vesselOwner) => await this.dbContext
+        public async Task<int> FindOwnerIdByNameAsync(string vesselOwner) => await this.dbContext
                 .Owners
                 .Where(o => o.Name == vesselOwner)
                 .Select(o => o.Id)

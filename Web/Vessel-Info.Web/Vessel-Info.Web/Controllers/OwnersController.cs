@@ -64,7 +64,7 @@
             }
 
             var edit = (await this.owners
-                .GetById(id))
+                .GetByIdAsync(id))
                 .To<OwnerEditInputModel>();
 
             return this.View(edit);
@@ -76,7 +76,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(model);
+                return this.BadRequest(model);
             }
 
             var edit = ObjectMappingExtensions.To<OwnerEditServiceModel>(model);

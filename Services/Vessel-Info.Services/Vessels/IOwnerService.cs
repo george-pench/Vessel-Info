@@ -6,7 +6,7 @@
 
     public interface IOwnerService
     {
-        Task<OwnerAllServiceModel> GetById(int? id);
+        Task<OwnerAllServiceModel> GetByIdAsync(int? id);
 
         IQueryable<OwnerAllServiceModel> GetAllBySearchTerm(string searchTerm);
 
@@ -16,7 +16,7 @@
 
         Task<bool> EditAsync(int? id, OwnerEditServiceModel model);
 
-        Task<int> FindOwnerIdByName(string vesselOwner);
+        Task<int> FindOwnerIdByNameAsync(string vesselOwner);
 
         IQueryable<OwnerBaseServiceModel> AllPaging(int page, int itemsPerPage = 12);
 
