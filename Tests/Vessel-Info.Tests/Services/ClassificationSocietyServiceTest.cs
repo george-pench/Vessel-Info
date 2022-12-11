@@ -24,6 +24,7 @@
         [Fact]
         public async Task GetByIdShouldReturnCorrectResultWithWhere()
         {
+            // Arrange
             var db = VesselInfoDbContextInMemory.GetDatabase();
 
             var firstClass = new ClassificationSociety { Id = classSocietyId, FullName = classSocietyFullName };
