@@ -16,7 +16,7 @@
 
         Task<bool> EditAsync(int? id, RegistrationBaseServiceModel model);
 
-        Task<int> FindRegistrationIdByName(string vesselRegistration);
+        Task<int> FindRegistrationIdByNameAsync(string vesselRegistration);
 
         IQueryable<RegistrationBaseServiceModel> AllPaging(int page, int pageSize = 12);
 

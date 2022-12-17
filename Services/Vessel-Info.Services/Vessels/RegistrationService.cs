@@ -84,7 +84,7 @@
             return true;
         }
 
-        public async Task<int> FindRegistrationIdByName(string vesselRegistration) => await this.dbContext
+        public async Task<int> FindRegistrationIdByNameAsync(string vesselRegistration) => await this.dbContext
                 .Registrations
                 .Where(r => r.Flag == vesselRegistration)
                 .Select(r => r.Id)
