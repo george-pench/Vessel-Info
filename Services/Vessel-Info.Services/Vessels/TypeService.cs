@@ -43,9 +43,9 @@
             return type.Id;
         }
 
-        public Task<TypeBaseServiceModel> DetailsAsync(int? id)
+        public async Task<TypeBaseServiceModel> DetailsAsync(int? id)
         {
-            var details = this.dbContext
+            var details = await this.dbContext
                 .Types
                 .Where(t => t.Id == id)
                 .To<TypeBaseServiceModel>()
@@ -59,7 +59,7 @@
             return details;
         }
 
-        public async Task<int> FindTypeIdByName(string vesselType) => await this.dbContext
+        public async Task<int> FindTypeIdByNameAsync(string vesselType) => await this.dbContext
                 .Types
                 .Where(t => t.Name == vesselType)
                 .Select(t => t.Id)

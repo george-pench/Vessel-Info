@@ -12,7 +12,7 @@
 
         Task<TypeBaseServiceModel> DetailsAsync(int? id);
 
-        Task<int> FindTypeIdByName(string vesselType);
+        Task<int> FindTypeIdByNameAsync(string vesselType);
 
         IQueryable<TypeBaseServiceModel> AllPaging(int page, int pageSize = 12);
 
