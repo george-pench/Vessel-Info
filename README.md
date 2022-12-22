@@ -10,9 +10,9 @@ The project is divided into two main sections:
 
 ---
 
-Apart from doing some basic CRUD operations on a given ship when logged as an admin you have an option for data scraping. Once the whole data is scrapped, it would automatically be persisted into the project's database. This process usually lasts quite some time due to a significant amount of information being processed. 
+Apart from doing some basic CRUD operations on a given ship when logged as an admin you have an option for data scraping. Once the whole data is scrapped, it would automatically be persisted into the project's database. This process usually takes quite some time due to a significant amount of information being processed. 
 
-A user is granted access to detailed information about ship specifications like:
+A user can sort all vessels by different criteria such as Registrations, Owners, Types, Class Societies and is granted access to detailed information about ship specifications like:
 
 - *IMO (identification number)*
 - *DWT (deadweight tonnage)*
@@ -60,13 +60,12 @@ The database's backup file can be found here: *https://github.com/george-pench/V
 - *Bootstrap Lazy Kit*
 - *HTML5*
 - *CSS*
-- *JavaScript*
 - *MS Visual Studio 2019*
 - *MS SQL Server Management Studio 2018*
 - *AngleSharp 0.14.0*
 - *AutoMapper*
 - *xUnit*
-- *FluentAssertions*
+- *Fluent Assertions*
 - *Moq*
 
 ## API Reference
@@ -120,3 +119,7 @@ The database's backup file can be found here: *https://github.com/george-pench/V
 - Delete page
 
 ![Capture](https://user-images.githubusercontent.com/97052397/200939915-9874372a-0002-4c02-bdbd-fa606af16e1e.PNG)
+
+- Get All Vessels By Most Class Societies Page
+
+![Capture](https://user-images.githubusercontent.com/97052397/209227085-a82bff74-875e-474a-9b25-2953728ac110.PNG)
