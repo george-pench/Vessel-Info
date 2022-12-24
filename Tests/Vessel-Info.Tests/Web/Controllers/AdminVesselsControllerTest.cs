@@ -146,5 +146,45 @@
                .Should()
                .BeOfType<BadRequestObjectResult>();
         }
+
+        [Fact]
+        public async Task DeleteShouldReturnNotFoundWithInvalidVesselId()
+        {
+            // Arrange
+            var controller = new VesselsController(null, null, null, null, null);
+
+            // Act
+            var result = await controller.Delete(null);
+
+            // Assert
+            result
+                .Should()
+                .BeOfType<NotFoundResult>();
+        }
+
+        [Fact]
+        public async Task DeleteShouldReturnViewWithCorrectModelAndValidVessel()
+        {
+            // Arrange
+            var vesselService = new Mock<IVesselService>();
+
+            vesselService
+               .Setup(cs => cs.GetByIdAsync(It.IsAny<string>()))
+               .ReturnsAsync(new VesselAllServiceModel { Id = vesselId, Name = vesselName });
+
+            var controller = new VesselsController(vesselService.Object, null, null, null, null);
+
+            // Act
+            var result = await controller.Delete(vesselId);
+
+            // Assert
+            result
+                .Should()
+                .BeOfType<ViewResult>()
+                .Subject
+                .Model
+                .Should()
+                .Match(m => m.As<VesselAllServiceModel>().Name == vesselName);
+        }
     }
 }

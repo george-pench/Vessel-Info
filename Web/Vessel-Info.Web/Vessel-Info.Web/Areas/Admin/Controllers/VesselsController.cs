@@ -123,7 +123,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(model);
+                return this.BadRequest(model);
             }
 
             var edit = ObjectMappingExtensions.To<VesselFormServiceModel>(model);
