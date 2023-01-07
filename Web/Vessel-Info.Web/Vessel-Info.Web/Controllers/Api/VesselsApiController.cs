@@ -5,7 +5,6 @@
     using System.Threading.Tasks;
     using Vessel_Info.Services.Mapping;
     using Vessel_Info.Services.Models.Vessels;
-    using Vessel_Info.Services.Models.Vessels.Api;
     using Vessel_Info.Services.Vessels;
 
     [ApiController]
@@ -33,7 +32,7 @@
 
         // POST api/<VesselsApiController>
         [HttpPost]
-        public IActionResult Post([FromBody]VesselRequestModel model)
+        public IActionResult Post([FromBody] VesselAllServiceModel model)
         {
             var mapped = ObjectMappingExtensions.To<VesselFormServiceModel>(model);
             var id = this.vessels.CreateAsync(mapped);
@@ -43,9 +42,7 @@
 
         // PUT api/<VesselsApiController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        public void Put(int id, [FromBody] string value) {}
 
         // DELETE api/<VesselsApiController>/00048ecf-69b7-474b-b4e6-e249d01cf1f3
         [HttpDelete("{id}")]
