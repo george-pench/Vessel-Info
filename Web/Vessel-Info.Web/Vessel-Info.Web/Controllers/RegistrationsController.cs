@@ -13,10 +13,7 @@
     {
         private readonly IRegistrationService registrations;
 
-        public RegistrationsController(IRegistrationService registrations)
-        {
-            this.registrations = registrations;
-        }
+        public RegistrationsController(IRegistrationService registrations) => this.registrations = registrations;
 
         public IActionResult Search(string searchTerm) => this.View(new RegistrationListingViewModel
         {

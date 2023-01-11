@@ -9,6 +9,7 @@
     using Vessel_Info.Web.ViewModels.Home;
 
     using static Vessel_Info.Web.Constants.WebConstants;
+
     public class HomeController : Controller
     {
         private readonly IGetCountsService counts;

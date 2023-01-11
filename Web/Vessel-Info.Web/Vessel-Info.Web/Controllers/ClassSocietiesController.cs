@@ -14,10 +14,8 @@
     {
         private readonly IClassificationSocietyService classificationSocieties;
 
-        public ClassSocietiesController(IClassificationSocietyService classificationSocieties)
-        {
-            this.classificationSocieties = classificationSocieties;
-        }
+        public ClassSocietiesController(IClassificationSocietyService classificationSocieties) 
+            => this.classificationSocieties = classificationSocieties;
 
         public IActionResult Search(string searchTerm) => this.View(new ClassSocietyListingViewModel
         {

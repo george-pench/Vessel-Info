@@ -11,8 +11,7 @@
     using static Vessel_Info.Web.Constants.WebConstants;
 
     public class VesselsController : AdminController
-    {      
-        // TODO: exception handling, data validation
+    {
         private readonly IVesselService vessels;
         private readonly IRegistrationService registrations;
         private readonly ITypeService types;

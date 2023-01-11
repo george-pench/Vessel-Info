@@ -106,5 +106,3 @@ namespace Vessel_Info.Web
         }
     }
 }
-
-// https://bootstrapbay.github.io/lazy-kit/

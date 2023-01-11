@@ -11,16 +11,12 @@
     {
         private readonly IQ88ScraperService scraperService;
 
-        public ScrapingController(IQ88ScraperService scraperService)
-        {
-            this.scraperService = scraperService;
-        }
+        public ScrapingController(IQ88ScraperService scraperService) => this.scraperService = scraperService;
 
         public IActionResult Index() => this.View();
 
         public async Task<IActionResult> Scrape()
         {
-            // TODO: add a message for wrong params
             await this.scraperService.ImportVesselDataAsync(StartLetter, EndLetter);
             
             TempData[GlobalMessage] = $"Data have been scraped successfully!";

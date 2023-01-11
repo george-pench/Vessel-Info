@@ -14,10 +14,7 @@
     {
         private readonly IOwnerService owners;
 
-        public OwnersController(IOwnerService owners)
-        {
-            this.owners = owners;
-        }
+        public OwnersController(IOwnerService owners) => this.owners = owners;
 
         public IActionResult Search(string searchTerm) => this.View(new OwnerListingViewModel
         {

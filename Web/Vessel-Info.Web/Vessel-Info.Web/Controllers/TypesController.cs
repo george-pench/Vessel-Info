@@ -12,10 +12,7 @@
     {
         private readonly ITypeService types;
 
-        public TypesController(ITypeService types)
-        {
-            this.types = types;
-        }
+        public TypesController(ITypeService types) => this.types = types;
 
         public IActionResult Search(string searchTerm) => this.View(new TypeListingViewModel
         {
